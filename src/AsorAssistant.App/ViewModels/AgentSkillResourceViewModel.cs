@@ -20,8 +20,8 @@ public partial class AgentSkillResourceViewModel : ObservableObject
 
     public static IReadOnlyList<LookupOption> ExecutionModeOptions { get; } =
     [
-        new LookupOption { Name = "Ambient", Id = ExecutionMode.Ambient },
         new LookupOption { Name = "Delegate", Id = ExecutionMode.Delegate },
+        new LookupOption { Name = "Ambient", Id = ExecutionMode.Ambient },
     ];
 
     [RelayCommand]

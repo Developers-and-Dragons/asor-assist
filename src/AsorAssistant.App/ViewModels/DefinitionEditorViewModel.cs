@@ -135,9 +135,6 @@ public partial class DefinitionEditorViewModel : ObservableObject
         ⚠️ Watch out
         • IDs use reference format: Provider=VALUE, Platform=VALUE
         • If yours isn't in the list, select "Custom..." and type the ID
-
-        💡 Common platforms
-        Copilot Studio · Azure AI Foundry · Bedrock AgentCore · Agentforce · Other
         """,
 
         "capabilities" => """
@@ -312,6 +309,12 @@ public partial class DefinitionEditorViewModel : ObservableObject
     public void ResetHelp()
     {
         ActiveSection = "default";
+    }
+
+    [RelayCommand]
+    public void ShowHelp(string section)
+    {
+        ActiveSection = section;
     }
 
     public AgentDefinition ToModel()

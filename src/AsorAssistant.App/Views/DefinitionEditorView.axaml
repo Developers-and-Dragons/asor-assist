@@ -10,7 +10,11 @@
 
         <!-- IDENTITY -->
         <StackPanel x:Name="SectionIdentity" Spacing="12">
-        <TextBlock Classes="section-header" Text="Identity" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Classes="section-header" Text="Identity" />
+          <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                  Command="{Binding ShowHelpCommand}" CommandParameter="identity" VerticalAlignment="Center" />
+        </StackPanel>
         <TextBlock Classes="section-desc" Text="Core fields that appear in the Workday agent catalog." />
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label" Text="NAME" />
@@ -42,7 +46,11 @@
 
         <!-- PROVIDER + PLATFORM -->
         <StackPanel x:Name="SectionProvider" Spacing="12">
-        <TextBlock Classes="section-header" Text="Provider &amp; Platform" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Classes="section-header" Text="Provider &amp; Platform" />
+          <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                  Command="{Binding ShowHelpCommand}" CommandParameter="provider" VerticalAlignment="Center" />
+        </StackPanel>
         <TextBlock Classes="section-desc" Text="Who built this agent and what platform it runs on. Select 'Other' to enter a custom ID." />
 
         <Grid ColumnDefinitions="*,16,*">
@@ -79,7 +87,11 @@
 
         <!-- CAPABILITIES -->
         <StackPanel x:Name="SectionCapabilities" Spacing="8">
-        <TextBlock Classes="section-header" Text="Capabilities" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Classes="section-header" Text="Capabilities" />
+          <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                  Command="{Binding ShowHelpCommand}" CommandParameter="capabilities" VerticalAlignment="Center" />
+        </StackPanel>
         <TextBlock Classes="section-desc" Text="Feature flags. Leave disabled unless your agent actively supports these." />
           <CheckBox Content="Push Notifications" IsChecked="{Binding PushNotifications}"
                     ToolTip.Tip="True if the agent can notify updates to client." />
@@ -97,7 +109,11 @@
           <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Add Skill"
                   Command="{Binding AddSkillCommand}" VerticalAlignment="Top" />
           <StackPanel>
-            <TextBlock Classes="section-header" Text="Skills" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Classes="section-header" Text="Skills" />
+              <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                      Command="{Binding ShowHelpCommand}" CommandParameter="skills" VerticalAlignment="Center" />
+            </StackPanel>
             <TextBlock Classes="section-desc" Text="At least one skill is required. A skill is a unit of capability that an agent can perform." />
           </StackPanel>
         </DockPanel>
@@ -172,7 +188,11 @@
           <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Add Mapping"
                   Command="{Binding AddWorkdayConfigEntryCommand}" VerticalAlignment="Top" />
           <StackPanel>
-            <TextBlock Classes="section-header" Text="Workday Config" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Classes="section-header" Text="Workday Config" />
+              <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                      Command="{Binding ShowHelpCommand}" CommandParameter="workdayconfig" VerticalAlignment="Center" />
+            </StackPanel>
             <TextBlock Classes="section-desc" Text="Map skills to Workday resources, execution modes, and securable items." />
           </StackPanel>
         </DockPanel>
@@ -270,7 +290,8 @@
                                 <ItemsControl.ItemTemplate>
                                   <DataTemplate x:DataType="vm:SecurableItemViewModel">
                                     <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,4">
-                                      <TextBox Text="{Binding Id}" PlaceholderText="Workday ID of the securable item (CRF Field, Data Source, etc.)" Width="420" />
+                                      <TextBox Text="{Binding Id}" PlaceholderText="Workday ID of the securable item (CRF Field, Data Source, etc.)"
+                                               HorizontalAlignment="Stretch" />
                                       <Button Classes="action-subtle" Content="✕"
                                               Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
                                               CommandParameter="{Binding}" />
@@ -297,7 +318,11 @@
         <Expander x:Name="SectionOptional" IsExpanded="False" HorizontalAlignment="Stretch">
           <Expander.Header>
             <StackPanel>
-              <TextBlock Classes="section-header" Text="Optional Fields" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Classes="section-header" Text="Optional Fields" />
+                <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                        Command="{Binding ShowHelpCommand}" CommandParameter="optional" VerticalAlignment="Center" />
+              </StackPanel>
               <TextBlock FontSize="11" Text="Overview, URLs, external IDs, MIME types"
                          Foreground="{StaticResource AppTextMutedBrush}" />
             </StackPanel>
