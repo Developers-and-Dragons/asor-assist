@@ -6,6 +6,6 @@ public class AgentSkill
     public string? Name { get; set; }
     public string? Description { get; set; }
     public List<SkillTag>? Tags { get; set; }
-    public List<string>? InputModes { get; set; }
-    public List<string>? OutputModes { get; set; }
+    public List<MimeType>? InputModes { get; set; }
+    public List<MimeType>? OutputModes { get; set; }
 }

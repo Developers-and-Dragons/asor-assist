@@ -24,8 +24,8 @@
         { "tag": "documents" },
         { "tag": "hr" }
       ],
-      "inputModes": ["application/json"],
-      "outputModes": ["application/json"]
+      "inputModes": [{"type": "application/json"}],
+      "outputModes": [{"type": "application/json"}]
     },
     {
       "id": "provision-systems",
@@ -43,13 +43,13 @@
   "documentationUrl": "https://docs.example.com/hr-onboarding-agent",
   "externalAgentID": "acme-hr-onboard-001",
   "externalTenantID": "acme-tenant-prod",
-  "defaultInputModes": ["application/json"],
-  "defaultOutputModes": ["application/json"],
+  "defaultInputModes": [{"type": "application/json"}],
+  "defaultOutputModes": [{"type": "application/json"}],
   "supportsAuthenticatedExtendedCard": false,
   "workdayConfig": [
     {
       "skillId": "collect-documents",
-      "executionMode": "Mode=Delegate",
+      "executionMode": {"id": "Mode=Delegate"},
       "workdayResources": [
         {
           "tool_name": "Get_Documents",
@@ -66,7 +66,7 @@
     },
     {
       "skillId": "provision-systems",
-      "executionMode": "Mode=Ambient",
+      "executionMode": {"id": "Mode=Ambient"},
       "workdayResources": [
         {
           "tool_name": "Create_Account_Provisioning",

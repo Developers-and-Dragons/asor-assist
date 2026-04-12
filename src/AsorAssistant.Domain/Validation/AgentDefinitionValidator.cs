@@ -109,7 +109,7 @@ public static class AgentDefinitionValidator
             var resource = workdayConfig[i];
             var prefix = $"WorkdayConfig[{i}]";
 
-            if (!ExecutionMode.IsValid(resource.ExecutionMode))
+            if (!ExecutionMode.IsValidId(resource.ExecutionMode?.Id))
                 result.Errors.Add($"{prefix}: executionMode must be '{ExecutionMode.Ambient}' or '{ExecutionMode.Delegate}'.");
 
             if (!string.IsNullOrWhiteSpace(resource.SkillId) && !skillIds.Contains(resource.SkillId))

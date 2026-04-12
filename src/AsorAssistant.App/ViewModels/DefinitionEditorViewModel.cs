@@ -73,6 +73,9 @@ public partial class DefinitionEditorViewModel : ObservableObject
     // Skills
     public ObservableCollection<SkillViewModel> Skills { get; } = [];
 
+    // Workday Config
+    public ObservableCollection<AgentSkillResourceViewModel> WorkdayConfig { get; } = [];
+
     // Validation
     [ObservableProperty]
     private string? _validationErrors;
@@ -102,6 +105,20 @@ public partial class DefinitionEditorViewModel : ObservableObject
     private void RemoveSkill(SkillViewModel skill)
     {
         Skills.Remove(skill);
+    }
+
+    [RelayCommand]
+    private void AddWorkdayConfigEntry()
+    {
+        var entry = new AgentSkillResourceViewModel();
+        entry.WorkdayResources.Add(new WorkdayResourceViewModel());
+        WorkdayConfig.Add(entry);
+    }
+
+    [RelayCommand]
+    private void RemoveWorkdayConfigEntry(AgentSkillResourceViewModel entry)
+    {
+        WorkdayConfig.Remove(entry);
     }
 
     [RelayCommand]
@@ -138,9 +155,12 @@ public partial class DefinitionEditorViewModel : ObservableObject
             DocumentationUrl = NullIfEmpty(DocumentationUrl),
             ExternalAgentID = NullIfEmpty(ExternalAgentId),
             ExternalTenantID = NullIfEmpty(ExternalTenantId),
-            DefaultInputModes = ParseCommaSeparated(DefaultInputModesText),
-            DefaultOutputModes = ParseCommaSeparated(DefaultOutputModesText),
-            SupportsAuthenticatedExtendedCard = SupportsAuthenticatedExtendedCard ? true : null
+            DefaultInputModes = SkillViewModel.ParseMimeTypes(DefaultInputModesText),
+            DefaultOutputModes = SkillViewModel.ParseMimeTypes(DefaultOutputModesText),
+            SupportsAuthenticatedExtendedCard = SupportsAuthenticatedExtendedCard ? true : null,
+            WorkdayConfig = WorkdayConfig.Count > 0
+                ? WorkdayConfig.Select(c => c.ToModel()).ToList()
+                : null
         };
     }
 
@@ -187,9 +207,11 @@ public partial class DefinitionEditorViewModel : ObservableObject
         ExternalAgentId = definition.ExternalAgentID;
         ExternalTenantId = definition.ExternalTenantID;
         DefaultInputModesText = definition.DefaultInputModes is not null
-            ? string.Join(", ", definition.DefaultInputModes) : null;
+            ? string.Join(", ", definition.DefaultInputModes.Where(m => m.Type is not null).Select(m => m.Type))
+            : null;
         DefaultOutputModesText = definition.DefaultOutputModes is not null
-            ? string.Join(", ", definition.DefaultOutputModes) : null;
+            ? string.Join(", ", definition.DefaultOutputModes.Where(m => m.Type is not null).Select(m => m.Type))
+            : null;
         SupportsAuthenticatedExtendedCard = definition.SupportsAuthenticatedExtendedCard == true;
 
         Skills.Clear();
@@ -197,6 +219,13 @@ public partial class DefinitionEditorViewModel : ObservableObject
         {
             foreach (var skill in definition.Skills)
                 Skills.Add(SkillViewModel.FromModel(skill));
+        }
+
+        WorkdayConfig.Clear();
+        if (definition.WorkdayConfig is not null)
+        {
+            foreach (var entry in definition.WorkdayConfig)
+                WorkdayConfig.Add(AgentSkillResourceViewModel.FromModel(entry));
         }
 
         Validate();
@@ -210,12 +239,4 @@ public partial class DefinitionEditorViewModel : ObservableObject
 
     private static string? NullIfEmpty(string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value;
-
-    private static List<string>? ParseCommaSeparated(string? text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return null;
-
-        return text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
-    }
 }

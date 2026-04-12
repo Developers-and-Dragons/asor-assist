@@ -19,8 +19,8 @@ public class AgentDefinition
     public string? DocumentationUrl { get; set; }
     public string? ExternalAgentID { get; set; }
     public string? ExternalTenantID { get; set; }
-    public List<string>? DefaultInputModes { get; set; }
-    public List<string>? DefaultOutputModes { get; set; }
+    public List<MimeType>? DefaultInputModes { get; set; }
+    public List<MimeType>? DefaultOutputModes { get; set; }
     public bool? SupportsAuthenticatedExtendedCard { get; set; }
     public List<AgentSkillResource>? WorkdayConfig { get; set; }
 }

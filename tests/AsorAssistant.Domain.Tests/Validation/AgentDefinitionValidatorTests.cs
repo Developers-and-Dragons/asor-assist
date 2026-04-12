@@ -230,7 +230,7 @@ public class AgentDefinitionValidatorTests
             new AgentSkillResource
             {
                 SkillId = "skill-1",
-                ExecutionMode = "InvalidMode",
+                ExecutionMode = new ExecutionMode { Id = "InvalidMode" },
                 WorkdayResources = [new WorkdayResource { ToolName = "Test_Tool" }]
             }
         ];
@@ -248,7 +248,7 @@ public class AgentDefinitionValidatorTests
             new AgentSkillResource
             {
                 SkillId = "nonexistent-skill",
-                ExecutionMode = ExecutionMode.Ambient,
+                ExecutionMode = new ExecutionMode { Id = ExecutionMode.Ambient },
                 WorkdayResources = [new WorkdayResource { ToolName = "Test_Tool" }]
             }
         ];
@@ -266,7 +266,7 @@ public class AgentDefinitionValidatorTests
             new AgentSkillResource
             {
                 SkillId = "skill-1",
-                ExecutionMode = ExecutionMode.Delegate,
+                ExecutionMode = new ExecutionMode { Id = ExecutionMode.Delegate },
                 WorkdayResources = [new WorkdayResource { ToolName = "Test_Tool" }]
             }
         ];

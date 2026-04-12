@@ -1,10 +1,12 @@
 namespace AsorAssistant.Domain.Models;
 
-public static class ExecutionMode
+public class ExecutionMode
 {
+    public string? Id { get; set; }
+
     public const string Ambient = "Mode=Ambient";
     public const string Delegate = "Mode=Delegate";
 
-    public static bool IsValid(string? value) =>
+    public static bool IsValidId(string? value) =>
         value is Ambient or Delegate;
 }

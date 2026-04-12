@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using AsorAssistant.Domain.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -30,8 +29,8 @@ public partial class SkillViewModel : ObservableObject
         Name = Name,
         Description = Description,
         Tags = ParseTags(TagsText),
-        InputModes = ParseCommaSeparated(InputModesText),
-        OutputModes = ParseCommaSeparated(OutputModesText)
+        InputModes = ParseMimeTypes(InputModesText),
+        OutputModes = ParseMimeTypes(OutputModesText)
     };
 
     public static SkillViewModel FromModel(AgentSkill skill) => new()
@@ -42,8 +41,12 @@ public partial class SkillViewModel : ObservableObject
         TagsText = skill.Tags is not null
             ? string.Join(", ", skill.Tags.Where(t => t.Tag is not null).Select(t => t.Tag))
             : null,
-        InputModesText = skill.InputModes is not null ? string.Join(", ", skill.InputModes) : null,
-        OutputModesText = skill.OutputModes is not null ? string.Join(", ", skill.OutputModes) : null
+        InputModesText = skill.InputModes is not null
+            ? string.Join(", ", skill.InputModes.Where(m => m.Type is not null).Select(m => m.Type))
+            : null,
+        OutputModesText = skill.OutputModes is not null
+            ? string.Join(", ", skill.OutputModes.Where(m => m.Type is not null).Select(m => m.Type))
+            : null
     };
 
     private static List<SkillTag>? ParseTags(string? text)
@@ -56,11 +59,13 @@ public partial class SkillViewModel : ObservableObject
             .ToList();
     }
 
-    private static List<string>? ParseCommaSeparated(string? text)
+    internal static List<MimeType>? ParseMimeTypes(string? text)
     {
         if (string.IsNullOrWhiteSpace(text))
             return null;
 
-        return text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+        return text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(t => new MimeType { Type = t })
+            .ToList();
     }
 }

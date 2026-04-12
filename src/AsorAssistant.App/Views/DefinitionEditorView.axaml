@@ -149,6 +149,75 @@
         <Button Content="Add Skill" Command="{Binding AddSkillCommand}" />
       </StackPanel>
 
+      <!-- Workday Config -->
+      <TextBlock Text="Workday Config" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
+      <TextBlock Text="Map skills to Workday resources, tools, and securable items." Foreground="Gray" />
+
+      <ItemsControl ItemsSource="{Binding WorkdayConfig}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:AgentSkillResourceViewModel">
+            <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,8">
+              <StackPanel Spacing="8">
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Skill ID *" />
+                  <TextBox Text="{Binding SkillId}" PlaceholderText="Must match a defined skill ID" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Execution Mode *" />
+                  <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
+                            SelectedItem="{Binding SelectedExecutionMode}"
+                            PlaceholderText="Select mode..." />
+                </StackPanel>
+
+                <!-- Workday Resources within this skill resource -->
+                <TextBlock Text="Workday Resources" FontWeight="SemiBold" Margin="0,4,0,0" />
+                <ItemsControl ItemsSource="{Binding WorkdayResources}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:WorkdayResourceViewModel">
+                      <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6">
+                        <StackPanel Spacing="6">
+                          <StackPanel Spacing="4">
+                            <TextBlock Text="Tool Name *" />
+                            <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers or endpoint name" />
+                          </StackPanel>
+                          <StackPanel Spacing="4">
+                            <TextBlock Text="Description" />
+                            <TextBox Text="{Binding Description}" PlaceholderText="What this tool does" />
+                          </StackPanel>
+                          <StackPanel Spacing="4">
+                            <TextBlock Text="Agent Resource ID (Workday Tool WID)" />
+                            <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday ID of the tool" />
+                          </StackPanel>
+
+                          <!-- Securable Items (Tools) -->
+                          <TextBlock Text="Securable Items (Data Sources, CRF Fields, etc.)" FontWeight="SemiBold" Margin="0,4,0,0" />
+                          <ItemsControl ItemsSource="{Binding Tools}">
+                            <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="vm:SecurableItemViewModel">
+                                <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,0,4">
+                                  <TextBox Text="{Binding Id}" PlaceholderText="Workday securable item ID" Width="400" />
+                                </StackPanel>
+                              </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                          </ItemsControl>
+                          <Button Content="+ Add Securable Item" Command="{Binding AddToolCommand}" />
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Button Content="+ Add Workday Resource" Command="{Binding AddWorkdayResourceCommand}" />
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Add Workday Config Entry" Command="{Binding AddWorkdayConfigEntryCommand}" />
+      </StackPanel>
+
       <!-- Validation -->
       <Separator Margin="0,8" />
       <StackPanel Orientation="Horizontal" Spacing="8">

@@ -49,8 +49,8 @@ public class AgentDefinitionSerializerTests
                 Name = "Skill One",
                 Description = "First skill",
                 Tags = [new SkillTag { Tag = "tag1" }, new SkillTag { Tag = "tag2" }],
-                InputModes = ["application/json"],
-                OutputModes = ["application/json"]
+                InputModes = [new MimeType { Type = "application/json" }],
+                OutputModes = [new MimeType { Type = "application/json" }]
             }
         ],
         Overview = "Full agent overview",
@@ -58,15 +58,15 @@ public class AgentDefinitionSerializerTests
         DocumentationUrl = "https://example.com/docs",
         ExternalAgentID = "ext-agent-001",
         ExternalTenantID = "ext-tenant-001",
-        DefaultInputModes = ["application/json"],
-        DefaultOutputModes = ["application/json"],
+        DefaultInputModes = [new MimeType { Type = "application/json" }],
+        DefaultOutputModes = [new MimeType { Type = "application/json" }],
         SupportsAuthenticatedExtendedCard = false,
         WorkdayConfig =
         [
             new AgentSkillResource
             {
                 SkillId = "skill-1",
-                ExecutionMode = ExecutionMode.Delegate,
+                ExecutionMode = new ExecutionMode { Id = ExecutionMode.Delegate },
                 WorkdayResources =
                 [
                     new WorkdayResource
@@ -113,8 +113,9 @@ public class AgentDefinitionSerializerTests
         Assert.Equal(original.DocumentationUrl, deserialized.DocumentationUrl);
         Assert.Equal(original.ExternalAgentID, deserialized.ExternalAgentID);
         Assert.Equal(original.ExternalTenantID, deserialized.ExternalTenantID);
-        Assert.Equal(original.DefaultInputModes, deserialized.DefaultInputModes);
-        Assert.Equal(original.DefaultOutputModes, deserialized.DefaultOutputModes);
+        Assert.Equal(original.DefaultInputModes!.Count, deserialized.DefaultInputModes!.Count);
+        Assert.Equal(original.DefaultInputModes[0].Type, deserialized.DefaultInputModes[0].Type);
+        Assert.Equal(original.DefaultOutputModes!.Count, deserialized.DefaultOutputModes!.Count);
         Assert.Equal(original.SupportsAuthenticatedExtendedCard, deserialized.SupportsAuthenticatedExtendedCard);
         Assert.True(deserialized.Capabilities!.PushNotifications);
         Assert.False(deserialized.Capabilities.Streaming);
@@ -124,7 +125,7 @@ public class AgentDefinitionSerializerTests
         Assert.NotNull(config);
         Assert.Single(config);
         Assert.Equal("skill-1", config[0].SkillId);
-        Assert.Equal(ExecutionMode.Delegate, config[0].ExecutionMode);
+        Assert.Equal(ExecutionMode.Delegate, config[0].ExecutionMode!.Id);
 
         var wr = config[0].WorkdayResources;
         Assert.NotNull(wr);
@@ -222,7 +223,7 @@ public class AgentDefinitionSerializerTests
         Assert.Equal(2, definition.Skills!.Count);
         Assert.NotNull(definition.WorkdayConfig);
         Assert.Equal(2, definition.WorkdayConfig.Count);
-        Assert.Equal(ExecutionMode.Delegate, definition.WorkdayConfig[0].ExecutionMode);
+        Assert.Equal(ExecutionMode.Delegate, definition.WorkdayConfig[0].ExecutionMode!.Id);
         Assert.Equal("Get_Documents", definition.WorkdayConfig[0].WorkdayResources![0].ToolName);
     }
 
