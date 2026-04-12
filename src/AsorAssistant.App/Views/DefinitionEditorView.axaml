@@ -5,7 +5,7 @@
              x:DataType="vm:DefinitionEditorViewModel"
              x:Name="EditorRoot">
 
-  <ScrollViewer Padding="20,12">
+  <ScrollViewer Padding="20,12,20,40">
     <StackPanel Spacing="4" MaxWidth="820" HorizontalAlignment="Left">
 
       <!-- Identity -->
@@ -150,55 +150,6 @@
         </StackPanel>
       </Border>
 
-      <!-- Optional Fields -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Classes="section-header" Text="Optional Fields" />
-
-          <StackPanel Spacing="4">
-            <TextBlock Classes="field-label" Text="Overview" />
-            <TextBox Text="{Binding Overview}" PlaceholderText="Summary display text"
-                     AcceptsReturn="True" TextWrapping="Wrap" Height="56" />
-          </StackPanel>
-
-          <Grid ColumnDefinitions="*,16,*">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="field-label" Text="Icon URL" />
-              <TextBox Text="{Binding IconUrl}" PlaceholderText="https://..." />
-            </StackPanel>
-            <StackPanel Grid.Column="2" Spacing="4">
-              <TextBlock Classes="field-label" Text="Documentation URL" />
-              <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="https://..." />
-            </StackPanel>
-          </Grid>
-
-          <Grid ColumnDefinitions="*,16,*">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="field-label" Text="External Agent ID" />
-              <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Partner system identifier" />
-            </StackPanel>
-            <StackPanel Grid.Column="2" Spacing="4">
-              <TextBlock Classes="field-label" Text="External Tenant ID" />
-              <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="Tenant locator" />
-            </StackPanel>
-          </Grid>
-
-          <Grid ColumnDefinitions="*,16,*">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="field-label" Text="Default Input Modes" />
-              <TextBox Text="{Binding DefaultInputModesText}" PlaceholderText="application/json (comma-separated)" />
-            </StackPanel>
-            <StackPanel Grid.Column="2" Spacing="4">
-              <TextBlock Classes="field-label" Text="Default Output Modes" />
-              <TextBox Text="{Binding DefaultOutputModesText}" PlaceholderText="application/json (comma-separated)" />
-            </StackPanel>
-          </Grid>
-
-          <CheckBox Content="Supports Authenticated Extended Card"
-                    IsChecked="{Binding SupportsAuthenticatedExtendedCard}" />
-        </StackPanel>
-      </Border>
-
       <!-- Workday Config -->
       <Border Classes="card">
         <StackPanel Spacing="12">
@@ -308,6 +259,55 @@
               </DataTemplate>
             </ItemsControl.ItemTemplate>
           </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <!-- Optional Fields -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="section-header" Text="Optional Fields" />
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="field-label" Text="Overview" />
+            <TextBox Text="{Binding Overview}" PlaceholderText="Summary display text"
+                     AcceptsReturn="True" TextWrapping="Wrap" Height="56" />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="Icon URL" />
+              <TextBox Text="{Binding IconUrl}" PlaceholderText="https://..." />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="Documentation URL" />
+              <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="https://..." />
+            </StackPanel>
+          </Grid>
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="External Agent ID" />
+              <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Partner system identifier" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="External Tenant ID" />
+              <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="Tenant locator" />
+            </StackPanel>
+          </Grid>
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="Default Input Modes" />
+              <TextBox Text="{Binding DefaultInputModesText}" PlaceholderText="application/json (comma-separated)" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="Default Output Modes" />
+              <TextBox Text="{Binding DefaultOutputModesText}" PlaceholderText="application/json (comma-separated)" />
+            </StackPanel>
+          </Grid>
+
+          <CheckBox Content="Supports Authenticated Extended Card"
+                    IsChecked="{Binding SupportsAuthenticatedExtendedCard}" />
         </StackPanel>
       </Border>
 
