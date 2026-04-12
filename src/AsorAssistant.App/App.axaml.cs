@@ -32,6 +32,7 @@ public partial class App : Application
             // Wire token providers: both Registration and WQL read from the app-level token
             mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
             mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
+            mainVm.DraftManager.BearerTokenProvider = () => mainVm.BearerToken;
 
             desktop.MainWindow = new MainWindow { DataContext = mainVm };
         }
@@ -48,6 +49,7 @@ public partial class App : Application
         services.AddSingleton<IDraftStore>(new FileDraftStore(draftsDir));
         services.AddSingleton<HttpClient>();
         services.AddSingleton<IAsorRegistrationClient, AsorRegistrationClient>();
+        services.AddSingleton<IAsorQueryClient, AsorQueryClient>();
         services.AddSingleton<IWqlClient, WqlClient>();
         services.AddSingleton<WqlLookupService>();
 

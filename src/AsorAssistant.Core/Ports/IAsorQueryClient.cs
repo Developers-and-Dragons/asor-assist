@@ -6,4 +6,5 @@ namespace AsorAssistant.Core.Ports;
 public interface IAsorQueryClient
 {
     Task<AgentDefinition?> GetDefinitionAsync(RegistrationContext context, string id);
+    Task<IReadOnlyList<AgentDefinition>> ListDefinitionsAsync(RegistrationContext context);
 }

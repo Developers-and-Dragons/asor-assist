@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using AsorAssistant.Core.Models;
 using AsorAssistant.Core.Ports;
+using AsorAssistant.Domain.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -9,8 +10,10 @@ namespace AsorAssistant.App.ViewModels;
 public partial class DraftManagerViewModel : ObservableObject
 {
     private readonly IDraftStore _draftStore;
+    private readonly IAsorQueryClient _queryClient;
     private readonly DefinitionEditorViewModel _editor;
 
+    // Local drafts
     [ObservableProperty]
     private string? _draftName;
 
@@ -24,11 +27,33 @@ public partial class DraftManagerViewModel : ObservableObject
 
     public ObservableCollection<DraftMetadata> Drafts { get; } = [];
 
-    public DraftManagerViewModel(IDraftStore draftStore, DefinitionEditorViewModel editor)
+    // Remote agents
+    [ObservableProperty]
+    private AsorRegion? _selectedRegion;
+
+    [ObservableProperty]
+    private AgentDefinition? _selectedRemoteAgent;
+
+    [ObservableProperty]
+    private bool _isFetchingRemote;
+
+    [ObservableProperty]
+    private string? _remoteStatusMessage;
+
+    public ObservableCollection<AgentDefinition> RemoteAgents { get; } = [];
+    public IReadOnlyList<AsorRegion> Regions => AsorRegion.All;
+
+    /// <summary>Provides the bearer token from the app-level connection bar.</summary>
+    public Func<string?>? BearerTokenProvider { get; set; }
+
+    public DraftManagerViewModel(IDraftStore draftStore, IAsorQueryClient queryClient, DefinitionEditorViewModel editor)
     {
         _draftStore = draftStore;
+        _queryClient = queryClient;
         _editor = editor;
     }
+
+    // --- Local drafts ---
 
     [RelayCommand]
     private async Task RefreshList()
@@ -111,5 +136,60 @@ public partial class DraftManagerViewModel : ObservableObject
         await _draftStore.DuplicateAsync(SelectedDraft.Id, newName);
         StatusMessage = $"Duplicated as: {newName}";
         await RefreshList();
+    }
+
+    // --- Remote agents ---
+
+    [RelayCommand]
+    private async Task FetchRemoteAgents()
+    {
+        var token = BearerTokenProvider?.Invoke();
+        if (SelectedRegion is null || string.IsNullOrWhiteSpace(token))
+        {
+            RemoteStatusMessage = "Select a region and set a bearer token in the connection bar.";
+            return;
+        }
+
+        IsFetchingRemote = true;
+        RemoteStatusMessage = null;
+        RemoteAgents.Clear();
+
+        try
+        {
+            var context = new RegistrationContext
+            {
+                Region = SelectedRegion,
+                BearerToken = token
+            };
+
+            var agents = await _queryClient.ListDefinitionsAsync(context);
+            foreach (var a in agents)
+                RemoteAgents.Add(a);
+
+            RemoteStatusMessage = $"{agents.Count} registered agent{(agents.Count == 1 ? "" : "s")} found";
+        }
+        catch (Exception ex)
+        {
+            RemoteStatusMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsFetchingRemote = false;
+        }
+    }
+
+    [RelayCommand]
+    private void LoadRemoteAgent()
+    {
+        if (SelectedRemoteAgent is null)
+        {
+            RemoteStatusMessage = "Select an agent first.";
+            return;
+        }
+
+        _editor.LoadFromModel(SelectedRemoteAgent);
+        DraftName = SelectedRemoteAgent.Name;
+        _currentDraftId = null;
+        RemoteStatusMessage = $"Loaded: {SelectedRemoteAgent.Name}";
     }
 }

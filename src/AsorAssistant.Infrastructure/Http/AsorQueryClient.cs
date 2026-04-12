@@ -34,4 +34,18 @@ public class AsorQueryClient : IAsorQueryClient
         var responseBody = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize(responseBody, AsorJsonContext.Default.AgentDefinition);
     }
+
+    public async Task<IReadOnlyList<AgentDefinition>> ListDefinitionsAsync(RegistrationContext context)
+    {
+        var url = AsorUrlBuilder.BuildRegistrationUrl(context.Region!.BaseUrl);
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.BearerToken);
+
+        using var response = await _httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize(responseBody, AsorJsonContext.Default.ListAgentDefinition) ?? [];
+    }
 }
