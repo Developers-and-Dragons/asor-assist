@@ -188,30 +188,46 @@ public partial class DefinitionEditorViewModel : ObservableObject
 
         // Provider — match by full ref ID, WID, bare reference_id, or descriptor
         var prov = definition.Provider;
-        var providerMatch = MatchKnownValue(KnownProviders.All, prov?.Id, prov?.ReferenceId, prov?.Descriptor);
-        if (providerMatch != default)
+        if (prov?.Id is null && prov?.ReferenceId is null && prov?.Descriptor is null)
         {
-            SelectedProviderId = providerMatch.Id;
+            SelectedProviderId = null;
             CustomProviderId = null;
         }
         else
         {
-            SelectedProviderId = "__CUSTOM__";
-            CustomProviderId = prov?.Descriptor ?? prov?.ReferenceId ?? prov?.Id;
+            var providerMatch = MatchKnownValue(KnownProviders.All, prov?.Id, prov?.ReferenceId, prov?.Descriptor);
+            if (providerMatch != default)
+            {
+                SelectedProviderId = providerMatch.Id;
+                CustomProviderId = null;
+            }
+            else
+            {
+                SelectedProviderId = "__CUSTOM__";
+                CustomProviderId = prov?.Descriptor ?? prov?.ReferenceId ?? prov?.Id;
+            }
         }
 
         // Platform — match by full ref ID, WID, bare reference_id, or descriptor
         var plat = definition.Platform;
-        var platformMatch = MatchKnownValue(KnownPlatforms.All, plat?.Id, plat?.ReferenceId, plat?.Descriptor);
-        if (platformMatch != default)
+        if (plat?.Id is null && plat?.ReferenceId is null && plat?.Descriptor is null)
         {
-            SelectedPlatformId = platformMatch.Id;
+            SelectedPlatformId = null;
             CustomPlatformId = null;
         }
         else
         {
-            SelectedPlatformId = "__CUSTOM__";
-            CustomPlatformId = plat?.Descriptor ?? plat?.ReferenceId ?? plat?.Id;
+            var platformMatch = MatchKnownValue(KnownPlatforms.All, plat?.Id, plat?.ReferenceId, plat?.Descriptor);
+            if (platformMatch != default)
+            {
+                SelectedPlatformId = platformMatch.Id;
+                CustomPlatformId = null;
+            }
+            else
+            {
+                SelectedPlatformId = "__CUSTOM__";
+                CustomPlatformId = plat?.Descriptor ?? plat?.ReferenceId ?? plat?.Id;
+            }
         }
 
         PushNotifications = definition.Capabilities?.PushNotifications == true;
