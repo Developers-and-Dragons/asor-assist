@@ -32,6 +32,7 @@ public partial class App : Application
             var mainVm = Services.GetRequiredService<MainWindowViewModel>();
 
             mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
+            mainVm.Registration.RegionProvider = () => mainVm.SelectedRegion;
             mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
 
             desktop.MainWindow = new MainWindow { DataContext = mainVm };

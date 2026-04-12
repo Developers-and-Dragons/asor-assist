@@ -245,7 +245,6 @@ public partial class DefinitionEditorViewModel : ObservableObject
                 WorkdayConfig.Add(AgentSkillResourceViewModel.FromModel(entry, Skills));
         }
 
-        Validate();
     }
 
     private void AddDefaultSkill()

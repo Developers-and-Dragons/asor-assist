@@ -30,7 +30,11 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool _isConnectionBarExpanded = true;
 
+    [ObservableProperty]
+    private AsorRegion? _selectedRegion;
+
     public bool HasToken => !string.IsNullOrWhiteSpace(BearerToken);
+    public IReadOnlyList<AsorRegion> Regions => AsorRegion.All;
 
     // Editor mode: Visual vs JSON
     [ObservableProperty]
@@ -74,8 +78,6 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private string? _remoteStatusMessage;
 
-    public IReadOnlyList<AsorRegion> Regions => AsorRegion.All;
-
     // Child VMs
     public DefinitionEditorViewModel Editor { get; }
     public RegistrationViewModel Registration { get; }
@@ -93,6 +95,7 @@ public partial class MainWindowViewModel : ObservableObject
         WqlLookup = wqlLookup;
         _draftStore = draftStore;
         _queryClient = queryClient;
+        SelectedRegion = AsorRegion.All[0];
         RemoteRegion = AsorRegion.All[0];
     }
 
@@ -215,7 +218,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         var saved = await _draftStore.SaveAsync(envelope);
         _currentDraftId = saved.Metadata.Id;
-        StatusMessage = $"Saved: {CurrentDraftName}";
+        StatusMessage = $"✓ Saved";
         await RefreshLocalDrafts();
     }
 

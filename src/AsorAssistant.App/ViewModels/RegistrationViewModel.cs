@@ -12,9 +12,7 @@ public partial class RegistrationViewModel : ObservableObject
     private readonly DefinitionEditorViewModel _editor;
 
     public Func<string?>? BearerTokenProvider { get; set; }
-
-    [ObservableProperty]
-    private AsorRegion? _selectedRegion;
+    public Func<AsorRegion?>? RegionProvider { get; set; }
 
     [ObservableProperty]
     private string? _resolvedUrl;
@@ -28,33 +26,26 @@ public partial class RegistrationViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSuccess;
 
-    public IReadOnlyList<AsorRegion> Regions => AsorRegion.All;
-
     public RegistrationViewModel(IAsorRegistrationClient registrationClient, DefinitionEditorViewModel editor)
     {
         _registrationClient = registrationClient;
         _editor = editor;
-        SelectedRegion = AsorRegion.All[0];
-    }
-
-    partial void OnSelectedRegionChanged(AsorRegion? value)
-    {
-        ResolvedUrl = value is not null
-            ? $"{value.BaseUrl}/asor/v1/agentDefinition"
-            : null;
     }
 
     [RelayCommand]
     private async Task Register()
     {
         var token = BearerTokenProvider?.Invoke();
+        var region = RegionProvider?.Invoke();
 
-        if (SelectedRegion is null)
+        if (region is null)
         {
-            ResponseText = "Select a region.";
+            ResponseText = "Select a region in the connection bar.";
             IsSuccess = false;
             return;
         }
+
+        ResolvedUrl = $"{region.BaseUrl}/asor/v1/agentDefinition";
 
         if (string.IsNullOrWhiteSpace(token))
         {
@@ -78,7 +69,7 @@ public partial class RegistrationViewModel : ObservableObject
         {
             var context = new RegistrationContext
             {
-                Region = SelectedRegion,
+                Region = region,
                 BearerToken = token
             };
 

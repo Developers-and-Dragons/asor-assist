@@ -103,10 +103,27 @@
               <TextBlock Text="▴" FontSize="12" />
             </Button>
           </StackPanel>
-          <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4">
-            <TextBlock Classes="field-label" Text="BEARER TOKEN" />
-            <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
-                     PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
+          <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="10">
+            <Grid ColumnDefinitions="*,16,200">
+              <StackPanel Spacing="3">
+                <TextBlock Classes="field-label" Text="BEARER TOKEN" />
+                <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
+                         PasswordChar="*" RevealPassword="False" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" Spacing="3">
+                <TextBlock Classes="field-label" Text="REGION" />
+                <ComboBox ItemsSource="{Binding Regions}"
+                          SelectedItem="{Binding SelectedRegion}"
+                          PlaceholderText="Region"
+                          HorizontalAlignment="Stretch">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </StackPanel>
+            </Grid>
             <TextBlock Classes="helper"
                        Text="Generate a token at the Workday Developer Site (upper right corner of page — login to tenant and copy token). Session-only — not saved to disk." />
           </StackPanel>
@@ -227,16 +244,15 @@
                   <Button Classes="action" Content="Validate" Command="{Binding Editor.ValidateCommand}"
                           ToolTip.Tip="Check definition against ASOR v1.2 spec." />
                   <Button Classes="action" Content="Save" Command="{Binding SaveCommand}"
-                          ToolTip.Tip="Save to current draft.">
+                          ToolTip.Tip="Save to current draft (or prompts for name if untitled).">
                     <Button.Flyout>
-                      <Flyout Placement="BottomEdgeAlignedRight">
+                      <Flyout Placement="BottomEdgeAlignedRight" x:Name="SaveFlyout">
                         <StackPanel Spacing="8" Width="280">
-                          <TextBlock Text="Save Draft" FontWeight="SemiBold" />
+                          <TextBlock Text="Save As" FontWeight="SemiBold" />
                           <TextBox Text="{Binding CurrentDraftName}" PlaceholderText="Draft name" />
-                          <StackPanel Orientation="Horizontal" Spacing="8">
-                            <Button Classes="action-primary" Content="Save" HorizontalAlignment="Stretch"
-                                    Command="{Binding SaveCommand}" />
-                          </StackPanel>
+                          <Button Classes="action-primary" Content="Save" HorizontalAlignment="Stretch"
+                                  HorizontalContentAlignment="Center"
+                                  Command="{Binding SaveCommand}" />
                         </StackPanel>
                       </Flyout>
                     </Button.Flyout>

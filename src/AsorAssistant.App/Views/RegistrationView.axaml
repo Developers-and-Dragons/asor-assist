@@ -15,37 +15,12 @@
         <TextBlock Classes="page-title" Text="Register" />
       </DockPanel>
 
-      <!-- Endpoint config -->
-      <TextBlock Classes="section-header" Text="Endpoint" />
-      <TextBlock Classes="section-desc" Text="Select the Workday region for this registration." />
-
-      <StackPanel Spacing="10">
-        <StackPanel Spacing="3">
-          <TextBlock Classes="field-label" Text="REGION" />
-          <ComboBox ItemsSource="{Binding Regions}"
-                    SelectedItem="{Binding SelectedRegion}"
-                    PlaceholderText="Select region..."
-                    HorizontalAlignment="Stretch">
-            <ComboBox.ItemTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding Name}" />
-              </DataTemplate>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
-          <TextBlock Classes="helper" Text="Determines the ASOR endpoint: {region}.agent.workday.com" />
-        </StackPanel>
-
-      </StackPanel>
-
-      <Separator Classes="section-divider" />
-
-      <!-- Submit -->
-      <TextBlock Classes="section-header" Text="Submit" />
+      <TextBlock Classes="section-desc" Text="POST the current definition to Workday ASOR. Region and token are set in the connection bar above." />
 
       <!-- Token reminder -->
-      <Border Classes="badge-warning" CornerRadius="4" Padding="8,6" Margin="0,6,0,10"
+      <Border Classes="badge-warning" CornerRadius="4" Padding="8,6" Margin="0,0,0,12"
               IsVisible="{Binding !$parent[Window].((vm:MainWindowViewModel)DataContext).HasToken}">
-        <TextBlock Text="⚠ Set a bearer token in the connection bar above before registering."
+        <TextBlock Text="⚠ Set a bearer token and region in the connection bar above."
                    FontSize="11" Foreground="{StaticResource AppWarningBrush}" TextWrapping="Wrap" />
       </Border>
 
@@ -70,7 +45,7 @@
                   IsVisible="{Binding ResponseText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
         <TextBlock Classes="field-label" Text="RESPONSE" />
         <TextBox Classes="mono" Text="{Binding ResponseText}" IsReadOnly="True"
-                 AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="300" />
+                 AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="400" />
       </StackPanel>
 
     </StackPanel>
