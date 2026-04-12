@@ -130,6 +130,13 @@ public partial class DefinitionEditorViewModel : ObservableObject
         ValidationErrors = result.IsValid ? null : string.Join("\n", result.Errors);
     }
 
+    [RelayCommand]
+    public void DismissErrors()
+    {
+        ValidationErrors = null;
+        IsValid = false;
+    }
+
     public AgentDefinition ToModel()
     {
         var providerId = SelectedProviderId == "__CUSTOM__" ? CustomProviderId : SelectedProviderId;

@@ -51,11 +51,16 @@
     <Border DockPanel.Dock="Top" Padding="28,10" Background="#18d95555"
             BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
             IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-      <StackPanel Spacing="2">
-        <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
-        <TextBlock Text="{Binding ValidationErrors}" FontSize="11" Foreground="{StaticResource AppErrorBrush}"
-                   TextWrapping="Wrap" />
-      </StackPanel>
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
+                Command="{Binding DismissErrorsCommand}"
+                ToolTip.Tip="Dismiss errors" VerticalAlignment="Top" />
+        <StackPanel Spacing="2">
+          <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
+          <TextBlock Text="{Binding ValidationErrors}" FontSize="11" Foreground="{StaticResource AppErrorBrush}"
+                     TextWrapping="Wrap" />
+        </StackPanel>
+      </DockPanel>
     </Border>
 
     <!-- Editor Body -->

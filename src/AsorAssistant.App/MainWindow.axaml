@@ -107,8 +107,9 @@
             </Border>
 
             <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
-                    ToolTip.Tip="Show/hide token input" VerticalAlignment="Center">
-              <TextBlock Text="▾" FontSize="12" IsVisible="{Binding !IsConnectionBarExpanded}" />
+                    ToolTip.Tip="Show/hide token input" VerticalAlignment="Center"
+                    IsVisible="{Binding !IsConnectionBarExpanded}">
+              <TextBlock Text="▾" FontSize="12" />
             </Button>
             <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
                     ToolTip.Tip="Show/hide token input" VerticalAlignment="Center"
