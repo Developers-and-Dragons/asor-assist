@@ -1,0 +1,167 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AsorAssistant.App.ViewModels"
+             x:Class="AsorAssistant.App.Views.DefinitionEditorView"
+             x:DataType="vm:DefinitionEditorViewModel">
+
+  <ScrollViewer Padding="16">
+    <StackPanel Spacing="16" MaxWidth="800">
+
+      <!-- Required Fields -->
+      <TextBlock Text="Agent Definition" FontSize="20" FontWeight="Bold" />
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Name *" />
+        <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Description *" />
+        <TextBox Text="{Binding Description}" PlaceholderText="What this agent does"
+                 AcceptsReturn="True" TextWrapping="Wrap" Height="80" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="URL *" />
+        <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Version *" />
+        <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
+      </StackPanel>
+
+      <!-- Provider -->
+      <TextBlock Text="Provider" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
+      <StackPanel Spacing="8">
+        <TextBlock Text="Provider *" />
+        <ComboBox ItemsSource="{Binding ProviderOptions}"
+                  SelectedValue="{Binding SelectedProviderId}"
+                  SelectedValueBinding="{Binding Id}"
+                  DisplayMemberBinding="{Binding Name}"
+                  PlaceholderText="Select provider..." />
+        <StackPanel IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}, FallbackValue=False}">
+          <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
+                   IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        </StackPanel>
+      </StackPanel>
+
+      <!-- Platform -->
+      <StackPanel Spacing="8">
+        <TextBlock Text="Platform *" />
+        <ComboBox ItemsSource="{Binding PlatformOptions}"
+                  SelectedValue="{Binding SelectedPlatformId}"
+                  SelectedValueBinding="{Binding Id}"
+                  DisplayMemberBinding="{Binding Name}"
+                  PlaceholderText="Select platform..." />
+      </StackPanel>
+
+      <!-- Capabilities -->
+      <TextBlock Text="Capabilities" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
+      <StackPanel Spacing="4">
+        <CheckBox Content="Push Notifications" IsChecked="{Binding PushNotifications}" />
+        <CheckBox Content="Streaming" IsChecked="{Binding Streaming}" />
+        <CheckBox Content="State Transition History" IsChecked="{Binding StateTransitionHistory}" />
+      </StackPanel>
+
+      <!-- Optional Fields -->
+      <TextBlock Text="Optional Fields" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Overview" />
+        <TextBox Text="{Binding Overview}" PlaceholderText="Summary display text"
+                 AcceptsReturn="True" TextWrapping="Wrap" Height="60" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Icon URL" />
+        <TextBox Text="{Binding IconUrl}" PlaceholderText="https://..." />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Documentation URL" />
+        <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="https://..." />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="External Agent ID" />
+        <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Partner system identifier" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="External Tenant ID" />
+        <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="Tenant locator in partner system" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Default Input Modes" />
+        <TextBox Text="{Binding DefaultInputModesText}" PlaceholderText="application/json (comma-separated)" />
+      </StackPanel>
+
+      <StackPanel Spacing="8">
+        <TextBlock Text="Default Output Modes" />
+        <TextBox Text="{Binding DefaultOutputModesText}" PlaceholderText="application/json (comma-separated)" />
+      </StackPanel>
+
+      <CheckBox Content="Supports Authenticated Extended Card"
+                IsChecked="{Binding SupportsAuthenticatedExtendedCard}" />
+
+      <!-- Skills -->
+      <TextBlock Text="Skills" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
+
+      <ItemsControl ItemsSource="{Binding Skills}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:SkillViewModel">
+            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,8">
+              <StackPanel Spacing="8">
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Skill ID *" />
+                  <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Skill Name *" />
+                  <TextBox Text="{Binding Name}" PlaceholderText="Human-readable skill name" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Skill Description *" />
+                  <TextBox Text="{Binding Description}" PlaceholderText="What this skill does"
+                           AcceptsReturn="True" TextWrapping="Wrap" Height="60" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Tags * (comma-separated)" />
+                  <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Input Modes (comma-separated)" />
+                  <TextBox Text="{Binding InputModesText}" PlaceholderText="application/json" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Output Modes (comma-separated)" />
+                  <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Add Skill" Command="{Binding AddSkillCommand}" />
+      </StackPanel>
+
+      <!-- Validation -->
+      <Separator Margin="0,8" />
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Validate" Command="{Binding ValidateCommand}" />
+        <TextBlock Text="Valid" Foreground="Green" VerticalAlignment="Center"
+                   IsVisible="{Binding IsValid}" />
+      </StackPanel>
+
+      <TextBlock Text="{Binding ValidationErrors}" Foreground="Red"
+                 TextWrapping="Wrap"
+                 IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+    </StackPanel>
+  </ScrollViewer>
+
+</UserControl>

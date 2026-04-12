@@ -1,9 +1,35 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="using:AsorAssistant.App.ViewModels"
+        xmlns:views="using:AsorAssistant.App.Views"
         x:Class="AsorAssistant.App.MainWindow"
-        Title="AsorAssistant.App">
-    Welcome to Avalonia!
+        x:DataType="vm:MainWindowViewModel"
+        Title="ASOR Assistant"
+        Width="1100" Height="800"
+        MinWidth="800" MinHeight="600">
+
+  <TabControl SelectedIndex="{Binding SelectedTabIndex}" Padding="8">
+
+    <TabItem Header="Editor">
+      <views:DefinitionEditorView DataContext="{Binding Editor}" />
+    </TabItem>
+
+    <TabItem Header="JSON Preview">
+      <views:JsonPreviewView DataContext="{Binding JsonPreview}" />
+    </TabItem>
+
+    <TabItem Header="Saved Drafts">
+      <views:DraftManagerView DataContext="{Binding DraftManager}" />
+    </TabItem>
+
+    <TabItem Header="Register">
+      <views:RegistrationView DataContext="{Binding Registration}" />
+    </TabItem>
+
+    <TabItem Header="WQL Lookup">
+      <views:WqlLookupView DataContext="{Binding WqlLookup}" />
+    </TabItem>
+
+  </TabControl>
+
 </Window>

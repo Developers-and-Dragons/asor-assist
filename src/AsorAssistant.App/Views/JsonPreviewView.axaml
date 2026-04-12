@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AsorAssistant.App.ViewModels"
+             x:Class="AsorAssistant.App.Views.JsonPreviewView"
+             x:DataType="vm:JsonPreviewViewModel">
+
+  <DockPanel Margin="16">
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+      <Button Content="Refresh" Command="{Binding RefreshCommand}" />
+      <Button Content="Copy to Clipboard" Command="{Binding CopyToClipboardCommand}"
+              CommandParameter="{Binding $parent[TopLevel].Clipboard}" />
+      <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="Green" />
+    </StackPanel>
+
+    <TextBox Text="{Binding JsonText}" IsReadOnly="True"
+             FontFamily="Cascadia Mono, Consolas, monospace"
+             FontSize="13"
+             AcceptsReturn="True" TextWrapping="NoWrap" />
+  </DockPanel>
+
+</UserControl>

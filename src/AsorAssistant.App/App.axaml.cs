@@ -1,11 +1,19 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using AsorAssistant.App.ViewModels;
+using AsorAssistant.Application.Ports;
+using AsorAssistant.Application.Services;
+using AsorAssistant.Infrastructure.Http;
+using AsorAssistant.Infrastructure.Persistence;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AsorAssistant.App;
 
 public partial class App : Avalonia.Application
 {
+    public static IServiceProvider Services { get; private set; } = null!;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -13,11 +21,37 @@ public partial class App : Avalonia.Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        var services = new ServiceCollection();
+        ConfigureServices(services);
+        Services = services.BuildServiceProvider();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow();
+            var mainVm = Services.GetRequiredService<MainWindowViewModel>();
+            desktop.MainWindow = new MainWindow { DataContext = mainVm };
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        // Infrastructure
+        var draftsDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "asor-assist", "drafts");
+        services.AddSingleton<IDraftStore>(new FileDraftStore(draftsDir));
+        services.AddSingleton<HttpClient>();
+        services.AddSingleton<IAsorRegistrationClient, AsorRegistrationClient>();
+        services.AddSingleton<IWqlClient, WqlClient>();
+        services.AddSingleton<WqlLookupService>();
+
+        // ViewModels
+        services.AddSingleton<DefinitionEditorViewModel>();
+        services.AddSingleton<JsonPreviewViewModel>();
+        services.AddSingleton<DraftManagerViewModel>();
+        services.AddSingleton<RegistrationViewModel>();
+        services.AddSingleton<WqlLookupViewModel>();
+        services.AddSingleton<MainWindowViewModel>();
     }
 }
