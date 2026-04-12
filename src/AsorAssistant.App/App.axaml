@@ -68,7 +68,7 @@
           <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
           <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
-          <Setter Property="Padding" Value="28,14" />
+          <Setter Property="Padding" Value="32,14" />
         </Style>
 
         <!-- Typography -->
