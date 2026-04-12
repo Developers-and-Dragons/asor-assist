@@ -131,15 +131,11 @@
       <!-- Pages -->
       <Panel>
         <!-- Editor Page -->
-        <Grid IsVisible="{Binding IsEditorPage}">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="300" />
-          </Grid.ColumnDefinitions>
+        <Panel IsVisible="{Binding IsEditorPage}">
 
-          <!-- File Drawer (overlay from left) -->
-          <Border Grid.Column="0" Classes="panel" Width="360" HorizontalAlignment="Left"
-                  ZIndex="10"
+          <!-- File Drawer (absolute overlay) -->
+          <Border Classes="panel" Width="360" HorizontalAlignment="Left"
+                  ZIndex="20"
                   IsVisible="{Binding IsFileDrawerOpen}">
             <ScrollViewer>
               <StackPanel Spacing="0">
@@ -232,6 +228,13 @@
               </StackPanel>
             </ScrollViewer>
           </Border>
+
+          <!-- Main 2-pane layout -->
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="360" />
+            </Grid.ColumnDefinitions>
 
           <!-- Editor workspace -->
           <DockPanel Grid.Column="0">
@@ -360,13 +363,15 @@
             </DockPanel>
           </Border>
 
-          <!-- Registration Panel (overlay from right) -->
-          <Border Grid.Column="1" Classes="panel" Width="400" HorizontalAlignment="Right"
-                  ZIndex="10"
+          </Grid>
+
+          <!-- Registration Panel (absolute overlay from right) -->
+          <Border Classes="panel" Width="400" HorizontalAlignment="Right"
+                  ZIndex="20"
                   IsVisible="{Binding IsRegistrationPanelOpen}">
             <views:RegistrationView DataContext="{Binding Registration}" />
           </Border>
-        </Grid>
+        </Panel>
 
         <!-- Lookups Page -->
         <views:WqlLookupView DataContext="{Binding WqlLookup}"
