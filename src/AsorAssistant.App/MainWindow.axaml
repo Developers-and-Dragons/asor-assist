@@ -36,8 +36,10 @@
                   <TextBlock TextWrapping="Wrap" FontSize="12"
                              Foreground="{StaticResource AppTextSecondaryBrush}"
                              Text="Register external agents against the Workday Agent System of Record (ASOR) API v1.2." />
-                  <TextBlock Text="→ ASOR v1.2 Specification" FontSize="12"
-                             Foreground="{StaticResource AppLinkBrush}" Cursor="Hand" />
+                  <Button Content="→ ASOR v1.2 Specification" FontSize="12"
+                          Foreground="{StaticResource AppLinkBrush}" Cursor="Hand"
+                          Background="Transparent" Padding="0" BorderThickness="0"
+                          Click="OnSpecLinkClick" />
                   <Separator Background="{StaticResource AppBorderSubtleBrush}" />
                   <TextBlock TextWrapping="Wrap" FontSize="11"
                              Foreground="{StaticResource AppTextMutedBrush}"
