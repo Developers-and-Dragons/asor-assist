@@ -133,14 +133,13 @@
         <!-- Editor Page -->
         <Grid IsVisible="{Binding IsEditorPage}">
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="3*" MinWidth="260" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="300" />
           </Grid.ColumnDefinitions>
 
-          <!-- File Drawer (left) -->
-          <Border Grid.Column="0" Classes="panel" Width="360"
+          <!-- File Drawer (overlay from left) -->
+          <Border Grid.Column="0" Classes="panel" Width="360" HorizontalAlignment="Left"
+                  ZIndex="10"
                   IsVisible="{Binding IsFileDrawerOpen}">
             <ScrollViewer>
               <StackPanel Spacing="0">
@@ -234,8 +233,8 @@
             </ScrollViewer>
           </Border>
 
-          <!-- Editor workspace (center) -->
-          <DockPanel Grid.Column="1">
+          <!-- Editor workspace -->
+          <DockPanel Grid.Column="0">
             <!-- Editor Toolbar -->
             <Border DockPanel.Dock="Top" Classes="page-header">
               <DockPanel>
@@ -338,8 +337,8 @@
             </Border>
           </DockPanel>
 
-          <!-- Help Panel (right side, always visible in visual mode) -->
-          <Border Grid.Column="2" Padding="20,20,20,20"
+          <!-- Help Panel (right column) -->
+          <Border Grid.Column="1" Padding="20"
                   Background="{StaticResource AppSurfaceBrush}"
                   BorderBrush="{StaticResource AppBorderSubtleBrush}"
                   BorderThickness="1,0,0,0"
@@ -361,8 +360,9 @@
             </DockPanel>
           </Border>
 
-          <!-- Registration Panel (slide-over, right) -->
-          <Border Grid.Column="3" Classes="panel" Width="400"
+          <!-- Registration Panel (overlay from right) -->
+          <Border Grid.Column="1" Classes="panel" Width="400" HorizontalAlignment="Right"
+                  ZIndex="10"
                   IsVisible="{Binding IsRegistrationPanelOpen}">
             <views:RegistrationView DataContext="{Binding Registration}" />
           </Border>
