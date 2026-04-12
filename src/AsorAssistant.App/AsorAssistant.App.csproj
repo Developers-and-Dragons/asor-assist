@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Assets\app-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AsorAssistant.Domain\AsorAssistant.Domain.csproj" />
     <ProjectReference Include="..\AsorAssistant.Core\AsorAssistant.Core.csproj" />
     <ProjectReference Include="..\AsorAssistant.Infrastructure\AsorAssistant.Infrastructure.csproj" />
