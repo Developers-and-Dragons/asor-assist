@@ -326,18 +326,21 @@
               </DockPanel>
             </Border>
 
-            <!-- Visual Mode -->
-            <views:DefinitionEditorView DataContext="{Binding Editor}"
-                                        IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsVisualMode}" />
+            <!-- Editor content (last child — gets DockPanel fill) -->
+            <Panel>
+              <!-- Visual Mode -->
+              <views:DefinitionEditorView DataContext="{Binding Editor}"
+                                          IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsVisualMode}" />
 
-            <!-- JSON Mode -->
-            <Border Margin="28,20" Background="{StaticResource AppSurfaceRaisedBrush}"
-                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1"
-                    CornerRadius="8" Padding="4"
-                    IsVisible="{Binding IsJsonMode}">
-              <TextBox Classes="mono" Text="{Binding JsonText}"
-                       AcceptsReturn="True" TextWrapping="NoWrap" />
-            </Border>
+              <!-- JSON Mode -->
+              <Border Margin="28,20" Background="{StaticResource AppSurfaceRaisedBrush}"
+                      BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1"
+                      CornerRadius="8" Padding="4"
+                      IsVisible="{Binding IsJsonMode}">
+                <TextBox Classes="mono" Text="{Binding JsonText}"
+                         AcceptsReturn="True" TextWrapping="NoWrap" />
+              </Border>
+            </Panel>
           </DockPanel>
 
           <!-- Help Panel (right column) -->
