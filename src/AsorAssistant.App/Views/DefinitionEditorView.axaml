@@ -29,6 +29,17 @@
       </DockPanel>
     </Border>
 
+    <!-- Validation Errors (fixed below toolbar, always visible when present) -->
+    <Border DockPanel.Dock="Top" Margin="20,8,20,0" Padding="12,8" CornerRadius="6"
+            Background="#20ff6060"
+            IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+      <StackPanel Spacing="4">
+        <TextBlock Text="Validation Errors" FontSize="12" FontWeight="SemiBold" Foreground="#ff8080" />
+        <TextBlock Text="{Binding ValidationErrors}" FontSize="12" Foreground="#ffb0b0"
+                   TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+
     <!-- Editor Content -->
     <ScrollViewer Padding="20,12,20,40">
       <StackPanel Spacing="0" MaxWidth="780" HorizontalAlignment="Left">
@@ -165,11 +176,11 @@
 
                     <Grid ColumnDefinitions="*,12,*">
                       <StackPanel Spacing="3">
-                        <TextBlock Classes="field-label" Text="INPUT MODES" />
+                        <TextBlock Classes="field-label" Text="INPUT MODES (comma-separated)" />
                         <TextBox Text="{Binding InputModesText}" PlaceholderText="application/json" />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
-                        <TextBlock Classes="field-label" Text="OUTPUT MODES" />
+                        <TextBlock Classes="field-label" Text="OUTPUT MODES (comma-separated)" />
                         <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
                       </StackPanel>
                     </Grid>
@@ -357,12 +368,6 @@
                           OnContent="Yes" OffContent="No" />
           </StackPanel>
         </Expander>
-
-        <!-- Validation errors (if any) -->
-        <TextBox Classes="mono" Text="{Binding ValidationErrors}" IsReadOnly="True"
-                 AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="150"
-                 IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                 Foreground="#ff8080" Margin="0,16,0,0" />
 
       </StackPanel>
     </ScrollViewer>
