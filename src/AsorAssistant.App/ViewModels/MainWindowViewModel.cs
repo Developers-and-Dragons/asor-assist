@@ -234,15 +234,6 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task SaveAs(string? name)
-    {
-        if (string.IsNullOrWhiteSpace(name)) return;
-        _currentDraftId = null; // force new
-        CurrentDraftName = name;
-        await Save();
-    }
-
-    [RelayCommand]
     private async Task LoadDraft(DraftMetadata? draft)
     {
         if (draft is null) return;

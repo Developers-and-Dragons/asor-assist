@@ -10,5 +10,4 @@ public static class AsorUrlBuilder
 
     public static string BuildWqlUrl() =>
         "https://api.workday.com/wql/v1/data";
-
 }

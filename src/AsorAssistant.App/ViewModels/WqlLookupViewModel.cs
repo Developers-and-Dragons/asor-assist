@@ -10,7 +10,6 @@ namespace AsorAssistant.App.ViewModels;
 public partial class WqlLookupViewModel : ObservableObject
 {
     private readonly WqlLookupService _lookupService;
-    private readonly DefinitionEditorViewModel _editor;
     private IReadOnlyList<ServiceOperationLookup> _allResults = [];
 
     /// <summary>Provides the bearer token from the app-level connection bar.</summary>
@@ -36,10 +35,9 @@ public partial class WqlLookupViewModel : ObservableObject
 
     public ObservableCollection<ServiceOperationLookup> Results { get; } = [];
 
-    public WqlLookupViewModel(WqlLookupService lookupService, DefinitionEditorViewModel editor)
+    public WqlLookupViewModel(WqlLookupService lookupService)
     {
         _lookupService = lookupService;
-        _editor = editor;
     }
 
     partial void OnFilterTextChanged(string? value)

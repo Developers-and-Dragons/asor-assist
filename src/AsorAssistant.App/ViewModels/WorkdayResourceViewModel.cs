@@ -46,9 +46,7 @@ public partial class WorkdayResourceViewModel : ObservableObject
             : null
     };
 
-    public static WorkdayResourceViewModel FromModel(WorkdayResource resource) => FromModelCore(resource);
-
-    private static WorkdayResourceViewModel FromModelCore(WorkdayResource resource)
+    public static WorkdayResourceViewModel FromModel(WorkdayResource resource)
     {
         var vm = new WorkdayResourceViewModel
         {

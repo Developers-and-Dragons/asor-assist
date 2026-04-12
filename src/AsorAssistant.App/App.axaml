@@ -11,7 +11,6 @@
         <Color x:Key="AppBase">#212121</Color>
         <Color x:Key="AppSurface">#2a2a2a</Color>
         <Color x:Key="AppSurfaceRaised">#333333</Color>
-        <Color x:Key="AppSurfaceHigh">#3c3c3c</Color>
         <Color x:Key="AppBorder">#4a4a4a</Color>
         <Color x:Key="AppBorderSubtle">#383838</Color>
         <Color x:Key="AppTextPrimary">#ececec</Color>
@@ -27,7 +26,6 @@
         <SolidColorBrush x:Key="AppBaseBrush" Color="{StaticResource AppBase}" />
         <SolidColorBrush x:Key="AppSurfaceBrush" Color="{StaticResource AppSurface}" />
         <SolidColorBrush x:Key="AppSurfaceRaisedBrush" Color="{StaticResource AppSurfaceRaised}" />
-        <SolidColorBrush x:Key="AppSurfaceHighBrush" Color="{StaticResource AppSurfaceHigh}" />
         <SolidColorBrush x:Key="AppBorderBrush" Color="{StaticResource AppBorder}" />
         <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="{StaticResource AppBorderSubtle}" />
         <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="{StaticResource AppTextPrimary}" />
@@ -50,7 +48,6 @@
           <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
           <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
         </Style>
-
 
         <!-- Nav rail -->
         <Style Selector="ListBox.nav-rail">
@@ -225,10 +222,6 @@
         </Style>
 
         <!-- Badges -->
-        <Style Selector="Border.badge">
-          <Setter Property="CornerRadius" Value="4" />
-          <Setter Property="Padding" Value="8,3" />
-        </Style>
         <Style Selector="Border.badge-success">
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="Padding" Value="8,3" />
