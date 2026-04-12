@@ -246,7 +246,7 @@
                   <Button Classes="action" Content="Save" Command="{Binding SaveCommand}"
                           ToolTip.Tip="Save to current draft (or prompts for name if untitled).">
                     <Button.Flyout>
-                      <Flyout Placement="BottomEdgeAlignedRight" x:Name="SaveFlyout">
+                      <Flyout Placement="BottomEdgeAlignedRight">
                         <StackPanel Spacing="8" Width="280">
                           <TextBlock Text="Save As" FontWeight="SemiBold" />
                           <TextBox Text="{Binding CurrentDraftName}" PlaceholderText="Draft name" />
