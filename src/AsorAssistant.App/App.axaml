@@ -51,6 +51,7 @@
           <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
         </Style>
 
+
         <!-- Nav rail -->
         <Style Selector="ListBox.nav-rail">
           <Setter Property="Background" Value="Transparent" />
