@@ -2,6 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:AsorAssistant.App.ViewModels"
         xmlns:views="using:AsorAssistant.App.Views"
+        xmlns:models="using:AsorAssistant.Core.Models"
+        xmlns:domain="using:AsorAssistant.Domain.Models"
         x:Class="AsorAssistant.App.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         x:Name="MainWin"
@@ -15,7 +17,6 @@
     <Border Grid.Column="0" Background="{StaticResource AppSurfaceBrush}"
             BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,1,0">
       <DockPanel>
-        <!-- Brand -->
         <StackPanel DockPanel.Dock="Top" Margin="0,16,0,16" HorizontalAlignment="Center">
           <TextBlock Text="ASOR" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"
                      Foreground="{StaticResource AppAccentBrush}" />
@@ -23,7 +24,7 @@
                      Foreground="{StaticResource AppTextMutedBrush}" Margin="0,1,0,0" />
         </StackPanel>
 
-        <!-- Help at bottom -->
+        <!-- Help -->
         <StackPanel DockPanel.Dock="Bottom" Margin="0,0,0,12">
           <Separator Margin="10,0" Background="{StaticResource AppBorderSubtleBrush}" />
           <Button HorizontalAlignment="Center" Margin="0,10,0,0"
@@ -56,7 +57,7 @@
           </Button>
         </StackPanel>
 
-        <!-- Nav items -->
+        <!-- Nav -->
         <ListBox Classes="nav-rail" SelectedIndex="{Binding SelectedPageIndex}">
           <ListBoxItem ToolTip.Tip="Agent Definition Editor">
             <StackPanel Spacing="3" HorizontalAlignment="Center">
@@ -72,20 +73,6 @@
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
-          <ListBoxItem ToolTip.Tip="JSON Preview">
-            <StackPanel Spacing="3" HorizontalAlignment="Center">
-              <TextBlock Text="{}{}" FontSize="15" HorizontalAlignment="Center" FontFamily="Cascadia Mono, Consolas, monospace" />
-              <TextBlock Text="JSON" FontSize="9" HorizontalAlignment="Center"
-                         Foreground="{StaticResource AppTextSecondaryBrush}" />
-            </StackPanel>
-          </ListBoxItem>
-          <ListBoxItem ToolTip.Tip="Saved Drafts">
-            <StackPanel Spacing="3" HorizontalAlignment="Center">
-              <TextBlock Text="📄" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Drafts" FontSize="9" HorizontalAlignment="Center"
-                         Foreground="{StaticResource AppTextSecondaryBrush}" />
-            </StackPanel>
-          </ListBoxItem>
         </ListBox>
       </DockPanel>
     </Border>
@@ -93,21 +80,18 @@
     <!-- Main Content -->
     <DockPanel Grid.Column="1">
 
-      <!-- Connection Bar: always visible, prominent -->
+      <!-- Connection Bar -->
       <Border DockPanel.Dock="Top" Classes="connection-bar">
         <StackPanel Spacing="6">
-          <!-- Summary row with inline toggle -->
           <StackPanel Orientation="Horizontal" Spacing="10">
             <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"
                        Foreground="{StaticResource AppTextPrimaryBrush}" />
-
             <Border Classes="badge-success" IsVisible="{Binding HasToken}">
               <TextBlock Text="✓ Token configured" FontSize="10" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
             </Border>
             <Border Classes="badge-warning" IsVisible="{Binding !HasToken}">
               <TextBlock Text="⚠ Bearer token required" FontSize="10" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
             </Border>
-
             <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
                     ToolTip.Tip="Show/hide token input" VerticalAlignment="Center"
                     IsVisible="{Binding !IsConnectionBarExpanded}">
@@ -119,8 +103,6 @@
               <TextBlock Text="▴" FontSize="12" />
             </Button>
           </StackPanel>
-
-          <!-- Expanded: token input -->
           <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4">
             <TextBlock Classes="field-label" Text="BEARER TOKEN" />
             <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
@@ -131,25 +113,216 @@
         </StackPanel>
       </Border>
 
-      <!-- Page Content -->
+      <!-- Pages -->
       <Panel>
-        <!-- Editor + Registration Panel -->
+        <!-- Editor Page -->
         <Grid IsVisible="{Binding IsEditorPage}">
           <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <views:DefinitionEditorView DataContext="{Binding Editor}" />
-          <Border Grid.Column="1" Classes="panel" Width="400"
+
+          <!-- File Drawer (left) -->
+          <Border Grid.Column="0" Classes="panel" Width="360"
+                  IsVisible="{Binding IsFileDrawerOpen}">
+            <ScrollViewer>
+              <StackPanel Spacing="0">
+                <DockPanel Margin="0,0,0,16">
+                  <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
+                          Command="{Binding CloseFileDrawerCommand}" />
+                  <TextBlock Classes="page-title" Text="Open" />
+                </DockPanel>
+
+                <!-- Local Drafts -->
+                <TextBlock Classes="section-header" Text="Local Drafts" />
+                <TextBlock Classes="section-desc" Text="Saved on this machine as JSON files." />
+
+                <ItemsControl ItemsSource="{Binding LocalDrafts}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:DraftMetadata">
+                      <Border Background="{StaticResource AppSurfaceRaisedBrush}"
+                              CornerRadius="6" Padding="10,8" Margin="0,0,0,4"
+                              BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1">
+                        <DockPanel>
+                          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                            <Button Classes="action-subtle" Content="✕" ToolTip.Tip="Delete this draft"
+                                    Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).DeleteDraftCommand}"
+                                    CommandParameter="{Binding}" />
+                          </StackPanel>
+                          <StackPanel Spacing="1">
+                            <Button Background="Transparent" Padding="0" BorderThickness="0" Cursor="Hand"
+                                    Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).LoadDraftCommand}"
+                                    CommandParameter="{Binding}">
+                              <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="13"
+                                         Foreground="{StaticResource AppTextPrimaryBrush}" />
+                            </Button>
+                            <TextBlock FontSize="11" Foreground="{StaticResource AppTextMutedBrush}">
+                              <Run Text="{Binding Version}" /><Run Text=" · " /><Run Text="{Binding LastModified, StringFormat='{}{0:g}'}" />
+                            </TextBlock>
+                          </StackPanel>
+                        </DockPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Separator Classes="section-divider" />
+
+                <!-- Remote Agents -->
+                <TextBlock Classes="section-header" Text="From Tenant" />
+                <TextBlock Classes="section-desc" Text="Fetch registered agent definitions from Workday." />
+
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,10">
+                  <ComboBox ItemsSource="{Binding Regions}"
+                            SelectedItem="{Binding RemoteRegion}"
+                            PlaceholderText="Region" Width="120">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                  <Button Classes="action-primary" Content="Fetch"
+                          Command="{Binding FetchRemoteAgentsCommand}"
+                          IsEnabled="{Binding !IsFetchingRemote}" />
+                </StackPanel>
+
+                <TextBlock Text="{Binding RemoteStatusMessage}" FontSize="11"
+                           Foreground="{StaticResource AppTextMutedBrush}" Margin="0,0,0,6"
+                           IsVisible="{Binding RemoteStatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+                <ItemsControl ItemsSource="{Binding RemoteAgents}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="domain:AgentDefinition">
+                      <Border Background="{StaticResource AppSurfaceRaisedBrush}"
+                              CornerRadius="6" Padding="10,8" Margin="0,0,0,4"
+                              BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1">
+                        <Button Background="Transparent" Padding="0" BorderThickness="0" Cursor="Hand"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).LoadRemoteAgentCommand}"
+                                CommandParameter="{Binding}">
+                          <StackPanel Spacing="1">
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"
+                                       Foreground="{StaticResource AppTextPrimaryBrush}" />
+                            <TextBlock FontSize="11" Foreground="{StaticResource AppTextMutedBrush}">
+                              <Run Text="{Binding Version}" /><Run Text=" · " /><Run Text="{Binding Provider.Descriptor}" />
+                            </TextBlock>
+                          </StackPanel>
+                        </Button>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+
+          <!-- Editor workspace (center) -->
+          <DockPanel Grid.Column="1">
+            <!-- Editor Toolbar -->
+            <Border DockPanel.Dock="Top" Classes="page-header">
+              <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <Button Classes="action" Content="Validate" Command="{Binding Editor.ValidateCommand}"
+                          ToolTip.Tip="Check definition against ASOR v1.2 spec." />
+                  <Button Classes="action" Content="Save" Command="{Binding SaveCommand}"
+                          ToolTip.Tip="Save to current draft.">
+                    <Button.Flyout>
+                      <Flyout Placement="BottomEdgeAlignedRight">
+                        <StackPanel Spacing="8" Width="280">
+                          <TextBlock Text="Save Draft" FontWeight="SemiBold" />
+                          <TextBox Text="{Binding CurrentDraftName}" PlaceholderText="Draft name" />
+                          <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Classes="action-primary" Content="Save" HorizontalAlignment="Stretch"
+                                    Command="{Binding SaveCommand}" />
+                          </StackPanel>
+                        </StackPanel>
+                      </Flyout>
+                    </Button.Flyout>
+                  </Button>
+                  <Button Classes="action-primary" Content="Register"
+                          Command="{Binding OpenRegistrationPanelCommand}"
+                          ToolTip.Tip="Open registration panel to POST to Workday ASOR." />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                  <!-- File operations -->
+                  <Button Classes="action" Content="Open" Command="{Binding ToggleFileDrawerCommand}"
+                          ToolTip.Tip="Open a local draft or fetch from tenant." />
+                  <Button Classes="action" Content="New" Command="{Binding NewDefinitionCommand}"
+                          ToolTip.Tip="Start a blank definition." />
+
+                  <Separator Width="1" Height="20" Background="{StaticResource AppBorderSubtleBrush}" />
+
+                  <!-- Mode toggle -->
+                  <StackPanel Orientation="Horizontal" Spacing="0">
+                    <Button Content="Visual" Padding="12,6" CornerRadius="6,0,0,6" FontSize="12"
+                            FontWeight="SemiBold"
+                            Command="{Binding SwitchToVisualCommand}"
+                            IsEnabled="{Binding IsJsonMode}" />
+                    <Button Content="JSON" Padding="12,6" CornerRadius="0,6,6,0" FontSize="12"
+                            FontWeight="SemiBold"
+                            Command="{Binding SwitchToJsonCommand}"
+                            IsEnabled="{Binding IsVisualMode}" />
+                  </StackPanel>
+
+                  <Separator Width="1" Height="20" Background="{StaticResource AppBorderSubtleBrush}" />
+
+                  <!-- Draft name / status -->
+                  <TextBlock Text="{Binding CurrentDraftName, FallbackValue='Untitled'}"
+                             Foreground="{StaticResource AppTextSecondaryBrush}" FontSize="13"
+                             VerticalAlignment="Center" />
+                  <TextBlock Text="{Binding StatusMessage}" FontSize="11"
+                             Foreground="{StaticResource AppTextMutedBrush}" VerticalAlignment="Center"
+                             IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </StackPanel>
+              </DockPanel>
+            </Border>
+
+            <!-- Validation bar -->
+            <Border DockPanel.Dock="Top" Padding="28,8" Background="#185ec26a"
+                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+                    IsVisible="{Binding Editor.IsValid}">
+              <TextBlock Text="✓ No validation issues" FontSize="11" FontWeight="SemiBold"
+                         Foreground="{StaticResource AppSuccessBrush}" />
+            </Border>
+            <Border DockPanel.Dock="Top" Padding="28,10" Background="#18e05555"
+                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+                    IsVisible="{Binding Editor.ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+              <DockPanel>
+                <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
+                        Command="{Binding Editor.DismissErrorsCommand}" ToolTip.Tip="Dismiss" VerticalAlignment="Top" />
+                <StackPanel Spacing="2">
+                  <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
+                  <TextBlock Text="{Binding Editor.ValidationErrors}" FontSize="11" Foreground="{StaticResource AppErrorBrush}"
+                             TextWrapping="Wrap" />
+                </StackPanel>
+              </DockPanel>
+            </Border>
+
+            <!-- Visual Mode -->
+            <views:DefinitionEditorView DataContext="{Binding Editor}"
+                                        IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsVisualMode}" />
+
+            <!-- JSON Mode -->
+            <Border Margin="28,20" Background="{StaticResource AppSurfaceRaisedBrush}"
+                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1"
+                    CornerRadius="8" Padding="4"
+                    IsVisible="{Binding IsJsonMode}">
+              <TextBox Classes="mono" Text="{Binding JsonText}"
+                       AcceptsReturn="True" TextWrapping="NoWrap" />
+            </Border>
+          </DockPanel>
+
+          <!-- Registration Panel (right) -->
+          <Border Grid.Column="2" Classes="panel" Width="400"
                   IsVisible="{Binding IsRegistrationPanelOpen}">
             <views:RegistrationView DataContext="{Binding Registration}" />
           </Border>
         </Grid>
 
-        <views:JsonPreviewView DataContext="{Binding JsonPreview}"
-                               IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsJsonPage}" />
-        <views:DraftManagerView DataContext="{Binding DraftManager}"
-                                IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsDraftsPage}" />
+        <!-- Lookups Page -->
         <views:WqlLookupView DataContext="{Binding WqlLookup}"
                              IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsLookupsPage}" />
       </Panel>

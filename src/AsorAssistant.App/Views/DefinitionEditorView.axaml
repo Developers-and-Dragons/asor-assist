@@ -5,66 +5,7 @@
              x:DataType="vm:DefinitionEditorViewModel"
              x:Name="EditorRoot">
 
-  <DockPanel>
-    <!-- Page Header -->
-    <Border DockPanel.Dock="Top" Classes="page-header">
-      <DockPanel>
-        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-          <Button Classes="action" Content="Validate" Command="{Binding ValidateCommand}"
-                  ToolTip.Tip="Check definition against ASOR v1.2 spec." />
-          <Button Classes="action" Content="Save Draft"
-                  ToolTip.Tip="Save current definition as a local draft.">
-            <Button.Flyout>
-              <Flyout Placement="BottomEdgeAlignedRight">
-                <StackPanel Spacing="8" Width="280">
-                  <TextBlock Text="Save Draft" FontWeight="SemiBold" />
-                  <TextBox Text="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).DraftManager.DraftName}"
-                           PlaceholderText="Draft name" />
-                  <Button Classes="action-primary" Content="Save" HorizontalAlignment="Stretch"
-                          HorizontalContentAlignment="Center"
-                          Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).DraftManager.SaveCommand}" />
-                </StackPanel>
-              </Flyout>
-            </Button.Flyout>
-          </Button>
-          <Button Classes="action-primary" Content="Register"
-                  Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).OpenRegistrationPanelCommand}"
-                  ToolTip.Tip="Open registration panel to POST to Workday ASOR." />
-        </StackPanel>
-
-        <StackPanel>
-          <TextBlock Classes="page-title" Text="Agent Definition" />
-          <TextBlock Classes="page-subtitle" Text="Define an external agent for the Workday Agent System of Record." />
-        </StackPanel>
-      </DockPanel>
-    </Border>
-
-    <!-- Validation Success -->
-    <Border DockPanel.Dock="Top" Padding="28,8" Background="#185ec26a"
-            BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
-            IsVisible="{Binding IsValid}">
-      <TextBlock Text="✓ No validation issues" FontSize="11" FontWeight="SemiBold"
-                 Foreground="{StaticResource AppSuccessBrush}" />
-    </Border>
-
-    <!-- Validation Errors -->
-    <Border DockPanel.Dock="Top" Padding="28,10" Background="#18e05555"
-            BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
-            IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-      <DockPanel>
-        <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
-                Command="{Binding DismissErrorsCommand}"
-                ToolTip.Tip="Dismiss" VerticalAlignment="Top" />
-        <StackPanel Spacing="2">
-          <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
-          <TextBlock Text="{Binding ValidationErrors}" FontSize="11" Foreground="{StaticResource AppErrorBrush}"
-                     TextWrapping="Wrap" />
-        </StackPanel>
-      </DockPanel>
-    </Border>
-
-    <!-- Editor Body -->
-    <ScrollViewer Padding="28,20,28,48">
+  <ScrollViewer Padding="28,20,28,48">
       <StackPanel Spacing="0" MaxWidth="960">
 
         <!-- IDENTITY -->
@@ -409,6 +350,5 @@
 
       </StackPanel>
     </ScrollViewer>
-  </DockPanel>
 
 </UserControl>

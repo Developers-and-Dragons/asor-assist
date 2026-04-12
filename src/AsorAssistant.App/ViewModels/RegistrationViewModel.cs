@@ -11,12 +11,9 @@ public partial class RegistrationViewModel : ObservableObject
     private readonly IAsorRegistrationClient _registrationClient;
     private readonly DefinitionEditorViewModel _editor;
 
-    /// <summary>Provides the bearer token from the app-level connection bar.</summary>
     public Func<string?>? BearerTokenProvider { get; set; }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsConnectionConfigured))]
-    [NotifyPropertyChangedFor(nameof(ConnectionStatusText))]
     private AsorRegion? _selectedRegion;
 
     [ObservableProperty]
@@ -31,19 +28,13 @@ public partial class RegistrationViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSuccess;
 
-    public bool IsConnectionConfigured =>
-        SelectedRegion is not null && !string.IsNullOrWhiteSpace(BearerTokenProvider?.Invoke());
-
-    public string ConnectionStatusText =>
-        IsConnectionConfigured ? $"{SelectedRegion!.Name} region" : "Not configured";
-
     public IReadOnlyList<AsorRegion> Regions => AsorRegion.All;
 
     public RegistrationViewModel(IAsorRegistrationClient registrationClient, DefinitionEditorViewModel editor)
     {
         _registrationClient = registrationClient;
         _editor = editor;
-        SelectedRegion = AsorRegion.All[0]; // Default to US
+        SelectedRegion = AsorRegion.All[0];
     }
 
     partial void OnSelectedRegionChanged(AsorRegion? value)
@@ -58,9 +49,16 @@ public partial class RegistrationViewModel : ObservableObject
     {
         var token = BearerTokenProvider?.Invoke();
 
-        if (SelectedRegion is null || string.IsNullOrWhiteSpace(token))
+        if (SelectedRegion is null)
         {
-            ResponseText = "Region and bearer token are required. Set the token in the connection bar at the top of the app.";
+            ResponseText = "Select a region.";
+            IsSuccess = false;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            ResponseText = "Set a bearer token in the connection bar at the top of the app.";
             IsSuccess = false;
             return;
         }

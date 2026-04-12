@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -29,10 +31,8 @@ public partial class App : Application
         {
             var mainVm = Services.GetRequiredService<MainWindowViewModel>();
 
-            // Wire token providers: both Registration and WQL read from the app-level token
             mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
             mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
-            mainVm.DraftManager.BearerTokenProvider = () => mainVm.BearerToken;
 
             desktop.MainWindow = new MainWindow { DataContext = mainVm };
         }
@@ -55,8 +55,6 @@ public partial class App : Application
 
         // ViewModels
         services.AddSingleton<DefinitionEditorViewModel>();
-        services.AddSingleton<JsonPreviewViewModel>();
-        services.AddSingleton<DraftManagerViewModel>();
         services.AddSingleton<RegistrationViewModel>();
         services.AddSingleton<WqlLookupViewModel>();
         services.AddSingleton<MainWindowViewModel>();
