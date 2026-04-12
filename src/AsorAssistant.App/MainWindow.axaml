@@ -350,7 +350,7 @@
                   BorderThickness="1,0,0,0"
                   IsVisible="{Binding IsVisualMode}">
             <DockPanel>
-              <Button DockPanel.Dock="Bottom" Classes="action-subtle" Content="← Getting Started"
+              <Button DockPanel.Dock="Bottom" Classes="action" Content="← Getting Started"
                       Command="{Binding Editor.ResetHelpCommand}"
                       HorizontalAlignment="Left" Margin="0,12,0,0"
                       IsVisible="{Binding Editor.IsContextualHelp}" />

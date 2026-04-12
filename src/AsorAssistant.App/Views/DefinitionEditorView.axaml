@@ -81,15 +81,12 @@
         <StackPanel x:Name="SectionCapabilities" Spacing="8">
         <TextBlock Classes="section-header" Text="Capabilities" />
         <TextBlock Classes="section-desc" Text="Feature flags. Leave disabled unless your agent actively supports these." />
-          <ToggleSwitch Content="Push Notifications" IsChecked="{Binding PushNotifications}"
-                        OnContent="Enabled" OffContent="Disabled"
-                        ToolTip.Tip="True if the agent can notify updates to client." />
-          <ToggleSwitch Content="Streaming (SSE)" IsChecked="{Binding Streaming}"
-                        OnContent="Enabled" OffContent="Disabled"
-                        ToolTip.Tip="True if the agent supports SSE." />
-          <ToggleSwitch Content="State Transition History" IsChecked="{Binding StateTransitionHistory}"
-                        OnContent="Enabled" OffContent="Disabled"
-                        ToolTip.Tip="True if the agent exposes status change history for tasks." />
+          <CheckBox Content="Push Notifications" IsChecked="{Binding PushNotifications}"
+                    ToolTip.Tip="True if the agent can notify updates to client." />
+          <CheckBox Content="Streaming (SSE)" IsChecked="{Binding Streaming}"
+                    ToolTip.Tip="True if the agent supports SSE." />
+          <CheckBox Content="State Transition History" IsChecked="{Binding StateTransitionHistory}"
+                    ToolTip.Tip="True if the agent exposes status change history for tasks." />
         </StackPanel>
 
         <Separator Classes="section-divider" />
