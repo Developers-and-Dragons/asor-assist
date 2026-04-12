@@ -5,48 +5,59 @@
              x:Class="AsorAssistant.App.Views.DraftManagerView"
              x:DataType="vm:DraftManagerViewModel">
 
-  <DockPanel Margin="16">
-    <!-- Save area -->
-    <StackPanel DockPanel.Dock="Top" Spacing="8" Margin="0,0,0,16">
-      <TextBlock Text="Save Current Definition" FontSize="16" FontWeight="SemiBold" />
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <TextBox Text="{Binding DraftName}" PlaceholderText="Draft name" Width="300" />
-        <Button Content="Save" Command="{Binding SaveCommand}" />
-      </StackPanel>
-    </StackPanel>
+  <StackPanel Spacing="4" Margin="20,12" MaxWidth="900" HorizontalAlignment="Left">
 
-    <!-- Status -->
-    <TextBlock DockPanel.Dock="Bottom" Text="{Binding StatusMessage}"
-               Margin="0,8,0,0" Foreground="Gray" />
+    <!-- Save -->
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <TextBlock Classes="section-header" Text="Save Current Definition" />
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <TextBox Text="{Binding DraftName}" PlaceholderText="Draft name" Width="320" />
+          <Button Classes="primary" Content="Save Draft" Command="{Binding SaveCommand}" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
 
     <!-- Drafts list -->
-    <StackPanel Spacing="8">
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <TextBlock Text="Saved Drafts" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
-        <Button Content="Refresh" Command="{Binding RefreshListCommand}" />
-      </StackPanel>
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Classes="add" Content="Refresh"
+                  Command="{Binding RefreshListCommand}" />
+          <TextBlock Classes="section-header" Text="Saved Drafts" />
+        </DockPanel>
 
-      <DataGrid ItemsSource="{Binding Drafts}"
-                SelectedItem="{Binding SelectedDraft}"
-                AutoGenerateColumns="False"
-                IsReadOnly="True"
-                Height="300"
-                SelectionMode="Single">
-        <DataGrid.Columns>
-          <DataGridTextColumn Header="Name" Binding="{Binding DisplayName}" Width="*" />
-          <DataGridTextColumn Header="Provider" Binding="{Binding Provider}" Width="150" />
-          <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="100" />
-          <DataGridTextColumn Header="Region" Binding="{Binding RegionName}" Width="80" />
-          <DataGridTextColumn Header="Last Modified" Binding="{Binding LastModified, StringFormat='{}{0:g}'}" Width="160" />
-        </DataGrid.Columns>
-      </DataGrid>
+        <DataGrid ItemsSource="{Binding Drafts}"
+                  SelectedItem="{Binding SelectedDraft}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Height="320"
+                  SelectionMode="Single"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="1"
+                  BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                  CornerRadius="6">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" Binding="{Binding DisplayName}" Width="*" />
+            <DataGridTextColumn Header="Provider" Binding="{Binding Provider}" Width="140" />
+            <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="90" />
+            <DataGridTextColumn Header="Region" Binding="{Binding RegionName}" Width="70" />
+            <DataGridTextColumn Header="Last Modified" Binding="{Binding LastModified, StringFormat='{}{0:g}'}" Width="150" />
+          </DataGrid.Columns>
+        </DataGrid>
 
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Load" Command="{Binding LoadCommand}" />
-        <Button Content="Duplicate" Command="{Binding DuplicateCommand}" />
-        <Button Content="Delete" Command="{Binding DeleteCommand}" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Classes="primary" Content="Load" Command="{Binding LoadCommand}" />
+          <Button Classes="add" Content="Duplicate" Command="{Binding DuplicateCommand}" />
+          <Button Classes="remove" Content="Delete" Command="{Binding DeleteCommand}" />
+        </StackPanel>
       </StackPanel>
-    </StackPanel>
-  </DockPanel>
+    </Border>
+
+    <!-- Status -->
+    <TextBlock Text="{Binding StatusMessage}" Margin="4,4,0,0"
+               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+               IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+  </StackPanel>
 
 </UserControl>

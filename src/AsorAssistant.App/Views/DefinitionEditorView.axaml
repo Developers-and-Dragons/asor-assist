@@ -5,256 +5,328 @@
              x:DataType="vm:DefinitionEditorViewModel"
              x:Name="EditorRoot">
 
-  <ScrollViewer Padding="16">
-    <StackPanel Spacing="16" MaxWidth="800">
+  <ScrollViewer Padding="20,12">
+    <StackPanel Spacing="4" MaxWidth="820" HorizontalAlignment="Left">
 
-      <!-- Required Fields -->
-      <TextBlock Text="Agent Definition" FontSize="20" FontWeight="Bold" />
+      <!-- Identity -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="section-header" Text="Identity" />
+          <TextBlock Classes="section-desc" Text="Core agent identity fields required by the ASOR spec." />
 
-      <StackPanel Spacing="8">
-        <TextBlock Text="Name *" />
-        <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
-      </StackPanel>
+          <StackPanel Spacing="4">
+            <TextBlock Classes="field-label" Text="Name *" />
+            <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
+          </StackPanel>
 
-      <StackPanel Spacing="8">
-        <TextBlock Text="Description *" />
-        <TextBox Text="{Binding Description}" PlaceholderText="What this agent does"
-                 AcceptsReturn="True" TextWrapping="Wrap" Height="80" />
-      </StackPanel>
+          <StackPanel Spacing="4">
+            <TextBlock Classes="field-label" Text="Description *" />
+            <TextBox Text="{Binding Description}" PlaceholderText="What this agent does"
+                     AcceptsReturn="True" TextWrapping="Wrap" Height="80" />
+          </StackPanel>
 
-      <StackPanel Spacing="8">
-        <TextBlock Text="URL *" />
-        <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="Version *" />
-        <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
-      </StackPanel>
-
-      <!-- Provider -->
-      <TextBlock Text="Provider" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
-      <StackPanel Spacing="8">
-        <TextBlock Text="Provider *" />
-        <ComboBox ItemsSource="{Binding ProviderOptions}"
-                  SelectedValue="{Binding SelectedProviderId}"
-                  SelectedValueBinding="{Binding Id}"
-                  DisplayMemberBinding="{Binding Name}"
-                  PlaceholderText="Select provider..." />
-        <StackPanel IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}, FallbackValue=False}">
-          <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
-                   IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="URL *" />
+              <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="Version *" />
+              <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
+            </StackPanel>
+          </Grid>
         </StackPanel>
-      </StackPanel>
+      </Border>
 
-      <!-- Platform -->
-      <StackPanel Spacing="8">
-        <TextBlock Text="Platform *" />
-        <ComboBox ItemsSource="{Binding PlatformOptions}"
-                  SelectedValue="{Binding SelectedPlatformId}"
-                  SelectedValueBinding="{Binding Id}"
-                  DisplayMemberBinding="{Binding Name}"
-                  PlaceholderText="Select platform..." />
-      </StackPanel>
+      <!-- Provider and Platform -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="section-header" Text="Provider &amp; Platform" />
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="Provider *" />
+              <ComboBox ItemsSource="{Binding ProviderOptions}"
+                        SelectedValue="{Binding SelectedProviderId}"
+                        SelectedValueBinding="{Binding Id}"
+                        DisplayMemberBinding="{Binding Name}"
+                        PlaceholderText="Select provider..."
+                        HorizontalAlignment="Stretch" />
+              <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
+                       IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       Margin="0,4,0,0" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="Platform *" />
+              <ComboBox ItemsSource="{Binding PlatformOptions}"
+                        SelectedValue="{Binding SelectedPlatformId}"
+                        SelectedValueBinding="{Binding Id}"
+                        DisplayMemberBinding="{Binding Name}"
+                        PlaceholderText="Select platform..."
+                        HorizontalAlignment="Stretch" />
+              <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Custom platform ID"
+                       IsVisible="{Binding SelectedPlatformId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       Margin="0,4,0,0" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </Border>
 
       <!-- Capabilities -->
-      <TextBlock Text="Capabilities" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
-      <StackPanel Spacing="4">
-        <CheckBox Content="Push Notifications" IsChecked="{Binding PushNotifications}" />
-        <CheckBox Content="Streaming" IsChecked="{Binding Streaming}" />
-        <CheckBox Content="State Transition History" IsChecked="{Binding StateTransitionHistory}" />
-      </StackPanel>
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="section-header" Text="Capabilities" />
+          <TextBlock Classes="section-desc" Text="Feature flags indicating what the agent supports." />
 
-      <!-- Optional Fields -->
-      <TextBlock Text="Optional Fields" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="Overview" />
-        <TextBox Text="{Binding Overview}" PlaceholderText="Summary display text"
-                 AcceptsReturn="True" TextWrapping="Wrap" Height="60" />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="Icon URL" />
-        <TextBox Text="{Binding IconUrl}" PlaceholderText="https://..." />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="Documentation URL" />
-        <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="https://..." />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="External Agent ID" />
-        <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Partner system identifier" />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="External Tenant ID" />
-        <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="Tenant locator in partner system" />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="Default Input Modes" />
-        <TextBox Text="{Binding DefaultInputModesText}" PlaceholderText="application/json (comma-separated)" />
-      </StackPanel>
-
-      <StackPanel Spacing="8">
-        <TextBlock Text="Default Output Modes" />
-        <TextBox Text="{Binding DefaultOutputModesText}" PlaceholderText="application/json (comma-separated)" />
-      </StackPanel>
-
-      <CheckBox Content="Supports Authenticated Extended Card"
-                IsChecked="{Binding SupportsAuthenticatedExtendedCard}" />
+          <StackPanel Orientation="Horizontal" Spacing="24">
+            <CheckBox Content="Push Notifications" IsChecked="{Binding PushNotifications}" />
+            <CheckBox Content="Streaming" IsChecked="{Binding Streaming}" />
+            <CheckBox Content="State Transition History" IsChecked="{Binding StateTransitionHistory}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
 
       <!-- Skills -->
-      <TextBlock Text="Skills" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <DockPanel>
+            <Button DockPanel.Dock="Right" Classes="add" Content="+ Add Skill"
+                    Command="{Binding AddSkillCommand}" VerticalAlignment="Top" />
+            <StackPanel>
+              <TextBlock Classes="section-header" Text="Skills" />
+              <TextBlock Classes="section-desc" Text="At least one skill is required. Skills define what the agent can do." />
+            </StackPanel>
+          </DockPanel>
 
-      <ItemsControl ItemsSource="{Binding Skills}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate x:DataType="vm:SkillViewModel">
-            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,8">
-              <StackPanel Spacing="8">
-                <DockPanel>
-                  <Button DockPanel.Dock="Right" Content="Remove"
-                          Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveSkillCommand}"
-                          CommandParameter="{Binding}" VerticalAlignment="Top" />
-                  <TextBlock Text="Skill" FontWeight="SemiBold" VerticalAlignment="Center" />
-                </DockPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Skill ID *" />
-                  <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
-                </StackPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Skill Name *" />
-                  <TextBox Text="{Binding Name}" PlaceholderText="Human-readable skill name" />
-                </StackPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Skill Description *" />
-                  <TextBox Text="{Binding Description}" PlaceholderText="What this skill does"
-                           AcceptsReturn="True" TextWrapping="Wrap" Height="60" />
-                </StackPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Tags * (comma-separated)" />
-                  <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
-                </StackPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Input Modes (comma-separated)" />
-                  <TextBox Text="{Binding InputModesText}" PlaceholderText="application/json" />
-                </StackPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Output Modes (comma-separated)" />
-                  <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
-                </StackPanel>
-              </StackPanel>
-            </Border>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
+          <ItemsControl ItemsSource="{Binding Skills}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:SkillViewModel">
+                <Border Classes="card-nested">
+                  <StackPanel Spacing="10">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="remove" Content="Remove"
+                              Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveSkillCommand}"
+                              CommandParameter="{Binding}" />
+                      <TextBlock Classes="card-title" Text="Skill" VerticalAlignment="Center" />
+                    </DockPanel>
 
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Add Skill" Command="{Binding AddSkillCommand}" />
-      </StackPanel>
+                    <Grid ColumnDefinitions="*,12,2*">
+                      <StackPanel Spacing="4">
+                        <TextBlock Classes="field-label" Text="ID *" />
+                        <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock Classes="field-label" Text="Name *" />
+                        <TextBox Text="{Binding Name}" PlaceholderText="Human-readable skill name" />
+                      </StackPanel>
+                    </Grid>
+
+                    <StackPanel Spacing="4">
+                      <TextBlock Classes="field-label" Text="Description *" />
+                      <TextBox Text="{Binding Description}" PlaceholderText="What this skill does"
+                               AcceptsReturn="True" TextWrapping="Wrap" Height="56" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="4">
+                      <TextBlock Classes="field-label" Text="Tags * (comma-separated)" />
+                      <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,12,*">
+                      <StackPanel Spacing="4">
+                        <TextBlock Classes="field-label" Text="Input Modes (comma-separated)" />
+                        <TextBox Text="{Binding InputModesText}" PlaceholderText="application/json" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock Classes="field-label" Text="Output Modes (comma-separated)" />
+                        <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
+                      </StackPanel>
+                    </Grid>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <!-- Optional Fields -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="section-header" Text="Optional Fields" />
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="field-label" Text="Overview" />
+            <TextBox Text="{Binding Overview}" PlaceholderText="Summary display text"
+                     AcceptsReturn="True" TextWrapping="Wrap" Height="56" />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="Icon URL" />
+              <TextBox Text="{Binding IconUrl}" PlaceholderText="https://..." />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="Documentation URL" />
+              <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="https://..." />
+            </StackPanel>
+          </Grid>
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="External Agent ID" />
+              <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Partner system identifier" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="External Tenant ID" />
+              <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="Tenant locator" />
+            </StackPanel>
+          </Grid>
+
+          <Grid ColumnDefinitions="*,16,*">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="field-label" Text="Default Input Modes" />
+              <TextBox Text="{Binding DefaultInputModesText}" PlaceholderText="application/json (comma-separated)" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4">
+              <TextBlock Classes="field-label" Text="Default Output Modes" />
+              <TextBox Text="{Binding DefaultOutputModesText}" PlaceholderText="application/json (comma-separated)" />
+            </StackPanel>
+          </Grid>
+
+          <CheckBox Content="Supports Authenticated Extended Card"
+                    IsChecked="{Binding SupportsAuthenticatedExtendedCard}" />
+        </StackPanel>
+      </Border>
 
       <!-- Workday Config -->
-      <TextBlock Text="Workday Config" FontSize="16" FontWeight="SemiBold" Margin="0,8,0,0" />
-      <TextBlock Text="Map skills to Workday resources, tools, and securable items." Foreground="Gray" />
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <DockPanel>
+            <Button DockPanel.Dock="Right" Classes="add" Content="+ Add Mapping"
+                    Command="{Binding AddWorkdayConfigEntryCommand}" VerticalAlignment="Top" />
+            <StackPanel>
+              <TextBlock Classes="section-header" Text="Workday Config" />
+              <TextBlock Classes="section-desc" Text="Map skills to Workday resources, execution modes, and securable items." />
+            </StackPanel>
+          </DockPanel>
 
-      <ItemsControl ItemsSource="{Binding WorkdayConfig}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate x:DataType="vm:AgentSkillResourceViewModel">
-            <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,8">
-              <StackPanel Spacing="8">
-                <DockPanel>
-                  <Button DockPanel.Dock="Right" Content="Remove"
-                          Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveWorkdayConfigEntryCommand}"
-                          CommandParameter="{Binding}" VerticalAlignment="Top" />
-                  <TextBlock Text="Skill Resource Mapping" FontWeight="SemiBold" VerticalAlignment="Center" />
-                </DockPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Skill ID *" />
-                  <ComboBox ItemsSource="{Binding AvailableSkills}"
-                            SelectedValue="{Binding SkillId}"
-                            SelectedValueBinding="{Binding Id}"
-                            DisplayMemberBinding="{Binding Id}"
-                            PlaceholderText="Select a skill..." />
-                </StackPanel>
-                <StackPanel Spacing="4">
-                  <TextBlock Text="Execution Mode *" />
-                  <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
-                            SelectedItem="{Binding SelectedExecutionMode}"
-                            PlaceholderText="Select mode..." />
-                </StackPanel>
+          <ItemsControl ItemsSource="{Binding WorkdayConfig}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:AgentSkillResourceViewModel">
+                <Border Classes="card-nested">
+                  <StackPanel Spacing="10">
+                    <DockPanel>
+                      <Button DockPanel.Dock="Right" Classes="remove" Content="Remove"
+                              Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveWorkdayConfigEntryCommand}"
+                              CommandParameter="{Binding}" />
+                      <TextBlock Classes="card-title" Text="Skill Resource Mapping" VerticalAlignment="Center" />
+                    </DockPanel>
 
-                <!-- Workday Resources within this skill resource -->
-                <TextBlock Text="Workday Resources" FontWeight="SemiBold" Margin="0,4,0,0" />
-                <ItemsControl ItemsSource="{Binding WorkdayResources}">
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="vm:WorkdayResourceViewModel">
-                      <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6">
-                        <StackPanel Spacing="6">
-                          <DockPanel>
-                            <Button DockPanel.Dock="Right" Content="Remove"
-                                    Command="{Binding $parent[ItemsControl].((vm:AgentSkillResourceViewModel)DataContext).RemoveWorkdayResourceCommand}"
-                                    CommandParameter="{Binding}" VerticalAlignment="Top" />
-                            <TextBlock Text="Resource" FontWeight="SemiBold" VerticalAlignment="Center" />
-                          </DockPanel>
-                          <StackPanel Spacing="4">
-                            <TextBlock Text="Tool Name *" />
-                            <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers or endpoint name" />
-                          </StackPanel>
-                          <StackPanel Spacing="4">
-                            <TextBlock Text="Description" />
-                            <TextBox Text="{Binding Description}" PlaceholderText="What this tool does" />
-                          </StackPanel>
-                          <StackPanel Spacing="4">
-                            <TextBlock Text="Agent Resource ID (Workday Tool WID)" />
-                            <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday ID of the tool" />
-                          </StackPanel>
+                    <Grid ColumnDefinitions="*,12,*">
+                      <StackPanel Spacing="4">
+                        <TextBlock Classes="field-label" Text="Skill *" />
+                        <ComboBox ItemsSource="{Binding AvailableSkills}"
+                                  SelectedValue="{Binding SkillId}"
+                                  SelectedValueBinding="{Binding Id}"
+                                  DisplayMemberBinding="{Binding Id}"
+                                  PlaceholderText="Select a skill..."
+                                  HorizontalAlignment="Stretch" />
+                      </StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock Classes="field-label" Text="Execution Mode *" />
+                        <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
+                                  SelectedItem="{Binding SelectedExecutionMode}"
+                                  PlaceholderText="Select mode..."
+                                  HorizontalAlignment="Stretch" />
+                      </StackPanel>
+                    </Grid>
 
-                          <!-- Securable Items (Tools) -->
-                          <TextBlock Text="Securable Items (SOAP Operations, REST Operations, Data Sources, etc.)" FontWeight="SemiBold" Margin="0,4,0,0" />
-                          <ItemsControl ItemsSource="{Binding Tools}">
-                            <ItemsControl.ItemTemplate>
-                              <DataTemplate x:DataType="vm:SecurableItemViewModel">
-                                <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,0,4">
-                                  <TextBox Text="{Binding Id}" PlaceholderText="Workday securable item ID" Width="400" />
-                                  <Button Content="Remove"
-                                          Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
-                                          CommandParameter="{Binding}" />
+                    <!-- Workday Resources -->
+                    <DockPanel Margin="0,4,0,0">
+                      <Button DockPanel.Dock="Right" Classes="add" Content="+ Resource"
+                              Command="{Binding AddWorkdayResourceCommand}" VerticalAlignment="Top" />
+                      <TextBlock Classes="card-title" Text="Workday Resources" VerticalAlignment="Center" />
+                    </DockPanel>
+
+                    <ItemsControl ItemsSource="{Binding WorkdayResources}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:WorkdayResourceViewModel">
+                          <Border Classes="card-inner">
+                            <StackPanel Spacing="8">
+                              <DockPanel>
+                                <Button DockPanel.Dock="Right" Classes="remove" Content="Remove"
+                                        Command="{Binding $parent[ItemsControl].((vm:AgentSkillResourceViewModel)DataContext).RemoveWorkdayResourceCommand}"
+                                        CommandParameter="{Binding}" />
+                                <TextBlock Classes="card-title" Text="Resource" VerticalAlignment="Center" />
+                              </DockPanel>
+
+                              <Grid ColumnDefinitions="*,12,*">
+                                <StackPanel Spacing="4">
+                                  <TextBlock Classes="field-label" Text="Tool Name *" />
+                                  <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers" />
                                 </StackPanel>
-                              </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                          </ItemsControl>
-                          <Button Content="+ Add Securable Item" Command="{Binding AddToolCommand}" />
-                        </StackPanel>
-                      </Border>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                <StackPanel Grid.Column="2" Spacing="4">
+                                  <TextBlock Classes="field-label" Text="Agent Resource ID" />
+                                  <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday tool WID" />
+                                </StackPanel>
+                              </Grid>
 
-                <Button Content="+ Add Workday Resource" Command="{Binding AddWorkdayResourceCommand}" />
-              </StackPanel>
-            </Border>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
+                              <StackPanel Spacing="4">
+                                <TextBlock Classes="field-label" Text="Description" />
+                                <TextBox Text="{Binding Description}" PlaceholderText="What this tool does" />
+                              </StackPanel>
 
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Add Workday Config Entry" Command="{Binding AddWorkdayConfigEntryCommand}" />
-      </StackPanel>
+                              <!-- Securable Items -->
+                              <DockPanel Margin="0,4,0,0">
+                                <Button DockPanel.Dock="Right" Classes="add" Content="+ Item"
+                                        Command="{Binding AddToolCommand}" VerticalAlignment="Top" />
+                                <TextBlock Classes="field-label" Text="Securable Items (SOAP Ops, REST Ops, Data Sources, etc.)"
+                                           VerticalAlignment="Center" />
+                              </DockPanel>
+
+                              <ItemsControl ItemsSource="{Binding Tools}">
+                                <ItemsControl.ItemTemplate>
+                                  <DataTemplate x:DataType="vm:SecurableItemViewModel">
+                                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,4">
+                                      <TextBox Text="{Binding Id}" PlaceholderText="Workday securable item ID"
+                                               Width="420" />
+                                      <Button Classes="remove" Content="Remove"
+                                              Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
+                                              CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+                            </StackPanel>
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
 
       <!-- Validation -->
-      <Separator Margin="0,8" />
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Validate" Command="{Binding ValidateCommand}" />
-        <TextBlock Text="Valid" Foreground="Green" VerticalAlignment="Center"
-                   IsVisible="{Binding IsValid}" />
-      </StackPanel>
+      <Border Classes="card">
+        <StackPanel Spacing="8">
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <Button Classes="primary" Content="Validate" Command="{Binding ValidateCommand}" />
+            <TextBlock Classes="status-success" Text="Definition is valid"
+                       VerticalAlignment="Center"
+                       IsVisible="{Binding IsValid}" />
+          </StackPanel>
 
-      <TextBlock Text="{Binding ValidationErrors}" Foreground="Red"
-                 TextWrapping="Wrap"
-                 IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <TextBox Classes="mono" Text="{Binding ValidationErrors}" IsReadOnly="True"
+                   AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="200"
+                   IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                   Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+        </StackPanel>
+      </Border>
 
     </StackPanel>
   </ScrollViewer>

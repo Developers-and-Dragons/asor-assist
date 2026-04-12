@@ -4,52 +4,64 @@
              x:Class="AsorAssistant.App.Views.WqlLookupView"
              x:DataType="vm:WqlLookupViewModel">
 
-  <DockPanel Margin="16">
-    <StackPanel DockPanel.Dock="Top" Spacing="12" MaxWidth="600" HorizontalAlignment="Left">
+  <StackPanel Spacing="4" Margin="20,12">
 
-      <TextBlock Text="WQL Service Operation Lookup" FontSize="20" FontWeight="Bold" />
+    <!-- Auth + Actions -->
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <TextBlock Classes="section-header" Text="WQL Service Operation Lookup" />
+        <TextBlock Classes="section-desc" Text="Search for SOAP or REST service operation WIDs to use in your Workday Config." />
 
-      <StackPanel Spacing="8">
-        <TextBlock Text="Bearer Token *" />
-        <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste bearer token"
-                 PasswordChar="*" RevealPassword="False" />
+        <StackPanel Spacing="4" MaxWidth="500">
+          <TextBlock Classes="field-label" Text="Bearer Token *" />
+          <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste bearer token"
+                   PasswordChar="*" RevealPassword="False" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Classes="primary" Content="SOAP Operations" Command="{Binding LookupSoapCommand}"
+                  IsEnabled="{Binding !IsLoading}" />
+          <Button Classes="add" Content="REST Operations" Command="{Binding LookupRestCommand}"
+                  IsEnabled="{Binding !IsLoading}" />
+        </StackPanel>
       </StackPanel>
-
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Lookup SOAP Operations" Command="{Binding LookupSoapCommand}"
-                IsEnabled="{Binding !IsLoading}" />
-        <Button Content="Lookup REST Operations" Command="{Binding LookupRestCommand}"
-                IsEnabled="{Binding !IsLoading}" />
-      </StackPanel>
-
-      <TextBlock Text="{Binding StatusMessage}" Foreground="Gray" />
-    </StackPanel>
+    </Border>
 
     <!-- Results -->
-    <StackPanel Margin="0,12,0,0" Spacing="8">
-      <StackPanel Spacing="8">
-        <TextBlock Text="Filter" />
+    <Border Classes="card">
+      <StackPanel Spacing="12">
+        <DockPanel>
+          <TextBlock DockPanel.Dock="Right" Text="{Binding StatusMessage}"
+                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                     VerticalAlignment="Center" FontSize="13"
+                     IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <TextBlock Classes="section-header" Text="Results" />
+        </DockPanel>
+
         <TextBox Text="{Binding FilterText}" PlaceholderText="Type to filter results..." />
-      </StackPanel>
 
-      <DataGrid ItemsSource="{Binding Results}"
-                SelectedItem="{Binding SelectedResult}"
-                AutoGenerateColumns="False"
-                IsReadOnly="True"
-                Height="350"
-                SelectionMode="Single">
-        <DataGrid.Columns>
-          <DataGridTextColumn Header="Operation" Binding="{Binding Name}" Width="*" />
-          <DataGridTextColumn Header="Workday ID" Binding="{Binding WorkdayId}" Width="300" />
-          <DataGridTextColumn Header="Service" Binding="{Binding ServiceName}" Width="200" />
-          <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
-        </DataGrid.Columns>
-      </DataGrid>
+        <DataGrid ItemsSource="{Binding Results}"
+                  SelectedItem="{Binding SelectedResult}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Height="380"
+                  SelectionMode="Single"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="1"
+                  BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                  CornerRadius="6">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Operation" Binding="{Binding Name}" Width="*" />
+            <DataGridTextColumn Header="Workday ID" Binding="{Binding WorkdayId}" Width="280" />
+            <DataGridTextColumn Header="Service" Binding="{Binding ServiceName}" Width="180" />
+            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60" />
+          </DataGrid.Columns>
+        </DataGrid>
 
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Copy WID" Command="{Binding CopyWidCommand}" />
+        <Button Classes="add" Content="Copy Selected WID" Command="{Binding CopyWidCommand}" />
       </StackPanel>
-    </StackPanel>
-  </DockPanel>
+    </Border>
+
+  </StackPanel>
 
 </UserControl>

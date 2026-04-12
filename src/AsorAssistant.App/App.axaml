@@ -2,10 +2,111 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="AsorAssistant.App.App"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+
+        <!-- Card style for form sections -->
+        <Style Selector="Border.card">
+          <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="8" />
+          <Setter Property="Padding" Value="20" />
+          <Setter Property="Margin" Value="0,0,0,12" />
+        </Style>
+
+        <Style Selector="Border.card-nested">
+          <Setter Property="Background" Value="{DynamicResource LayerFillColorDefaultBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="Padding" Value="16" />
+          <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="Border.card-inner">
+          <Setter Property="Background" Value="{DynamicResource SolidBackgroundFillColorBaseBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="Padding" Value="12" />
+          <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+
+        <!-- Section header -->
+        <Style Selector="TextBlock.section-header">
+          <Setter Property="FontSize" Value="18" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Margin" Value="0,4,0,4" />
+        </Style>
+
+        <Style Selector="TextBlock.section-desc">
+          <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+          <Setter Property="FontSize" Value="13" />
+          <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="TextBlock.field-label">
+          <Setter Property="FontSize" Value="13" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+
+        <Style Selector="TextBlock.card-title">
+          <Setter Property="FontSize" Value="14" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <!-- Subtle remove button -->
+        <Style Selector="Button.remove">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="Padding" Value="8,4" />
+          <Setter Property="CornerRadius" Value="4" />
+        </Style>
+
+        <Style Selector="Button.remove:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+          <Setter Property="Background" Value="{DynamicResource SystemFillColorCriticalBackgroundBrush}" />
+          <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+        </Style>
+
+        <!-- Primary action button -->
+        <Style Selector="Button.primary">
+          <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Padding" Value="16,8" />
+          <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <!-- Add button -->
+        <Style Selector="Button.add">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="Foreground" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+          <Setter Property="Padding" Value="12,6" />
+          <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="FontSize" Value="13" />
+        </Style>
+
+        <!-- Status text -->
+        <Style Selector="TextBlock.status-success">
+          <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="TextBlock.status-error">
+          <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+        </Style>
+
+        <!-- Monospace text -->
+        <Style Selector="TextBox.mono">
+          <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, monospace" />
+          <Setter Property="FontSize" Value="13" />
+        </Style>
     </Application.Styles>
 </Application>
