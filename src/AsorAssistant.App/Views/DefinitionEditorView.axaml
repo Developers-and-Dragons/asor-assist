@@ -11,13 +11,13 @@
       <DockPanel>
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
           <!-- Status badges -->
-          <Border Classes="badge" Background="#1880d0a0"
+          <Border Classes="badge badge-success"
                   IsVisible="{Binding IsValid}">
-            <TextBlock Text="✓ Valid" FontSize="11" Foreground="#80d0a0" FontWeight="SemiBold" />
+            <TextBlock Text="✓ Valid" FontSize="11" Foreground="{StaticResource AppSuccessBrush}" FontWeight="SemiBold" />
           </Border>
-          <Border Classes="badge" Background="#30ff6060"
+          <Border Classes="badge badge-error"
                   IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-            <TextBlock Text="✕ Invalid" FontSize="11" Foreground="#ff8080" FontWeight="SemiBold" />
+            <TextBlock Text="✕ Invalid" FontSize="11" Foreground="{StaticResource AppErrorBrush}" FontWeight="SemiBold" />
           </Border>
 
           <Separator Width="1" Height="20" Margin="4,0" Opacity="0.15" />
@@ -53,11 +53,11 @@
 
     <!-- Validation Errors (fixed below toolbar, always visible when present) -->
     <Border DockPanel.Dock="Top" Margin="20,8,20,0" Padding="12,8" CornerRadius="6"
-            Background="#20ff6060"
+            Background="#22e06060"
             IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
       <StackPanel Spacing="4">
-        <TextBlock Text="Validation Errors" FontSize="12" FontWeight="SemiBold" Foreground="#ff8080" />
-        <TextBlock Text="{Binding ValidationErrors}" FontSize="12" Foreground="#ffb0b0"
+        <TextBlock Text="Validation Errors" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
+        <TextBlock Text="{Binding ValidationErrors}" FontSize="12" Foreground="{StaticResource AppErrorBrush}"
                    TextWrapping="Wrap" />
       </StackPanel>
     </Border>
@@ -74,7 +74,7 @@
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label" Text="NAME" />
             <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
-            <TextBlock Opacity="0.4" FontSize="11" Text="Display name shown to Workday admins and end users." />
+            <TextBlock Classes="helper" Text="Display name shown to Workday admins and end users." />
           </StackPanel>
 
           <StackPanel Spacing="3">
@@ -87,12 +87,12 @@
             <StackPanel Spacing="3">
               <TextBlock Classes="field-label" Text="URL" />
               <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
-              <TextBlock Opacity="0.4" FontSize="11" Text="The publicly reachable endpoint Workday will call." />
+              <TextBlock Classes="helper" Text="The publicly reachable endpoint Workday will call." />
             </StackPanel>
             <StackPanel Grid.Column="2" Spacing="3">
               <TextBlock Classes="field-label" Text="VERSION" />
               <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
-              <TextBlock Opacity="0.4" FontSize="11" Text="Semver recommended." />
+              <TextBlock Classes="helper" Text="Semver recommended." />
             </StackPanel>
           </Grid>
         </StackPanel>
@@ -115,7 +115,7 @@
             <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
                      IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                      Margin="0,4,0,0" />
-            <TextBlock Opacity="0.4" FontSize="11" Text="The organisation that built or manages this agent." />
+            <TextBlock Classes="helper" Text="The organisation that built or manages this agent." />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="3">
             <TextBlock Classes="field-label" Text="PLATFORM" />
@@ -128,7 +128,7 @@
             <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Custom platform ID"
                      IsVisible="{Binding SelectedPlatformId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                      Margin="0,4,0,0" />
-            <TextBlock Opacity="0.4" FontSize="11" Text="The runtime or framework the agent is deployed on." />
+            <TextBlock Classes="helper" Text="The runtime or framework the agent is deployed on." />
           </StackPanel>
         </Grid>
 
@@ -175,7 +175,7 @@
                       <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Classes="card-title" Text="{Binding Id, FallbackValue='New Skill'}"
                                    VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Name}" Opacity="0.5" FontSize="12"
+                        <TextBlock Text="{Binding Name}" Foreground="{StaticResource AppTextSecondaryBrush}" FontSize="12"
                                    VerticalAlignment="Center" />
                       </StackPanel>
                     </DockPanel>
@@ -186,7 +186,7 @@
                       <StackPanel Spacing="3">
                         <TextBlock Classes="field-label" Text="ID" />
                         <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
-                        <TextBlock Opacity="0.4" FontSize="11" Text="Stable identifier used in API calls." />
+                        <TextBlock Classes="helper" Text="Stable identifier used in API calls." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label" Text="NAME" />
@@ -203,19 +203,19 @@
                     <StackPanel Spacing="3">
                       <TextBlock Classes="field-label" Text="TAGS (comma-separated)" />
                       <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
-                      <TextBlock Opacity="0.4" FontSize="11" Text="Optional labels for categorisation and search." />
+                      <TextBlock Classes="helper" Text="Optional labels for categorisation and search." />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,12,*">
                       <StackPanel Spacing="3">
                         <TextBlock Classes="field-label" Text="INPUT MODES (comma-separated)" />
                         <TextBox Text="{Binding InputModesText}" PlaceholderText="application/json" />
-                        <TextBlock Opacity="0.4" FontSize="11" Text="MIME types the skill accepts." />
+                        <TextBlock Classes="helper" Text="MIME types the skill accepts." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label" Text="OUTPUT MODES (comma-separated)" />
                         <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
-                        <TextBlock Opacity="0.4" FontSize="11" Text="MIME types the skill returns." />
+                        <TextBlock Classes="helper" Text="MIME types the skill returns." />
                       </StackPanel>
                     </Grid>
                   </StackPanel>
@@ -250,7 +250,7 @@
                       <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Classes="card-title" Text="{Binding SkillId, FallbackValue='Unmapped'}"
                                    VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding SelectedExecutionMode}" Opacity="0.4" FontSize="11"
+                        <TextBlock Text="{Binding SelectedExecutionMode}" Classes="helper"
                                    VerticalAlignment="Center" />
                       </StackPanel>
                     </DockPanel>
@@ -273,7 +273,7 @@
                                   SelectedItem="{Binding SelectedExecutionMode}"
                                   PlaceholderText="Select mode..."
                                   HorizontalAlignment="Stretch" />
-                        <TextBlock Opacity="0.4" FontSize="11" Text="Ambient = no human needed. Delegate = human invocation required." />
+                        <TextBlock Classes="helper" Text="Ambient = no human needed. Delegate = human invocation required." />
                       </StackPanel>
                     </Grid>
 
@@ -302,12 +302,12 @@
                                 <StackPanel Spacing="3">
                                   <TextBlock Classes="field-label" Text="TOOL NAME" />
                                   <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers" />
-                                  <TextBlock Opacity="0.4" FontSize="11" Text="SOAP/REST operation or data source name." />
+                                  <TextBlock Classes="helper" Text="SOAP/REST operation or data source name." />
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Spacing="3">
                                   <TextBlock Classes="field-label" Text="AGENT RESOURCE ID" />
                                   <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday tool WID" />
-                                  <TextBlock Opacity="0.4" FontSize="11" Text="WID from Workday. Use Lookups to find it." />
+                                  <TextBlock Classes="helper" Text="WID from Workday. Use Lookups to find it." />
                                 </StackPanel>
                               </Grid>
 
@@ -357,7 +357,7 @@
           <Expander.Header>
             <StackPanel>
               <TextBlock Classes="section-header" Text="Optional Fields" />
-              <TextBlock FontSize="11" Text="Overview, URLs, external IDs, MIME types" Opacity="0.4" />
+              <TextBlock Classes="helper" Text="Overview, URLs, external IDs, MIME types" />
             </StackPanel>
           </Expander.Header>
 

@@ -12,14 +12,16 @@
   <Grid ColumnDefinitions="68,*">
 
     <!-- Left Navigation Rail -->
-    <Border Grid.Column="0" Background="#0Affffff" BorderBrush="#12ffffff" BorderThickness="0,0,1,0">
+    <Border Grid.Column="0" Background="{StaticResource AppSurfaceBrush}"
+            BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,1,0">
       <DockPanel>
         <TextBlock DockPanel.Dock="Top" Text="ASOR" FontSize="11" FontWeight="Bold"
-                   HorizontalAlignment="Center" Margin="0,16,0,12" Opacity="0.5" />
+                   HorizontalAlignment="Center" Margin="0,16,0,12"
+                   Foreground="{StaticResource AppTextMutedBrush}" />
 
         <!-- Help pinned to bottom -->
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Margin="0,0,0,16">
-          <Separator Margin="8,0" Opacity="0.1" />
+          <Separator Margin="8,0" Background="{StaticResource AppBorderSubtleBrush}" />
           <Button HorizontalAlignment="Center" Margin="0,10,0,0"
                   Background="Transparent" CornerRadius="8" Padding="8"
                   ToolTip.Tip="Help &amp; Documentation">
@@ -27,17 +29,22 @@
               <Flyout Placement="RightEdgeAlignedTop">
                 <StackPanel Spacing="8" Width="260" Margin="4">
                   <TextBlock Text="Help &amp; Docs" FontWeight="SemiBold" FontSize="13" />
-                  <TextBlock TextWrapping="Wrap" FontSize="12" Opacity="0.6"
+                  <TextBlock TextWrapping="Wrap" FontSize="12"
+                             Foreground="{StaticResource AppTextSecondaryBrush}"
                              Text="This tool registers external agents against the Workday Agent System of Record (ASOR) API v1.2." />
-                  <TextBlock Text="ASOR v1.2 Spec" FontSize="12" Foreground="#80a0d0" Cursor="Hand" />
-                  <TextBlock TextWrapping="Wrap" FontSize="11" Opacity="0.4"
+                  <TextBlock Text="ASOR v1.2 Spec" FontSize="12"
+                             Foreground="{StaticResource AppLinkBrush}" Cursor="Hand" />
+                  <TextBlock TextWrapping="Wrap" FontSize="11"
+                             Foreground="{StaticResource AppTextMutedBrush}"
                              Text="Region endpoints: US / EU / UK / SIN / IND / JPN at {region}.agent.workday.com" />
                 </StackPanel>
               </Flyout>
             </Button.Flyout>
             <StackPanel Spacing="4" HorizontalAlignment="Center">
-              <TextBlock Text="?" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" />
-              <TextBlock Text="Help" FontSize="10" HorizontalAlignment="Center" Opacity="0.7" />
+              <TextBlock Text="?" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold"
+                         Foreground="{StaticResource AppTextMutedBrush}" />
+              <TextBlock Text="Help" FontSize="10" HorizontalAlignment="Center"
+                         Foreground="{StaticResource AppTextMutedBrush}" />
             </StackPanel>
           </Button>
         </StackPanel>
@@ -47,25 +54,29 @@
           <ListBoxItem ToolTip.Tip="Agent Definition Editor">
             <StackPanel Spacing="4" HorizontalAlignment="Center">
               <TextBlock Text="✏" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Editor" FontSize="10" HorizontalAlignment="Center" Opacity="0.7" />
+              <TextBlock Text="Editor" FontSize="10" HorizontalAlignment="Center"
+                         Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="JSON Preview">
             <StackPanel Spacing="4" HorizontalAlignment="Center">
               <TextBlock Text="{}{}" FontSize="16" HorizontalAlignment="Center" FontFamily="Cascadia Mono, Consolas, monospace" />
-              <TextBlock Text="JSON" FontSize="10" HorizontalAlignment="Center" Opacity="0.7" />
+              <TextBlock Text="JSON" FontSize="10" HorizontalAlignment="Center"
+                         Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="Saved Drafts">
             <StackPanel Spacing="4" HorizontalAlignment="Center">
               <TextBlock Text="📄" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Drafts" FontSize="10" HorizontalAlignment="Center" Opacity="0.7" />
+              <TextBlock Text="Drafts" FontSize="10" HorizontalAlignment="Center"
+                         Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="Service Operation Lookups">
             <StackPanel Spacing="4" HorizontalAlignment="Center">
               <TextBlock Text="🔍" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Lookups" FontSize="10" HorizontalAlignment="Center" Opacity="0.7" />
+              <TextBlock Text="Lookups" FontSize="10" HorizontalAlignment="Center"
+                         Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
         </ListBox>
@@ -75,43 +86,36 @@
     <!-- Right: Connection Bar + Content -->
     <DockPanel Grid.Column="1">
 
-      <!-- Connection Bar (always visible at top) -->
-      <Border DockPanel.Dock="Top" Background="#08ffffff" BorderBrush="#10ffffff"
-              BorderThickness="0,0,0,1" Padding="16,8">
+      <!-- Connection Bar -->
+      <Border DockPanel.Dock="Top" Classes="connection-bar">
         <DockPanel>
-          <!-- Expand/collapse toggle -->
           <Button DockPanel.Dock="Right" Classes="action-subtle"
-                  Content="{Binding IsConnectionBarExpanded, Converter={x:Static BoolConverters.And}, ConverterParameter=▲, FallbackValue=▼}"
-                  Command="{Binding ToggleConnectionBarCommand}"
+                  Content="⋯" Command="{Binding ToggleConnectionBarCommand}"
                   ToolTip.Tip="Show/hide token field"
                   VerticalAlignment="Top" Margin="8,0,0,0" />
 
           <StackPanel Spacing="6">
-            <!-- Summary row (always visible) -->
             <StackPanel Orientation="Horizontal" Spacing="12">
               <TextBlock Text="🔑" FontSize="14" VerticalAlignment="Center" />
-              <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+              <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"
+                         Foreground="{StaticResource AppTextPrimaryBrush}" />
 
-              <!-- Token status -->
-              <Border CornerRadius="4" Padding="6,2" Background="#1880d0a0"
-                      IsVisible="{Binding HasToken}">
-                <TextBlock Text="✓ Token set" FontSize="11" Foreground="#80d0a0" FontWeight="Medium" />
+              <Border Classes="badge-success" IsVisible="{Binding HasToken}">
+                <TextBlock Text="✓ Token set" FontSize="11" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
               </Border>
-              <Border CornerRadius="4" Padding="6,2" Background="#20ffb080"
-                      IsVisible="{Binding !HasToken}">
-                <TextBlock Text="⚠ No token" FontSize="11" Foreground="#ffb080" FontWeight="Medium" />
+              <Border Classes="badge-warning" IsVisible="{Binding !HasToken}">
+                <TextBlock Text="⚠ No token" FontSize="11" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
               </Border>
 
-              <TextBlock Text="Used for registration and WQL lookups" FontSize="11" Opacity="0.35"
-                         VerticalAlignment="Center" />
+              <TextBlock Text="Used for registration and WQL lookups" FontSize="11"
+                         Foreground="{StaticResource AppTextMutedBrush}" VerticalAlignment="Center" />
             </StackPanel>
 
-            <!-- Expanded: token input -->
             <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4" Margin="26,2,0,0">
               <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token here"
                        PasswordChar="*" RevealPassword="False" MaxWidth="500" HorizontalAlignment="Left" />
-              <TextBlock Text="From Workday OAuth (API Client > Generate Token). Kept in memory only — not saved to disk."
-                         FontSize="11" Opacity="0.35" />
+              <TextBlock Classes="helper"
+                         Text="From Workday OAuth (API Client > Generate Token). Kept in memory only — not saved to disk." />
             </StackPanel>
           </StackPanel>
         </DockPanel>
@@ -119,7 +123,6 @@
 
       <!-- Content Area -->
       <Panel>
-        <!-- Page 0: Editor + Registration Panel -->
         <Grid IsVisible="{Binding IsEditorPage}">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -134,15 +137,12 @@
           </Border>
         </Grid>
 
-        <!-- Page 1: JSON -->
         <views:JsonPreviewView DataContext="{Binding JsonPreview}"
                                IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsJsonPage}" />
 
-        <!-- Page 2: Drafts -->
         <views:DraftManagerView DataContext="{Binding DraftManager}"
                                 IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsDraftsPage}" />
 
-        <!-- Page 3: Lookups -->
         <views:WqlLookupView DataContext="{Binding WqlLookup}"
                              IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsLookupsPage}" />
       </Panel>

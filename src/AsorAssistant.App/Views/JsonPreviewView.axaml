@@ -12,7 +12,7 @@
         <Button Classes="action" Content="Copy" Command="{Binding CopyToClipboardCommand}"
                 CommandParameter="{Binding $parent[TopLevel].Clipboard}" />
         <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"
-                   FontSize="12" Foreground="#80d0a0"
+                   FontSize="12" Foreground="{StaticResource AppSuccessBrush}"
                    IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
       </StackPanel>
       <TextBlock Classes="page-title" Text="JSON Preview" VerticalAlignment="Center" />

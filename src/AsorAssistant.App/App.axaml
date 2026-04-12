@@ -3,11 +3,51 @@
              x:Class="AsorAssistant.App.App"
              RequestedThemeVariant="Dark">
 
+    <Application.Resources>
+        <!-- Soft dark palette -->
+        <Color x:Key="AppBase">#1e2128</Color>
+        <Color x:Key="AppSurface">#262a33</Color>
+        <Color x:Key="AppSurfaceRaised">#2c313c</Color>
+        <Color x:Key="AppSurfaceOverlay">#333845</Color>
+        <Color x:Key="AppBorder">#3a3f4c</Color>
+        <Color x:Key="AppBorderSubtle">#31363f</Color>
+        <Color x:Key="AppTextPrimary">#e2e4e9</Color>
+        <Color x:Key="AppTextSecondary">#a0a5b2</Color>
+        <Color x:Key="AppTextMuted">#717686</Color>
+        <Color x:Key="AppTextFaint">#555a68</Color>
+        <Color x:Key="AppAccent">#5b9bd5</Color>
+        <Color x:Key="AppSuccess">#6ec889</Color>
+        <Color x:Key="AppWarning">#e0a458</Color>
+        <Color x:Key="AppError">#e06060</Color>
+        <Color x:Key="AppLink">#7bb3e0</Color>
+
+        <SolidColorBrush x:Key="AppBaseBrush" Color="{StaticResource AppBase}" />
+        <SolidColorBrush x:Key="AppSurfaceBrush" Color="{StaticResource AppSurface}" />
+        <SolidColorBrush x:Key="AppSurfaceRaisedBrush" Color="{StaticResource AppSurfaceRaised}" />
+        <SolidColorBrush x:Key="AppSurfaceOverlayBrush" Color="{StaticResource AppSurfaceOverlay}" />
+        <SolidColorBrush x:Key="AppBorderBrush" Color="{StaticResource AppBorder}" />
+        <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="{StaticResource AppBorderSubtle}" />
+        <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="{StaticResource AppTextPrimary}" />
+        <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="{StaticResource AppTextSecondary}" />
+        <SolidColorBrush x:Key="AppTextMutedBrush" Color="{StaticResource AppTextMuted}" />
+        <SolidColorBrush x:Key="AppTextFaintBrush" Color="{StaticResource AppTextFaint}" />
+        <SolidColorBrush x:Key="AppAccentBrush" Color="{StaticResource AppAccent}" />
+        <SolidColorBrush x:Key="AppSuccessBrush" Color="{StaticResource AppSuccess}" />
+        <SolidColorBrush x:Key="AppWarningBrush" Color="{StaticResource AppWarning}" />
+        <SolidColorBrush x:Key="AppErrorBrush" Color="{StaticResource AppError}" />
+        <SolidColorBrush x:Key="AppLinkBrush" Color="{StaticResource AppLink}" />
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
-        <!-- Nav rail button -->
+        <!-- Override window background -->
+        <Style Selector="Window">
+          <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
+        </Style>
+
+        <!-- Nav rail -->
         <Style Selector="ListBox.nav-rail">
           <Setter Property="Background" Value="Transparent" />
           <Setter Property="Padding" Value="0" />
@@ -19,46 +59,54 @@
           <Setter Property="Margin" Value="4,2" />
         </Style>
 
-        <!-- Section styling -->
+        <!-- Typography -->
         <Style Selector="TextBlock.page-title">
           <Setter Property="FontSize" Value="20" />
           <Setter Property="FontWeight" Value="Bold" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
         </Style>
 
         <Style Selector="TextBlock.section-header">
           <Setter Property="FontSize" Value="15" />
           <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,2" />
-          <Setter Property="Opacity" Value="0.9" />
         </Style>
 
         <Style Selector="TextBlock.section-desc">
           <Setter Property="FontSize" Value="12" />
-          <Setter Property="Opacity" Value="0.5" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,12" />
         </Style>
 
         <Style Selector="TextBlock.field-label">
-          <Setter Property="FontSize" Value="12" />
-          <Setter Property="FontWeight" Value="Medium" />
-          <Setter Property="Opacity" Value="0.7" />
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,3" />
+        </Style>
+
+        <Style Selector="TextBlock.helper">
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
+          <Setter Property="Margin" Value="0,2,0,0" />
         </Style>
 
         <Style Selector="TextBlock.card-title">
           <Setter Property="FontSize" Value="13" />
           <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
         </Style>
 
         <Style Selector="Separator.section-divider">
-          <Setter Property="Margin" Value="0,16,0,16" />
-          <Setter Property="Opacity" Value="0.15" />
+          <Setter Property="Margin" Value="0,20,0,20" />
+          <Setter Property="Background" Value="{StaticResource AppBorderSubtleBrush}" />
         </Style>
 
-        <!-- Surface card (used sparingly for nested items) -->
+        <!-- Surfaces -->
         <Style Selector="Border.surface">
-          <Setter Property="Background" Value="#0Affffff" />
-          <Setter Property="BorderBrush" Value="#15ffffff" />
+          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="1" />
           <Setter Property="CornerRadius" Value="8" />
           <Setter Property="Padding" Value="16" />
@@ -66,8 +114,8 @@
         </Style>
 
         <Style Selector="Border.surface-inner">
-          <Setter Property="Background" Value="#08ffffff" />
-          <Setter Property="BorderBrush" Value="#10ffffff" />
+          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="1" />
           <Setter Property="CornerRadius" Value="6" />
           <Setter Property="Padding" Value="12" />
@@ -76,7 +124,9 @@
 
         <!-- Toolbar -->
         <Style Selector="Border.toolbar">
-          <Setter Property="Background" Value="#08ffffff" />
+          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="BorderThickness" Value="1" />
           <Setter Property="CornerRadius" Value="8" />
           <Setter Property="Padding" Value="12,8" />
           <Setter Property="Margin" Value="0,0,0,20" />
@@ -84,10 +134,24 @@
 
         <!-- Slide panel -->
         <Style Selector="Border.panel">
-          <Setter Property="Background" Value="#0Cffffff" />
-          <Setter Property="BorderBrush" Value="#18ffffff" />
+          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
           <Setter Property="BorderThickness" Value="1,0,0,0" />
           <Setter Property="Padding" Value="20" />
+        </Style>
+
+        <!-- Nav rail background -->
+        <Style Selector="Border.nav-rail-bg">
+          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+        </Style>
+
+        <!-- Connection bar -->
+        <Style Selector="Border.connection-bar">
+          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="BorderThickness" Value="0,0,0,1" />
+          <Setter Property="Padding" Value="16,8" />
         </Style>
 
         <!-- Button variants -->
@@ -109,7 +173,7 @@
           <Setter Property="Padding" Value="8,4" />
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="FontSize" Value="11" />
-          <Setter Property="Opacity" Value="0.7" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
         </Style>
 
         <Style Selector="Button.action-add">
@@ -128,6 +192,25 @@
         <Style Selector="Border.badge">
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="Padding" Value="8,3" />
+        </Style>
+
+        <!-- Status colors as badge backgrounds -->
+        <Style Selector="Border.badge-success">
+          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="Padding" Value="8,3" />
+          <Setter Property="Background" Value="#1a6ec889" />
+        </Style>
+
+        <Style Selector="Border.badge-warning">
+          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="Padding" Value="8,3" />
+          <Setter Property="Background" Value="#1ae0a458" />
+        </Style>
+
+        <Style Selector="Border.badge-error">
+          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="Padding" Value="8,3" />
+          <Setter Property="Background" Value="#22e06060" />
         </Style>
     </Application.Styles>
 </Application>

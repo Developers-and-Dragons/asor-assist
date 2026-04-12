@@ -32,13 +32,13 @@
               </DataTemplate>
             </ComboBox.ItemTemplate>
           </ComboBox>
-          <TextBlock Opacity="0.4" FontSize="11" Text="Determines the ASOR endpoint: {region}.agent.workday.com" />
+          <TextBlock Classes="helper" Text="Determines the ASOR endpoint: {region}.agent.workday.com" />
         </StackPanel>
 
         <StackPanel Spacing="3">
           <TextBlock Classes="field-label" Text="TENANT NAME" />
           <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
-          <TextBlock Opacity="0.4" FontSize="11" Text="Your Workday tenant identifier, as shown in your Workday URL." />
+          <TextBlock Classes="helper" Text="Your Workday tenant identifier, as shown in your Workday URL." />
         </StackPanel>
       </StackPanel>
 
@@ -48,10 +48,10 @@
       <TextBlock Classes="section-header" Text="Submit" />
 
       <!-- Token reminder -->
-      <Border CornerRadius="4" Padding="8,6" Margin="0,6,0,10" Background="#18ffb080"
+      <Border Classes="badge-warning" CornerRadius="4" Padding="8,6" Margin="0,6,0,10"
               IsVisible="{Binding !$parent[Window].((vm:MainWindowViewModel)DataContext).HasToken}">
         <TextBlock Text="⚠ Set a bearer token in the connection bar above before registering."
-                   FontSize="11" Foreground="#ffb080" TextWrapping="Wrap" />
+                   FontSize="11" Foreground="{StaticResource AppWarningBrush}" TextWrapping="Wrap" />
       </Border>
 
       <!-- URL Preview -->
@@ -60,15 +60,15 @@
         <StackPanel Spacing="2">
           <TextBlock Classes="field-label" Text="ENDPOINT" />
           <TextBlock Text="{Binding ResolvedUrl}" Classes="mono" FontSize="11"
-                     Opacity="0.6" TextWrapping="Wrap" />
+                     Foreground="{StaticResource AppTextSecondaryBrush}" TextWrapping="Wrap" />
         </StackPanel>
       </Border>
 
       <!-- Readiness -->
       <StackPanel Spacing="4" Margin="0,0,0,12"
                   IsVisible="{Binding !IsConnectionConfigured}">
-        <TextBlock Text="⚠ Missing configuration" FontSize="12" Foreground="#ffb080" FontWeight="SemiBold" />
-        <TextBlock FontSize="11" Opacity="0.5" TextWrapping="Wrap"
+        <TextBlock Text="⚠ Missing configuration" FontSize="12" Foreground="{StaticResource AppWarningBrush}" FontWeight="SemiBold" />
+        <TextBlock FontSize="11" Foreground="{StaticResource AppTextSecondaryBrush}" TextWrapping="Wrap"
                    Text="Select a region above and set a bearer token in the connection bar." />
       </StackPanel>
 
