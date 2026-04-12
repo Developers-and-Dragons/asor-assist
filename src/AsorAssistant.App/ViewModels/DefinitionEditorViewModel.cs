@@ -186,11 +186,9 @@ public partial class DefinitionEditorViewModel : ObservableObject
         Url = definition.Url;
         Version = definition.Version;
 
-        // Provider — match by known ID, reference_id, or descriptor
+        // Provider — match by full ref ID, WID, bare reference_id, or descriptor
         var prov = definition.Provider;
-        var providerMatch = KnownProviders.All.FirstOrDefault(p =>
-            p.Id == prov?.Id || p.Id == prov?.ReferenceId ||
-            string.Equals(p.Name, prov?.Descriptor, StringComparison.OrdinalIgnoreCase));
+        var providerMatch = MatchKnownValue(KnownProviders.All, prov?.Id, prov?.ReferenceId, prov?.Descriptor);
         if (providerMatch != default)
         {
             SelectedProviderId = providerMatch.Id;
@@ -202,11 +200,9 @@ public partial class DefinitionEditorViewModel : ObservableObject
             CustomProviderId = prov?.Descriptor ?? prov?.ReferenceId ?? prov?.Id;
         }
 
-        // Platform — match by known ID, reference_id, or descriptor
+        // Platform — match by full ref ID, WID, bare reference_id, or descriptor
         var plat = definition.Platform;
-        var platformMatch = KnownPlatforms.All.FirstOrDefault(p =>
-            p.Id == plat?.Id || p.Id == plat?.ReferenceId ||
-            string.Equals(p.Name, plat?.Descriptor, StringComparison.OrdinalIgnoreCase));
+        var platformMatch = MatchKnownValue(KnownPlatforms.All, plat?.Id, plat?.ReferenceId, plat?.Descriptor);
         if (platformMatch != default)
         {
             SelectedPlatformId = platformMatch.Id;
@@ -256,6 +252,35 @@ public partial class DefinitionEditorViewModel : ObservableObject
     {
         if (Skills.Count == 0)
             Skills.Add(new SkillViewModel());
+    }
+
+    /// <summary>
+    /// Match a known value list against an id (which may be a WID or a ref ID like "Provider=SELF-BUILT"),
+    /// a bare reference_id (like "SELF-BUILT"), or a descriptor (like "Self-Built").
+    /// </summary>
+    private static (string Name, string Id) MatchKnownValue(
+        IReadOnlyList<(string Name, string Id)> known, string? id, string? referenceId, string? descriptor)
+    {
+        // Direct match on full ref ID (e.g., "Provider=SELF-BUILT" == "Provider=SELF-BUILT")
+        var byId = known.FirstOrDefault(k => k.Id == id);
+        if (byId != default) return byId;
+
+        // Match bare reference_id against the value part (e.g., "SELF-BUILT" matches "Provider=SELF-BUILT")
+        if (referenceId is not null)
+        {
+            var byRef = known.FirstOrDefault(k => k.Id.EndsWith("=" + referenceId, StringComparison.Ordinal));
+            if (byRef != default) return byRef;
+        }
+
+        // Match by descriptor (e.g., "Self-Built" matches name "Self-Built")
+        if (descriptor is not null)
+        {
+            var byDesc = known.FirstOrDefault(k =>
+                string.Equals(k.Name, descriptor, StringComparison.OrdinalIgnoreCase));
+            if (byDesc != default) return byDesc;
+        }
+
+        return default;
     }
 
     private static string? NullIfEmpty(string? value) =>

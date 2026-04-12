@@ -13,7 +13,7 @@ public class AgentDefinitionSerializerTests
         Url = "https://example.com/agent",
         Version = "1.0.0",
         Provider = new Provider { Id = "test-provider" },
-        Platform = new Platform { Id = "OTHER" },
+        Platform = new Platform { Id = "Platform=OTHER" },
         Capabilities = new Capabilities(),
         Skills =
         [
@@ -34,7 +34,7 @@ public class AgentDefinitionSerializerTests
         Url = "https://example.com/full-agent",
         Version = "2.0.0",
         Provider = new Provider { Id = "full-provider" },
-        Platform = new Platform { Id = "OTHER" },
+        Platform = new Platform { Id = "Platform=OTHER" },
         Capabilities = new Capabilities
         {
             PushNotifications = true,
@@ -206,7 +206,7 @@ public class AgentDefinitionSerializerTests
 
         Assert.NotNull(definition);
         Assert.Equal("Expense Report Assistant", definition.Name);
-        Assert.Equal("OTHER", definition.Platform!.Id);
+        Assert.Equal("Platform=OTHER", definition.Platform!.Id);
         Assert.Single(definition.Skills!);
         Assert.Equal("submit-expense", definition.Skills![0].Id);
     }

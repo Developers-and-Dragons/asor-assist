@@ -4,10 +4,10 @@
   "url": "https://agents.example.com/hr-onboarding",
   "version": "2.1.0",
   "provider": {
-    "id": "acme_hr_solutions"
+    "id": "Provider=acme_hr_solutions"
   },
   "platform": {
-    "id": "OTHER"
+    "id": "Platform=OTHER"
   },
   "capabilities": {
     "pushNotifications": true,

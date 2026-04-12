@@ -4,10 +4,10 @@
   "url": "https://agents.example.com/expense-assistant",
   "version": "1.0.0",
   "provider": {
-    "id": "example_provider_org"
+    "id": "Provider=example_provider_org"
   },
   "platform": {
-    "id": "OTHER"
+    "id": "Platform=OTHER"
   },
   "capabilities": {},
   "skills": [
