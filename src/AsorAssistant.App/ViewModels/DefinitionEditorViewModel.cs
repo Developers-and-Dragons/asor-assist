@@ -87,7 +87,10 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HelpTitle))]
     [NotifyPropertyChangedFor(nameof(HelpContent))]
+    [NotifyPropertyChangedFor(nameof(IsContextualHelp))]
     private string _activeSection = "default";
+
+    public bool IsContextualHelp => ActiveSection != "default";
 
     public string HelpTitle => ActiveSection switch
     {
@@ -280,6 +283,12 @@ public partial class DefinitionEditorViewModel : ObservableObject
     {
         ValidationErrors = null;
         IsValid = false;
+    }
+
+    [RelayCommand]
+    public void ResetHelp()
+    {
+        ActiveSection = "default";
     }
 
     public AgentDefinition ToModel()

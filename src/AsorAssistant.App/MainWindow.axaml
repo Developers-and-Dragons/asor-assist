@@ -134,8 +134,8 @@
         <Grid IsVisible="{Binding IsEditorPage}">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="*" MinWidth="240" MaxWidth="320" />
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="3*" MinWidth="260" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
 
@@ -344,15 +344,21 @@
                   BorderBrush="{StaticResource AppBorderSubtleBrush}"
                   BorderThickness="1,0,0,0"
                   IsVisible="{Binding IsVisualMode}">
-            <ScrollViewer>
-              <StackPanel Spacing="12" DataContext="{Binding Editor}">
-                <TextBlock Text="{Binding HelpTitle}" FontSize="15" FontWeight="SemiBold"
-                           Foreground="{StaticResource AppAccentBrush}" />
-                <TextBlock Text="{Binding HelpContent}" FontSize="12"
-                           Foreground="{StaticResource AppTextSecondaryBrush}"
-                           TextWrapping="Wrap" LineHeight="20" />
-              </StackPanel>
-            </ScrollViewer>
+            <DockPanel>
+              <Button DockPanel.Dock="Bottom" Classes="action-subtle" Content="← Getting Started"
+                      Command="{Binding Editor.ResetHelpCommand}"
+                      HorizontalAlignment="Left" Margin="0,12,0,0"
+                      IsVisible="{Binding Editor.IsContextualHelp}" />
+              <ScrollViewer>
+                <StackPanel Spacing="12" DataContext="{Binding Editor}">
+                  <TextBlock Text="{Binding HelpTitle}" FontSize="15" FontWeight="SemiBold"
+                             Foreground="{StaticResource AppAccentBrush}" />
+                  <TextBlock Text="{Binding HelpContent}" FontSize="12.5"
+                             Foreground="{StaticResource AppTextSecondaryBrush}"
+                             TextWrapping="Wrap" LineHeight="20" />
+                </StackPanel>
+              </ScrollViewer>
+            </DockPanel>
           </Border>
 
           <!-- Registration Panel (slide-over, right) -->
