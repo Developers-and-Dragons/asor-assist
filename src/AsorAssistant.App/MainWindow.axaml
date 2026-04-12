@@ -294,8 +294,16 @@
               </DockPanel>
             </Border>
 
+            <!-- Save success bar (auto-dismisses) -->
+            <Border DockPanel.Dock="Top" Padding="32,8" Background="#185ec26a"
+                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+                    IsVisible="{Binding ShowSaveSuccess}">
+              <TextBlock Text="✓ Draft saved" FontSize="11" FontWeight="SemiBold"
+                         Foreground="{StaticResource AppSuccessBrush}" />
+            </Border>
+
             <!-- Validation bar -->
-            <Border DockPanel.Dock="Top" Padding="28,8" Background="#185ec26a"
+            <Border DockPanel.Dock="Top" Padding="32,8" Background="#185ec26a"
                     BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
                     IsVisible="{Binding Editor.IsValid}">
               <TextBlock Text="✓ No validation issues" FontSize="11" FontWeight="SemiBold"

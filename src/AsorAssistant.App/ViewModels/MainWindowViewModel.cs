@@ -63,6 +63,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private string? _statusMessage;
 
+    [ObservableProperty]
+    private bool _showSaveSuccess;
+
     private string? _currentDraftId;
 
     // Draft lists
@@ -220,6 +223,14 @@ public partial class MainWindowViewModel : ObservableObject
         _currentDraftId = saved.Metadata.Id;
         StatusMessage = $"✓ Saved";
         await RefreshLocalDrafts();
+        await FlashSaveSuccess();
+    }
+
+    private async Task FlashSaveSuccess()
+    {
+        ShowSaveSuccess = true;
+        await Task.Delay(3000);
+        ShowSaveSuccess = false;
     }
 
     [RelayCommand]
