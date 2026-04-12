@@ -136,6 +136,15 @@ public partial class DefinitionEditorViewModel : ObservableObject
         var result = AgentDefinitionValidator.Validate(definition);
         IsValid = result.IsValid;
         ValidationErrors = result.IsValid ? null : string.Join("\n", result.Errors);
+
+        if (IsValid)
+            _ = AutoDismissValidation();
+    }
+
+    private async Task AutoDismissValidation()
+    {
+        await Task.Delay(3000);
+        IsValid = false;
     }
 
     [RelayCommand]
