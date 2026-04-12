@@ -12,7 +12,7 @@
         <StackPanel x:Name="SectionIdentity" Spacing="12">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <TextBlock Classes="section-header" Text="Identity" />
-          <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+          <Button Classes="help-trigger" Content="?" ToolTip.Tip="Show help for this section"
                   Command="{Binding ShowHelpCommand}" CommandParameter="identity" VerticalAlignment="Center" />
         </StackPanel>
         <TextBlock Classes="section-desc" Text="Core fields that appear in the Workday agent catalog." />
@@ -48,7 +48,7 @@
         <StackPanel x:Name="SectionProvider" Spacing="12">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <TextBlock Classes="section-header" Text="Provider &amp; Platform" />
-          <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+          <Button Classes="help-trigger" Content="?" ToolTip.Tip="Show help for this section"
                   Command="{Binding ShowHelpCommand}" CommandParameter="provider" VerticalAlignment="Center" />
         </StackPanel>
         <TextBlock Classes="section-desc" Text="Who built this agent and what platform it runs on. Select 'Other' to enter a custom ID." />
@@ -89,7 +89,7 @@
         <StackPanel x:Name="SectionCapabilities" Spacing="8">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <TextBlock Classes="section-header" Text="Capabilities" />
-          <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+          <Button Classes="help-trigger" Content="?" ToolTip.Tip="Show help for this section"
                   Command="{Binding ShowHelpCommand}" CommandParameter="capabilities" VerticalAlignment="Center" />
         </StackPanel>
         <TextBlock Classes="section-desc" Text="Feature flags. Leave disabled unless your agent actively supports these." />
@@ -111,7 +111,7 @@
           <StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="8">
               <TextBlock Classes="section-header" Text="Skills" />
-              <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+              <Button Classes="help-trigger" Content="?" ToolTip.Tip="Show help for this section"
                       Command="{Binding ShowHelpCommand}" CommandParameter="skills" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Classes="section-desc" Text="At least one skill is required. A skill is a unit of capability that an agent can perform." />
@@ -190,7 +190,7 @@
           <StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="8">
               <TextBlock Classes="section-header" Text="Workday Config" />
-              <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+              <Button Classes="help-trigger" Content="?" ToolTip.Tip="Show help for this section"
                       Command="{Binding ShowHelpCommand}" CommandParameter="workdayconfig" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Classes="section-desc" Text="Map skills to Workday resources, execution modes, and securable items." />
@@ -320,7 +320,7 @@
             <StackPanel>
               <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock Classes="section-header" Text="Optional Fields" />
-                <Button Classes="action-subtle" Content="ⓘ" FontSize="14" ToolTip.Tip="Show help for this section"
+                <Button Classes="help-trigger" Content="?" ToolTip.Tip="Show help for this section"
                         Command="{Binding ShowHelpCommand}" CommandParameter="optional" VerticalAlignment="Center" />
               </StackPanel>
               <TextBlock FontSize="11" Text="Overview, URLs, external IDs, MIME types"
