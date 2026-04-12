@@ -28,6 +28,11 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var mainVm = Services.GetRequiredService<MainWindowViewModel>();
+
+            // Wire central bearer token to registration and WQL viewmodels
+            mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
+            mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
+
             desktop.MainWindow = new MainWindow { DataContext = mainVm };
         }
 

@@ -11,14 +11,14 @@ public partial class RegistrationViewModel : ObservableObject
     private readonly IAsorRegistrationClient _registrationClient;
     private readonly DefinitionEditorViewModel _editor;
 
+    /// <summary>Provides the bearer token from the central app state.</summary>
+    public Func<string?>? BearerTokenProvider { get; set; }
+
     [ObservableProperty]
     private AsorRegion? _selectedRegion;
 
     [ObservableProperty]
     private string? _tenantName;
-
-    [ObservableProperty]
-    private string? _bearerToken;
 
     [ObservableProperty]
     private string? _resolvedUrl;
@@ -45,11 +45,6 @@ public partial class RegistrationViewModel : ObservableObject
         UpdateResolvedUrl();
     }
 
-    partial void OnTenantNameChanged(string? value)
-    {
-        UpdateResolvedUrl();
-    }
-
     private void UpdateResolvedUrl()
     {
         ResolvedUrl = SelectedRegion is not null
@@ -60,9 +55,11 @@ public partial class RegistrationViewModel : ObservableObject
     [RelayCommand]
     private async Task Register()
     {
-        if (SelectedRegion is null || string.IsNullOrWhiteSpace(BearerToken))
+        var token = BearerTokenProvider?.Invoke();
+
+        if (SelectedRegion is null || string.IsNullOrWhiteSpace(token))
         {
-            ResponseText = "Region and bearer token are required.";
+            ResponseText = "Region and bearer token are required. Set the token via the 🔑 button in the nav rail.";
             IsSuccess = false;
             return;
         }
@@ -70,7 +67,7 @@ public partial class RegistrationViewModel : ObservableObject
         _editor.Validate();
         if (!_editor.IsValid)
         {
-            ResponseText = $"Definition has validation errors:\n{_editor.ValidationErrors}";
+            ResponseText = $"Validation errors:\n{_editor.ValidationErrors}";
             IsSuccess = false;
             return;
         }
@@ -84,7 +81,7 @@ public partial class RegistrationViewModel : ObservableObject
             {
                 Region = SelectedRegion,
                 TenantName = TenantName,
-                BearerToken = BearerToken
+                BearerToken = token
             };
 
             var definition = _editor.ToModel();

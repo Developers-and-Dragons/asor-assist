@@ -1,14 +1,27 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AsorAssistant.App.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty]
-    private object? _currentView;
+    [NotifyPropertyChangedFor(nameof(IsEditorPage))]
+    [NotifyPropertyChangedFor(nameof(IsJsonPage))]
+    [NotifyPropertyChangedFor(nameof(IsDraftsPage))]
+    [NotifyPropertyChangedFor(nameof(IsWqlPage))]
+    private int _selectedPageIndex;
+
+    public bool IsEditorPage => SelectedPageIndex == 0;
+    public bool IsJsonPage => SelectedPageIndex == 1;
+    public bool IsDraftsPage => SelectedPageIndex == 2;
+    public bool IsWqlPage => SelectedPageIndex == 3;
 
     [ObservableProperty]
-    private int _selectedTabIndex;
+    private string? _bearerToken;
+
+    [ObservableProperty]
+    private bool _isRegistrationPanelOpen;
 
     public DefinitionEditorViewModel Editor { get; }
     public JsonPreviewViewModel JsonPreview { get; }
@@ -28,5 +41,17 @@ public partial class MainWindowViewModel : ObservableObject
         DraftManager = draftManager;
         Registration = registration;
         WqlLookup = wqlLookup;
+    }
+
+    [RelayCommand]
+    private void ToggleRegistrationPanel()
+    {
+        IsRegistrationPanelOpen = !IsRegistrationPanelOpen;
+    }
+
+    [RelayCommand]
+    private void NavigateToEditor()
+    {
+        SelectedPageIndex = 0;
     }
 }

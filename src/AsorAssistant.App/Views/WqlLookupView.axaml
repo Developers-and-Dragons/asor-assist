@@ -4,73 +4,66 @@
              x:Class="AsorAssistant.App.Views.WqlLookupView"
              x:DataType="vm:WqlLookupViewModel">
 
-  <StackPanel Spacing="4" Margin="20,12">
+  <DockPanel Margin="24,20">
+    <!-- Header -->
+    <TextBlock DockPanel.Dock="Top" Classes="page-title" Text="WQL Lookup" Margin="0,0,0,20" />
 
-    <!-- Auth + Actions -->
-    <Border Classes="card">
-      <StackPanel Spacing="12">
-        <TextBlock Classes="section-header" Text="WQL Service Operation Lookup" />
-        <TextBlock Classes="section-desc" Text="Search for SOAP or REST service operation WIDs to use in your Workday Config." />
+    <StackPanel Spacing="16">
 
-        <StackPanel Spacing="4" MaxWidth="500">
-          <TextBlock Classes="field-label" Text="Bearer Token *" />
-          <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste bearer token"
-                   PasswordChar="*" RevealPassword="False" />
-        </StackPanel>
+      <!-- Actions -->
+      <StackPanel Spacing="8">
+        <TextBlock Classes="section-header" Text="Service Operation Lookup" />
+        <TextBlock Classes="section-desc" Text="Search for SOAP or REST service operation WIDs. Set your bearer token via the 🔑 button in the nav rail." />
 
         <StackPanel Orientation="Horizontal" Spacing="8">
-          <Button Classes="primary" Content="SOAP Operations" Command="{Binding LookupSoapCommand}"
+          <Button Classes="action-primary" Content="SOAP Operations" Command="{Binding LookupSoapCommand}"
                   IsEnabled="{Binding !IsLoading}" />
-          <Button Classes="add" Content="REST Operations" Command="{Binding LookupRestCommand}"
+          <Button Classes="action" Content="REST Operations" Command="{Binding LookupRestCommand}"
                   IsEnabled="{Binding !IsLoading}" />
         </StackPanel>
       </StackPanel>
-    </Border>
 
-    <!-- Results -->
-    <Border Classes="card">
-      <StackPanel Spacing="12">
-        <DockPanel>
-          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="12">
-            <TextBlock Text="{Binding StatusMessage}"
-                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-                       VerticalAlignment="Center" FontSize="13"
-                       IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-          </StackPanel>
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <TextBlock Classes="section-header" Text="Results" />
-            <TextBlock Classes="section-header" Text="{Binding ResultTypeLabel}"
-                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-                       IsVisible="{Binding ResultTypeLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-          </StackPanel>
-        </DockPanel>
+      <Separator Classes="section-divider" />
 
-        <TextBox Text="{Binding FilterText}" PlaceholderText="Type to filter results..." />
+      <!-- Results -->
+      <DockPanel Margin="0,0,0,8">
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+          <TextBlock Text="{Binding StatusMessage}" FontSize="12" Opacity="0.5"
+                     VerticalAlignment="Center"
+                     IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Classes="section-header" Text="Results" VerticalAlignment="Center" />
+          <TextBlock Classes="section-header" Text="{Binding ResultTypeLabel}" Opacity="0.4"
+                     VerticalAlignment="Center"
+                     IsVisible="{Binding ResultTypeLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        </StackPanel>
+      </DockPanel>
 
-        <DataGrid ItemsSource="{Binding Results}"
-                  SelectedItem="{Binding SelectedResult}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Height="380"
-                  SelectionMode="Single"
-                  GridLinesVisibility="Horizontal"
-                  BorderThickness="1"
-                  BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                  CornerRadius="6">
-          <DataGrid.Columns>
-            <DataGridTextColumn Header="Operation" Binding="{Binding Name}" Width="350" />
-            <DataGridTextColumn Header="Workday ID" Binding="{Binding WorkdayId}" Width="280" />
-            <DataGridTextColumn Header="Service" Binding="{Binding ServiceName}" Width="180"
-                                IsVisible="{Binding $parent[UserControl].((vm:WqlLookupViewModel)DataContext).ShowServiceColumn}" />
-          </DataGrid.Columns>
-        </DataGrid>
+      <TextBox Text="{Binding FilterText}" PlaceholderText="Filter results..." />
 
-        <Button Classes="add" Content="Copy Selected WID"
-                Command="{Binding CopyWidCommand}"
-                CommandParameter="{Binding $parent[TopLevel].Clipboard}" />
-      </StackPanel>
-    </Border>
+      <DataGrid ItemsSource="{Binding Results}"
+                SelectedItem="{Binding SelectedResult}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                Height="380"
+                SelectionMode="Single"
+                GridLinesVisibility="Horizontal"
+                BorderThickness="1"
+                BorderBrush="#15ffffff"
+                CornerRadius="6">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Operation" Binding="{Binding Name}" Width="350" />
+          <DataGridTextColumn Header="Workday ID" Binding="{Binding WorkdayId}" Width="280" />
+          <DataGridTextColumn Header="Service" Binding="{Binding ServiceName}" Width="180"
+                              IsVisible="{Binding $parent[UserControl].((vm:WqlLookupViewModel)DataContext).ShowServiceColumn}" />
+        </DataGrid.Columns>
+      </DataGrid>
 
-  </StackPanel>
+      <Button Classes="action" Content="Copy Selected WID"
+              Command="{Binding CopyWidCommand}"
+              CommandParameter="{Binding $parent[TopLevel].Clipboard}" />
+    </StackPanel>
+  </DockPanel>
 
 </UserControl>

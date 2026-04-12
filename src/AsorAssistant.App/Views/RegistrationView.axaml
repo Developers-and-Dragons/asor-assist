@@ -4,71 +4,59 @@
              x:Class="AsorAssistant.App.Views.RegistrationView"
              x:DataType="vm:RegistrationViewModel">
 
-  <ScrollViewer Padding="20,12">
-    <StackPanel Spacing="4" MaxWidth="700" HorizontalAlignment="Left">
+  <ScrollViewer>
+    <StackPanel Spacing="16">
 
-      <!-- Connection -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Classes="section-header" Text="Connection" />
-          <TextBlock Classes="section-desc" Text="Select a region and provide authentication credentials." />
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
+                Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ToggleRegistrationPanelCommand}" />
+        <TextBlock Classes="page-title" Text="Register" />
+      </DockPanel>
 
-          <Grid ColumnDefinitions="*,16,*">
-            <StackPanel Spacing="4">
-              <TextBlock Classes="field-label" Text="Region *" />
-              <ComboBox ItemsSource="{Binding Regions}"
-                        SelectedItem="{Binding SelectedRegion}"
-                        PlaceholderText="Select region..."
-                        HorizontalAlignment="Stretch">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-            </StackPanel>
-            <StackPanel Grid.Column="2" Spacing="4">
-              <TextBlock Classes="field-label" Text="Tenant Name" />
-              <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
-            </StackPanel>
-          </Grid>
+      <TextBlock Text="Submit this definition to the ASOR API."
+                 FontSize="12" Opacity="0.5" />
 
-          <StackPanel Spacing="4">
-            <TextBlock Classes="field-label" Text="Bearer Token *" />
-            <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste bearer token"
-                     PasswordChar="*" RevealPassword="False" />
-          </StackPanel>
+      <StackPanel Spacing="3">
+        <TextBlock Classes="field-label" Text="REGION" />
+        <ComboBox ItemsSource="{Binding Regions}"
+                  SelectedItem="{Binding SelectedRegion}"
+                  PlaceholderText="Select region..."
+                  HorizontalAlignment="Stretch">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
 
-          <!-- URL Preview -->
-          <Border Classes="card-inner" Padding="12,8"
-                  IsVisible="{Binding ResolvedUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-            <StackPanel Spacing="2">
-              <TextBlock Classes="field-label" Text="Registration URL" />
-              <TextBlock Text="{Binding ResolvedUrl}" Classes="mono"
-                         Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="13" />
-            </StackPanel>
-          </Border>
+      <StackPanel Spacing="3">
+        <TextBlock Classes="field-label" Text="TENANT NAME" />
+        <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
+      </StackPanel>
+
+      <!-- URL Preview -->
+      <Border Classes="surface-inner" Padding="10,8"
+              IsVisible="{Binding ResolvedUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+        <StackPanel Spacing="2">
+          <TextBlock Classes="field-label" Text="ENDPOINT" />
+          <TextBlock Text="{Binding ResolvedUrl}" Classes="mono" FontSize="11"
+                     Opacity="0.6" TextWrapping="Wrap" />
         </StackPanel>
       </Border>
 
-      <!-- Action -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <Button Classes="primary" Content="Register Agent Definition"
-                  Command="{Binding RegisterCommand}"
-                  IsEnabled="{Binding !IsRegistering}" />
-        </StackPanel>
-      </Border>
+      <Button Classes="action-primary" Content="Register Agent"
+              Command="{Binding RegisterCommand}"
+              IsEnabled="{Binding !IsRegistering}"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
 
       <!-- Response -->
-      <Border Classes="card"
-              IsVisible="{Binding ResponseText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-        <StackPanel Spacing="8">
-          <TextBlock Classes="section-header" Text="Response" />
-          <TextBox Classes="mono" Text="{Binding ResponseText}" IsReadOnly="True"
-                   AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="400" />
-        </StackPanel>
-      </Border>
+      <StackPanel Spacing="6"
+                  IsVisible="{Binding ResponseText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+        <TextBlock Classes="field-label" Text="RESPONSE" />
+        <TextBox Classes="mono" Text="{Binding ResponseText}" IsReadOnly="True"
+                 AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="300" />
+      </StackPanel>
 
     </StackPanel>
   </ScrollViewer>

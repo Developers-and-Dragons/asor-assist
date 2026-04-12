@@ -1,99 +1,133 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="AsorAssistant.App.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Dark">
 
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
-        <!-- Card style for form sections -->
-        <Style Selector="Border.card">
-          <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-          <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
-          <Setter Property="BorderThickness" Value="1" />
+        <!-- Nav rail button -->
+        <Style Selector="ListBox.nav-rail">
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="ListBox.nav-rail ListBoxItem">
+          <Setter Property="Padding" Value="0,12" />
+          <Setter Property="HorizontalContentAlignment" Value="Center" />
           <Setter Property="CornerRadius" Value="8" />
-          <Setter Property="Padding" Value="20" />
+          <Setter Property="Margin" Value="4,2" />
+        </Style>
+
+        <!-- Section styling -->
+        <Style Selector="TextBlock.page-title">
+          <Setter Property="FontSize" Value="20" />
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style Selector="TextBlock.section-header">
+          <Setter Property="FontSize" Value="15" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Margin" Value="0,0,0,2" />
+          <Setter Property="Opacity" Value="0.9" />
+        </Style>
+
+        <Style Selector="TextBlock.section-desc">
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="Opacity" Value="0.5" />
           <Setter Property="Margin" Value="0,0,0,12" />
         </Style>
 
-        <Style Selector="Border.card-nested">
-          <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}" />
-          <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
+        <Style Selector="TextBlock.field-label">
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="FontWeight" Value="Medium" />
+          <Setter Property="Opacity" Value="0.7" />
+          <Setter Property="Margin" Value="0,0,0,3" />
+        </Style>
+
+        <Style Selector="TextBlock.card-title">
+          <Setter Property="FontSize" Value="13" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style Selector="Separator.section-divider">
+          <Setter Property="Margin" Value="0,16,0,16" />
+          <Setter Property="Opacity" Value="0.15" />
+        </Style>
+
+        <!-- Surface card (used sparingly for nested items) -->
+        <Style Selector="Border.surface">
+          <Setter Property="Background" Value="#0Affffff" />
+          <Setter Property="BorderBrush" Value="#15ffffff" />
           <Setter Property="BorderThickness" Value="1" />
-          <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="CornerRadius" Value="8" />
           <Setter Property="Padding" Value="16" />
           <Setter Property="Margin" Value="0,0,0,8" />
         </Style>
 
-        <Style Selector="Border.card-inner">
-          <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
-          <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
+        <Style Selector="Border.surface-inner">
+          <Setter Property="Background" Value="#08ffffff" />
+          <Setter Property="BorderBrush" Value="#10ffffff" />
           <Setter Property="BorderThickness" Value="1" />
-          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="CornerRadius" Value="6" />
           <Setter Property="Padding" Value="12" />
           <Setter Property="Margin" Value="0,0,0,6" />
         </Style>
 
-        <!-- Section header -->
-        <Style Selector="TextBlock.section-header">
-          <Setter Property="FontSize" Value="18" />
+        <!-- Toolbar -->
+        <Style Selector="Border.toolbar">
+          <Setter Property="Background" Value="#08ffffff" />
+          <Setter Property="CornerRadius" Value="8" />
+          <Setter Property="Padding" Value="12,8" />
+          <Setter Property="Margin" Value="0,0,0,20" />
+        </Style>
+
+        <!-- Slide panel -->
+        <Style Selector="Border.panel">
+          <Setter Property="Background" Value="#0Cffffff" />
+          <Setter Property="BorderBrush" Value="#18ffffff" />
+          <Setter Property="BorderThickness" Value="1,0,0,0" />
+          <Setter Property="Padding" Value="20" />
+        </Style>
+
+        <!-- Button variants -->
+        <Style Selector="Button.action">
+          <Setter Property="Padding" Value="14,7" />
+          <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+
+        <Style Selector="Button.action-primary">
+          <Setter Property="Padding" Value="14,7" />
+          <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="FontSize" Value="12" />
           <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Margin" Value="0,4,0,4" />
         </Style>
 
-        <Style Selector="TextBlock.section-desc">
-          <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-          <Setter Property="FontSize" Value="13" />
-          <Setter Property="Margin" Value="0,0,0,8" />
-        </Style>
-
-        <Style Selector="TextBlock.field-label">
-          <Setter Property="FontSize" Value="13" />
-          <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Margin" Value="0,0,0,4" />
-        </Style>
-
-        <Style Selector="TextBlock.card-title">
-          <Setter Property="FontSize" Value="14" />
-          <Setter Property="FontWeight" Value="SemiBold" />
-        </Style>
-
-        <!-- Subtle remove button -->
-        <Style Selector="Button.remove">
+        <Style Selector="Button.action-subtle">
           <Setter Property="Padding" Value="8,4" />
           <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="FontSize" Value="11" />
+          <Setter Property="Opacity" Value="0.7" />
+        </Style>
+
+        <Style Selector="Button.action-add">
+          <Setter Property="Padding" Value="10,5" />
+          <Setter Property="CornerRadius" Value="6" />
           <Setter Property="FontSize" Value="12" />
         </Style>
 
-        <!-- Primary action button -->
-        <Style Selector="Button.primary">
-          <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Padding" Value="16,8" />
-          <Setter Property="CornerRadius" Value="6" />
-        </Style>
-
-        <!-- Add button -->
-        <Style Selector="Button.add">
-          <Setter Property="Padding" Value="12,6" />
-          <Setter Property="CornerRadius" Value="6" />
-          <Setter Property="FontSize" Value="13" />
-        </Style>
-
-        <!-- Status text -->
-        <Style Selector="TextBlock.status-success">
-          <Setter Property="Foreground" Value="Green" />
-          <Setter Property="FontWeight" Value="SemiBold" />
-        </Style>
-
-        <Style Selector="TextBlock.status-error">
-          <Setter Property="Foreground" Value="Red" />
-        </Style>
-
-        <!-- Monospace text -->
+        <!-- Monospace -->
         <Style Selector="TextBox.mono">
           <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, monospace" />
-          <Setter Property="FontSize" Value="13" />
+          <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <!-- Badge -->
+        <Style Selector="Border.badge">
+          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="Padding" Value="8,3" />
         </Style>
     </Application.Styles>
 </Application>

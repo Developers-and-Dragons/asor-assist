@@ -12,8 +12,8 @@ public partial class WqlLookupViewModel : ObservableObject
     private readonly WqlLookupService _lookupService;
     private readonly DefinitionEditorViewModel _editor;
 
-    [ObservableProperty]
-    private string? _bearerToken;
+    /// <summary>Provides the bearer token from the central app state.</summary>
+    public Func<string?>? BearerTokenProvider { get; set; }
 
     [ObservableProperty]
     private bool _isLoading;
@@ -46,7 +46,7 @@ public partial class WqlLookupViewModel : ObservableObject
     {
         ShowServiceColumn = true;
         ResultTypeLabel = "SOAP Operations";
-        await RunLookup(() => _lookupService.LookupSoapOperationsAsync(BearerToken!));
+        await RunLookup(() => _lookupService.LookupSoapOperationsAsync(BearerTokenProvider?.Invoke()!));
     }
 
     [RelayCommand]
@@ -54,14 +54,15 @@ public partial class WqlLookupViewModel : ObservableObject
     {
         ShowServiceColumn = false;
         ResultTypeLabel = "REST Operations";
-        await RunLookup(() => _lookupService.LookupRestOperationsAsync(BearerToken!));
+        await RunLookup(() => _lookupService.LookupRestOperationsAsync(BearerTokenProvider?.Invoke()!));
     }
 
     private async Task RunLookup(Func<Task<IReadOnlyList<ServiceOperationLookup>>> lookup)
     {
-        if (string.IsNullOrWhiteSpace(BearerToken))
+        var token = BearerTokenProvider?.Invoke();
+        if (string.IsNullOrWhiteSpace(token))
         {
-            StatusMessage = "Bearer token is required.";
+            StatusMessage = "Set a bearer token first (🔑 in the nav rail).";
             return;
         }
 
