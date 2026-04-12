@@ -49,7 +49,7 @@ public partial class AgentSkillResourceViewModel : ObservableObject
         {
             AvailableSkills = availableSkills,
             SkillId = resource.SkillId,
-            SelectedExecutionModeOption = ExecutionModeOptions.FirstOrDefault(o => o.Id == resource.ExecutionMode?.Id)
+            SelectedExecutionModeOption = MatchExecutionMode(resource.ExecutionMode)
         };
 
         if (resource.WorkdayResources is not null)
@@ -59,5 +59,23 @@ public partial class AgentSkillResourceViewModel : ObservableObject
         }
 
         return vm;
+    }
+
+    private static LookupOption? MatchExecutionMode(ExecutionMode? mode)
+    {
+        if (mode is null) return null;
+
+        // Match by spec value (Mode=Ambient / Mode=Delegate)
+        var byId = ExecutionModeOptions.FirstOrDefault(o => o.Id == mode.Id);
+        if (byId is not null) return byId;
+
+        // Match by descriptor from tenant response (Ambient / Delegate)
+        var byDescriptor = ExecutionModeOptions.FirstOrDefault(o =>
+            string.Equals(o.Name, mode.Descriptor, StringComparison.OrdinalIgnoreCase));
+        if (byDescriptor is not null) return byDescriptor;
+
+        // Match by descriptor in the id field (some responses may vary)
+        return ExecutionModeOptions.FirstOrDefault(o =>
+            mode.Id is not null && mode.Id.Contains(o.Name, StringComparison.OrdinalIgnoreCase));
     }
 }

@@ -186,8 +186,11 @@ public partial class DefinitionEditorViewModel : ObservableObject
         Url = definition.Url;
         Version = definition.Version;
 
-        // Provider
-        var providerMatch = KnownProviders.All.FirstOrDefault(p => p.Id == definition.Provider?.Id);
+        // Provider — match by known ID, reference_id, or descriptor
+        var prov = definition.Provider;
+        var providerMatch = KnownProviders.All.FirstOrDefault(p =>
+            p.Id == prov?.Id || p.Id == prov?.ReferenceId ||
+            string.Equals(p.Name, prov?.Descriptor, StringComparison.OrdinalIgnoreCase));
         if (providerMatch != default)
         {
             SelectedProviderId = providerMatch.Id;
@@ -196,11 +199,14 @@ public partial class DefinitionEditorViewModel : ObservableObject
         else
         {
             SelectedProviderId = "__CUSTOM__";
-            CustomProviderId = definition.Provider?.Id;
+            CustomProviderId = prov?.Descriptor ?? prov?.ReferenceId ?? prov?.Id;
         }
 
-        // Platform
-        var platformMatch = KnownPlatforms.All.FirstOrDefault(p => p.Id == definition.Platform?.Id);
+        // Platform — match by known ID, reference_id, or descriptor
+        var plat = definition.Platform;
+        var platformMatch = KnownPlatforms.All.FirstOrDefault(p =>
+            p.Id == plat?.Id || p.Id == plat?.ReferenceId ||
+            string.Equals(p.Name, plat?.Descriptor, StringComparison.OrdinalIgnoreCase));
         if (platformMatch != default)
         {
             SelectedPlatformId = platformMatch.Id;
@@ -209,7 +215,7 @@ public partial class DefinitionEditorViewModel : ObservableObject
         else
         {
             SelectedPlatformId = "__CUSTOM__";
-            CustomPlatformId = definition.Platform?.Id;
+            CustomPlatformId = plat?.Descriptor ?? plat?.ReferenceId ?? plat?.Id;
         }
 
         PushNotifications = definition.Capabilities?.PushNotifications == true;
