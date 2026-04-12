@@ -27,7 +27,7 @@ public class AsorQueryClientTests
     public async Task ListDefinitions_sends_get_to_registration_url()
     {
         var (client, handler) = CreateClient();
-        handler.SetResponse(HttpStatusCode.OK, "[]");
+        handler.SetResponse(HttpStatusCode.OK, """{"total": 0, "data": []}""");
 
         await client.ListDefinitionsAsync(CreateContext());
 
@@ -41,7 +41,7 @@ public class AsorQueryClientTests
     public async Task ListDefinitions_sets_bearer_token()
     {
         var (client, handler) = CreateClient();
-        handler.SetResponse(HttpStatusCode.OK, "[]");
+        handler.SetResponse(HttpStatusCode.OK, """{"total": 0, "data": []}""");
 
         await client.ListDefinitionsAsync(CreateContext());
 
@@ -50,29 +50,51 @@ public class AsorQueryClientTests
     }
 
     [Fact]
-    public async Task ListDefinitions_parses_response_array()
+    public async Task ListDefinitions_parses_wrapped_response()
     {
         var (client, handler) = CreateClient();
-        var agents = new List<AgentDefinition>
+        handler.SetResponse(HttpStatusCode.OK, """
         {
-            new() { Name = "Agent One", Description = "First", Url = "https://a.com", Version = "1.0" },
-            new() { Name = "Agent Two", Description = "Second", Url = "https://b.com", Version = "2.0" }
-        };
-        handler.SetResponse(HttpStatusCode.OK,
-            JsonSerializer.Serialize(agents, AsorJsonContext.Default.ListAgentDefinition));
+          "total": 2,
+          "data": [
+            {
+              "name": "Agent One",
+              "description": "First",
+              "url": "https://a.com",
+              "version": "1.0",
+              "provider": {"id": "abc", "descriptor": "Self-Built"},
+              "platform": {"id": "def", "descriptor": "Other", "reference_id": "OTHER"},
+              "capabilities": {"pushNotifications": false, "streaming": false, "stateTransitionHistory": false},
+              "skills": [{"id": "s1", "name": "Skill", "description": "A skill"}]
+            },
+            {
+              "name": "Agent Two",
+              "description": "Second",
+              "url": "https://b.com",
+              "version": "2.0",
+              "provider": {"id": "xyz"},
+              "platform": {"id": "ghi"},
+              "capabilities": {},
+              "skills": [{"id": "s2", "name": "Skill 2", "description": "Another"}]
+            }
+          ]
+        }
+        """);
 
         var result = await client.ListDefinitionsAsync(CreateContext());
 
         Assert.Equal(2, result.Count);
         Assert.Equal("Agent One", result[0].Name);
+        Assert.Equal("Self-Built", result[0].Provider!.Descriptor);
+        Assert.Equal("OTHER", result[0].Platform!.ReferenceId);
         Assert.Equal("Agent Two", result[1].Name);
     }
 
     [Fact]
-    public async Task ListDefinitions_returns_empty_on_empty_array()
+    public async Task ListDefinitions_returns_empty_on_empty_data()
     {
         var (client, handler) = CreateClient();
-        handler.SetResponse(HttpStatusCode.OK, "[]");
+        handler.SetResponse(HttpStatusCode.OK, """{"total": 0, "data": []}""");
 
         var result = await client.ListDefinitionsAsync(CreateContext());
 

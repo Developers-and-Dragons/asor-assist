@@ -5,7 +5,7 @@ using AsorAssistant.Domain.Models;
 namespace AsorAssistant.Core.Serialization;
 
 [JsonSerializable(typeof(AgentDefinition))]
-[JsonSerializable(typeof(List<AgentDefinition>))]
+[JsonSerializable(typeof(AgentListResponse))]
 [JsonSerializable(typeof(MimeType))]
 [JsonSerializable(typeof(ExecutionMode))]
 [JsonSerializable(typeof(DraftEnvelope))]

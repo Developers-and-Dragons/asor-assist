@@ -98,8 +98,8 @@
                   CornerRadius="8">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-            <DataGridTextColumn Header="Provider" Binding="{Binding Provider.Id}" Width="160" />
-            <DataGridTextColumn Header="Platform" Binding="{Binding Platform.Id}" Width="160" />
+            <DataGridTextColumn Header="Provider" Binding="{Binding Provider.Descriptor}" Width="160" />
+            <DataGridTextColumn Header="Platform" Binding="{Binding Platform.Descriptor}" Width="160" />
             <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="100" />
             <DataGridTextColumn Header="URL" Binding="{Binding Url}" Width="250" />
           </DataGrid.Columns>

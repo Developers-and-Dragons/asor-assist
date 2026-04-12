@@ -46,6 +46,7 @@ public class AsorQueryClient : IAsorQueryClient
         response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize(responseBody, AsorJsonContext.Default.ListAgentDefinition) ?? [];
+        var result = JsonSerializer.Deserialize(responseBody, AsorJsonContext.Default.AgentListResponse);
+        return result?.Data?.AsReadOnly() ?? (IReadOnlyList<AgentDefinition>)[];
     }
 }
