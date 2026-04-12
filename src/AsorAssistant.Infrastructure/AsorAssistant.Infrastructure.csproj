@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AsorAssistant.Domain\AsorAssistant.Domain.csproj" />
-    <ProjectReference Include="..\AsorAssistant.Application\AsorAssistant.Application.csproj" />
+    <ProjectReference Include="..\AsorAssistant.Core\AsorAssistant.Core.csproj" />
   </ItemGroup>
 
 </Project>

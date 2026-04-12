@@ -2,15 +2,15 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using AsorAssistant.App.ViewModels;
-using AsorAssistant.Application.Ports;
-using AsorAssistant.Application.Services;
+using AsorAssistant.Core.Ports;
+using AsorAssistant.Core.Services;
 using AsorAssistant.Infrastructure.Http;
 using AsorAssistant.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AsorAssistant.App;
 
-public partial class App : Avalonia.Application
+public partial class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
 

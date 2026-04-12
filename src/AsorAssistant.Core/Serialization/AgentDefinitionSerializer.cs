@@ -1,7 +1,7 @@
 using System.Text.Json;
 using AsorAssistant.Domain.Models;
 
-namespace AsorAssistant.Application.Serialization;
+namespace AsorAssistant.Core.Serialization;
 
 public static class AgentDefinitionSerializer
 {

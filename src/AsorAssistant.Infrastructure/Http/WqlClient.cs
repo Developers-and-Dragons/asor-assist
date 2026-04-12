@@ -1,9 +1,9 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using AsorAssistant.Application.Models;
-using AsorAssistant.Application.Ports;
-using AsorAssistant.Application.Serialization;
+using AsorAssistant.Core.Models;
+using AsorAssistant.Core.Ports;
+using AsorAssistant.Core.Serialization;
 
 namespace AsorAssistant.Infrastructure.Http;
 

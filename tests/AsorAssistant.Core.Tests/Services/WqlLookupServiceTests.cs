@@ -1,10 +1,10 @@
 using System.Text.Json;
-using AsorAssistant.Application.Models;
-using AsorAssistant.Application.Ports;
-using AsorAssistant.Application.Services;
+using AsorAssistant.Core.Models;
+using AsorAssistant.Core.Ports;
+using AsorAssistant.Core.Services;
 using NSubstitute;
 
-namespace AsorAssistant.Application.Tests.Services;
+namespace AsorAssistant.Core.Tests.Services;
 
 public class WqlLookupServiceTests
 {

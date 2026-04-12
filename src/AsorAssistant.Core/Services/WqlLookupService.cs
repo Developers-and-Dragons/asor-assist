@@ -1,8 +1,8 @@
 using System.Text.Json;
-using AsorAssistant.Application.Models;
-using AsorAssistant.Application.Ports;
+using AsorAssistant.Core.Models;
+using AsorAssistant.Core.Ports;
 
-namespace AsorAssistant.Application.Services;
+namespace AsorAssistant.Core.Services;
 
 public class WqlLookupService
 {

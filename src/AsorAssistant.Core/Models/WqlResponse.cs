@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace AsorAssistant.Application.Models;
+namespace AsorAssistant.Core.Models;
 
 public class WqlResponse
 {

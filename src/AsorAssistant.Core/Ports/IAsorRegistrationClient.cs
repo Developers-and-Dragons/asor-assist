@@ -1,7 +1,7 @@
-using AsorAssistant.Application.Models;
+using AsorAssistant.Core.Models;
 using AsorAssistant.Domain.Models;
 
-namespace AsorAssistant.Application.Ports;
+namespace AsorAssistant.Core.Ports;
 
 public interface IAsorRegistrationClient
 {

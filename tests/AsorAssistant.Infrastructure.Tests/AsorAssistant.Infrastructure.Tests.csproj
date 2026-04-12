@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AsorAssistant.Infrastructure\AsorAssistant.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\src\AsorAssistant.Application\AsorAssistant.Application.csproj" />
+    <ProjectReference Include="..\..\src\AsorAssistant.Core\AsorAssistant.Core.csproj" />
     <ProjectReference Include="..\..\src\AsorAssistant.Domain\AsorAssistant.Domain.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-using AsorAssistant.Application.Serialization;
+using AsorAssistant.Core.Serialization;
 using Avalonia.Input.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

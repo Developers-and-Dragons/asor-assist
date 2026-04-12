@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:AsorAssistant.App.ViewModels"
-             xmlns:models="using:AsorAssistant.Application.Models"
+             xmlns:models="using:AsorAssistant.Core.Models"
              x:Class="AsorAssistant.App.Views.DraftManagerView"
              x:DataType="vm:DraftManagerViewModel">
 

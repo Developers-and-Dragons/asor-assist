@@ -1,6 +1,6 @@
 using AsorAssistant.Domain.Models;
 
-namespace AsorAssistant.Application.Models;
+namespace AsorAssistant.Core.Models;
 
 public class RegistrationContext
 {

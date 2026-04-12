@@ -1,8 +1,8 @@
 using System.Text.Json;
-using AsorAssistant.Application.Serialization;
+using AsorAssistant.Core.Serialization;
 using AsorAssistant.Domain.Models;
 
-namespace AsorAssistant.Application.Tests.Serialization;
+namespace AsorAssistant.Core.Tests.Serialization;
 
 public class AgentDefinitionSerializerTests
 {

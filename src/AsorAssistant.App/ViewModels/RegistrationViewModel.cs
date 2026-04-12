@@ -1,5 +1,5 @@
-using AsorAssistant.Application.Models;
-using AsorAssistant.Application.Ports;
+using AsorAssistant.Core.Models;
+using AsorAssistant.Core.Ports;
 using AsorAssistant.Domain.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
-using AsorAssistant.Application.Models;
-using AsorAssistant.Application.Serialization;
+using AsorAssistant.Core.Models;
+using AsorAssistant.Core.Serialization;
 using AsorAssistant.Domain.Models;
 using AsorAssistant.Infrastructure.Http;
 

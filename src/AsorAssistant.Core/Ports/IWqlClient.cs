@@ -1,6 +1,6 @@
-using AsorAssistant.Application.Models;
+using AsorAssistant.Core.Models;
 
-namespace AsorAssistant.Application.Ports;
+namespace AsorAssistant.Core.Ports;
 
 public interface IWqlClient
 {

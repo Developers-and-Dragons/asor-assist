@@ -1,4 +1,4 @@
-using AsorAssistant.Application.Models;
+using AsorAssistant.Core.Models;
 using AsorAssistant.Domain.Models;
 using AsorAssistant.Infrastructure.Persistence;
 

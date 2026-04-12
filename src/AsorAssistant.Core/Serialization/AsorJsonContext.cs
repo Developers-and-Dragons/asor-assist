@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
-using AsorAssistant.Application.Models;
+using AsorAssistant.Core.Models;
 using AsorAssistant.Domain.Models;
 
-namespace AsorAssistant.Application.Serialization;
+namespace AsorAssistant.Core.Serialization;
 
 [JsonSerializable(typeof(AgentDefinition))]
 [JsonSerializable(typeof(MimeType))]

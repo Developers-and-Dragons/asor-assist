@@ -1,4 +1,4 @@
-namespace AsorAssistant.Application.Models;
+namespace AsorAssistant.Core.Models;
 
 public class ServiceOperationLookup
 {

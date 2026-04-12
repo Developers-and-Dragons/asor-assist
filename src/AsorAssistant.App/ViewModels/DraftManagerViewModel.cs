@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
-using AsorAssistant.Application.Models;
-using AsorAssistant.Application.Ports;
+using AsorAssistant.Core.Models;
+using AsorAssistant.Core.Ports;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
