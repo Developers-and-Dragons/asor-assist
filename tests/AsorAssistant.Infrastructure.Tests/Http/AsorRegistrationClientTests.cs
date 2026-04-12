@@ -11,7 +11,7 @@ public class AsorRegistrationClientTests
 {
     private static RegistrationContext CreateContext() => new()
     {
-        WorkdayHost = "example.workday.com",
+        Region = new AsorRegion { Name = "US", BaseUrl = "https://us.agent.workday.com" },
         TenantName = "test-tenant",
         BearerToken = "test-token-abc123"
     };
@@ -73,7 +73,7 @@ public class AsorRegistrationClientTests
 
         Assert.NotNull(handler.LastRequest);
         Assert.Equal(
-            "https://example.workday.com/api/asor/v1/test-tenant/agentDefinition",
+            "https://us.agent.workday.com/asor/v1/agentDefinition",
             handler.LastRequest.RequestUri!.ToString());
     }
 

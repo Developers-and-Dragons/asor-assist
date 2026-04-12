@@ -19,7 +19,7 @@ public class AsorQueryClient : IAsorQueryClient
 
     public async Task<AgentDefinition?> GetDefinitionAsync(RegistrationContext context, string id)
     {
-        var url = AsorUrlBuilder.BuildDefinitionUrl(context.WorkdayHost!, context.TenantName!, id);
+        var url = AsorUrlBuilder.BuildDefinitionUrl(context.Region!.BaseUrl, id);
 
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.BearerToken);

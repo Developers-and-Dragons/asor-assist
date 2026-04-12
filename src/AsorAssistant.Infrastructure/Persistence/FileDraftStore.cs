@@ -87,7 +87,7 @@ public class FileDraftStore : IDraftStore
                 DisplayName = newDisplayName,
                 Provider = source.Metadata.Provider,
                 Version = source.Metadata.Version,
-                WorkdayHost = source.Metadata.WorkdayHost,
+                RegionName = source.Metadata.RegionName,
                 TenantName = source.Metadata.TenantName
             },
             Definition = DeepCopy(source.Definition)

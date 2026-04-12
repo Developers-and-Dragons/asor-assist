@@ -30,7 +30,7 @@ public class FileDraftStoreTests : IDisposable
             DisplayName = displayName,
             Provider = "test-provider",
             Version = "1.0.0",
-            WorkdayHost = "example.workday.com",
+            RegionName = "US",
             TenantName = "test-tenant",
             LastModified = DateTimeOffset.UtcNow
         },
@@ -68,7 +68,7 @@ public class FileDraftStoreTests : IDisposable
         Assert.Equal(envelope.Definition.Name, loaded.Definition.Name);
         Assert.Equal(envelope.Definition.Skills!.Count, loaded.Definition.Skills!.Count);
         Assert.Equal(envelope.Metadata.Provider, loaded.Metadata.Provider);
-        Assert.Equal(envelope.Metadata.WorkdayHost, loaded.Metadata.WorkdayHost);
+        Assert.Equal(envelope.Metadata.RegionName, loaded.Metadata.RegionName);
     }
 
     [Fact]

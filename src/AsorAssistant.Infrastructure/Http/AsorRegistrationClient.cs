@@ -21,7 +21,7 @@ public class AsorRegistrationClient : IAsorRegistrationClient
     {
         try
         {
-            var url = AsorUrlBuilder.BuildRegistrationUrl(context.WorkdayHost!, context.TenantName!);
+            var url = AsorUrlBuilder.BuildRegistrationUrl(context.Region!.BaseUrl);
             var json = JsonSerializer.Serialize(definition, AsorJsonContext.Default.AgentDefinition);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, url);
