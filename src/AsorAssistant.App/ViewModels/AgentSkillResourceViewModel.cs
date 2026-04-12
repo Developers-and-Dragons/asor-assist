@@ -15,6 +15,9 @@ public partial class AgentSkillResourceViewModel : ObservableObject
 
     public ObservableCollection<WorkdayResourceViewModel> WorkdayResources { get; } = [];
 
+    /// <summary>Reference to the editor's skills collection for the skill ID dropdown.</summary>
+    public ObservableCollection<SkillViewModel>? AvailableSkills { get; set; }
+
     public static IReadOnlyList<string> ExecutionModeOptions { get; } =
         [ExecutionMode.Ambient, ExecutionMode.Delegate];
 
@@ -37,10 +40,11 @@ public partial class AgentSkillResourceViewModel : ObservableObject
         WorkdayResources = WorkdayResources.Select(r => r.ToModel()).ToList()
     };
 
-    public static AgentSkillResourceViewModel FromModel(AgentSkillResource resource)
+    public static AgentSkillResourceViewModel FromModel(AgentSkillResource resource, ObservableCollection<SkillViewModel>? availableSkills = null)
     {
         var vm = new AgentSkillResourceViewModel
         {
+            AvailableSkills = availableSkills,
             SkillId = resource.SkillId,
             SelectedExecutionMode = resource.ExecutionMode?.Id
         };

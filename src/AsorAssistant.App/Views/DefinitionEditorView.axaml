@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:AsorAssistant.App.ViewModels"
              x:Class="AsorAssistant.App.Views.DefinitionEditorView"
-             x:DataType="vm:DefinitionEditorViewModel">
+             x:DataType="vm:DefinitionEditorViewModel"
+             x:Name="EditorRoot">
 
   <ScrollViewer Padding="16">
     <StackPanel Spacing="16" MaxWidth="800">
@@ -114,6 +115,12 @@
           <DataTemplate x:DataType="vm:SkillViewModel">
             <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,8">
               <StackPanel Spacing="8">
+                <DockPanel>
+                  <Button DockPanel.Dock="Right" Content="Remove"
+                          Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveSkillCommand}"
+                          CommandParameter="{Binding}" VerticalAlignment="Top" />
+                  <TextBlock Text="Skill" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </DockPanel>
                 <StackPanel Spacing="4">
                   <TextBlock Text="Skill ID *" />
                   <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
@@ -158,9 +165,19 @@
           <DataTemplate x:DataType="vm:AgentSkillResourceViewModel">
             <Border BorderBrush="DodgerBlue" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,8">
               <StackPanel Spacing="8">
+                <DockPanel>
+                  <Button DockPanel.Dock="Right" Content="Remove"
+                          Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveWorkdayConfigEntryCommand}"
+                          CommandParameter="{Binding}" VerticalAlignment="Top" />
+                  <TextBlock Text="Skill Resource Mapping" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </DockPanel>
                 <StackPanel Spacing="4">
                   <TextBlock Text="Skill ID *" />
-                  <TextBox Text="{Binding SkillId}" PlaceholderText="Must match a defined skill ID" />
+                  <ComboBox ItemsSource="{Binding AvailableSkills}"
+                            SelectedValue="{Binding SkillId}"
+                            SelectedValueBinding="{Binding Id}"
+                            DisplayMemberBinding="{Binding Id}"
+                            PlaceholderText="Select a skill..." />
                 </StackPanel>
                 <StackPanel Spacing="4">
                   <TextBlock Text="Execution Mode *" />
@@ -176,6 +193,12 @@
                     <DataTemplate x:DataType="vm:WorkdayResourceViewModel">
                       <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6">
                         <StackPanel Spacing="6">
+                          <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="Remove"
+                                    Command="{Binding $parent[ItemsControl].((vm:AgentSkillResourceViewModel)DataContext).RemoveWorkdayResourceCommand}"
+                                    CommandParameter="{Binding}" VerticalAlignment="Top" />
+                            <TextBlock Text="Resource" FontWeight="SemiBold" VerticalAlignment="Center" />
+                          </DockPanel>
                           <StackPanel Spacing="4">
                             <TextBlock Text="Tool Name *" />
                             <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers or endpoint name" />
@@ -190,12 +213,15 @@
                           </StackPanel>
 
                           <!-- Securable Items (Tools) -->
-                          <TextBlock Text="Securable Items (Data Sources, CRF Fields, etc.)" FontWeight="SemiBold" Margin="0,4,0,0" />
+                          <TextBlock Text="Securable Items (SOAP Operations, REST Operations, Data Sources, etc.)" FontWeight="SemiBold" Margin="0,4,0,0" />
                           <ItemsControl ItemsSource="{Binding Tools}">
                             <ItemsControl.ItemTemplate>
                               <DataTemplate x:DataType="vm:SecurableItemViewModel">
                                 <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,0,4">
                                   <TextBox Text="{Binding Id}" PlaceholderText="Workday securable item ID" Width="400" />
+                                  <Button Content="Remove"
+                                          Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
+                                          CommandParameter="{Binding}" />
                                 </StackPanel>
                               </DataTemplate>
                             </ItemsControl.ItemTemplate>

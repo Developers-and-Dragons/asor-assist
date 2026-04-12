@@ -110,7 +110,7 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [RelayCommand]
     private void AddWorkdayConfigEntry()
     {
-        var entry = new AgentSkillResourceViewModel();
+        var entry = new AgentSkillResourceViewModel { AvailableSkills = Skills };
         entry.WorkdayResources.Add(new WorkdayResourceViewModel());
         WorkdayConfig.Add(entry);
     }
@@ -225,7 +225,7 @@ public partial class DefinitionEditorViewModel : ObservableObject
         if (definition.WorkdayConfig is not null)
         {
             foreach (var entry in definition.WorkdayConfig)
-                WorkdayConfig.Add(AgentSkillResourceViewModel.FromModel(entry));
+                WorkdayConfig.Add(AgentSkillResourceViewModel.FromModel(entry, Skills));
         }
 
         Validate();
