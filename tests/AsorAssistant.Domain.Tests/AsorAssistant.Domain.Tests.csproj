@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AsorAssistant.Domain\AsorAssistant.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

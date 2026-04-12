@@ -1,0 +1,24 @@
+{
+  "name": "Expense Report Assistant",
+  "description": "Helps employees submit and track expense reports through Workday.",
+  "url": "https://agents.example.com/expense-assistant",
+  "version": "1.0.0",
+  "provider": {
+    "id": "example_provider_org"
+  },
+  "platform": {
+    "id": "OTHER"
+  },
+  "capabilities": {},
+  "skills": [
+    {
+      "id": "submit-expense",
+      "name": "Submit Expense Report",
+      "description": "Guides users through submitting a new expense report with required fields and approvals.",
+      "tags": [
+        { "tag": "expenses" },
+        { "tag": "finance" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "name": "HR Onboarding Agent",
+  "description": "Automates new hire onboarding tasks including document collection, system provisioning, and orientation scheduling.",
+  "url": "https://agents.example.com/hr-onboarding",
+  "version": "2.1.0",
+  "provider": {
+    "id": "acme_hr_solutions"
+  },
+  "platform": {
+    "id": "OTHER"
+  },
+  "capabilities": {
+    "pushNotifications": true,
+    "streaming": false,
+    "stateTransitionHistory": true
+  },
+  "skills": [
+    {
+      "id": "collect-documents",
+      "name": "Collect Onboarding Documents",
+      "description": "Requests and tracks required documents from new hires such as tax forms, ID verification, and emergency contacts.",
+      "tags": [
+        { "tag": "onboarding" },
+        { "tag": "documents" },
+        { "tag": "hr" }
+      ],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"]
+    },
+    {
+      "id": "provision-systems",
+      "name": "Provision System Access",
+      "description": "Creates accounts and assigns roles in connected systems based on the new hire's department and role.",
+      "tags": [
+        { "tag": "onboarding" },
+        { "tag": "provisioning" },
+        { "tag": "it" }
+      ]
+    }
+  ],
+  "overview": "End-to-end onboarding automation for new hires, from document collection through system provisioning.",
+  "iconUrl": "https://agents.example.com/icons/hr-onboarding.png",
+  "documentationUrl": "https://docs.example.com/hr-onboarding-agent",
+  "externalAgentID": "acme-hr-onboard-001",
+  "externalTenantID": "acme-tenant-prod",
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "supportsAuthenticatedExtendedCard": false,
+  "workdayConfig": [
+    {
+      "skillId": "collect-documents",
+      "executionMode": "Mode=Delegate",
+      "workdayResources": [
+        {
+          "tool_name": "Get_Documents",
+          "description": "Retrieves pending document requirements for a worker.",
+          "agent_resource": {
+            "id": "wd-tool-documents-001"
+          },
+          "tools": [
+            { "id": "ds-onboarding-documents" },
+            { "id": "ds-worker-profile" }
+          ]
+        }
+      ]
+    },
+    {
+      "skillId": "provision-systems",
+      "executionMode": "Mode=Ambient",
+      "workdayResources": [
+        {
+          "tool_name": "Create_Account_Provisioning",
+          "description": "Triggers account creation in downstream systems.",
+          "tools": [
+            { "id": "ds-system-accounts" }
+          ]
+        },
+        {
+          "tool_name": "Assign_Security_Group",
+          "description": "Assigns the worker to the appropriate security groups based on role.",
+          "agent_resource": {
+            "id": "wd-tool-security-groups-001"
+          }
+        }
+      ]
+    }
+  ]
+}

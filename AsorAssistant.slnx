@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AsorAssistant.App/AsorAssistant.App.csproj" />
+    <Project Path="src/AsorAssistant.Application/AsorAssistant.Application.csproj" />
+    <Project Path="src/AsorAssistant.Domain/AsorAssistant.Domain.csproj" />
+    <Project Path="src/AsorAssistant.Infrastructure/AsorAssistant.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AsorAssistant.App.Tests/AsorAssistant.App.Tests.csproj" />
+    <Project Path="tests/AsorAssistant.Application.Tests/AsorAssistant.Application.Tests.csproj" />
+    <Project Path="tests/AsorAssistant.Domain.Tests/AsorAssistant.Domain.Tests.csproj" />
+    <Project Path="tests/AsorAssistant.Infrastructure.Tests/AsorAssistant.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>
