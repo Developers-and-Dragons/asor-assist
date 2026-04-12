@@ -12,7 +12,7 @@ public partial class WqlLookupViewModel : ObservableObject
     private readonly WqlLookupService _lookupService;
     private readonly DefinitionEditorViewModel _editor;
 
-    /// <summary>Provides the bearer token from the central app state.</summary>
+    /// <summary>Provides the bearer token from the registration state.</summary>
     public Func<string?>? BearerTokenProvider { get; set; }
 
     [ObservableProperty]
@@ -62,7 +62,7 @@ public partial class WqlLookupViewModel : ObservableObject
         var token = BearerTokenProvider?.Invoke();
         if (string.IsNullOrWhiteSpace(token))
         {
-            StatusMessage = "Set a bearer token first (🔑 in the nav rail).";
+            StatusMessage = "No bearer token configured. Set it in the Register panel on the Editor page.";
             return;
         }
 

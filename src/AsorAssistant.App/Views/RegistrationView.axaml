@@ -5,38 +5,53 @@
              x:DataType="vm:RegistrationViewModel">
 
   <ScrollViewer>
-    <StackPanel Spacing="16">
+    <StackPanel Spacing="0">
 
-      <DockPanel>
+      <!-- Header -->
+      <DockPanel Margin="0,0,0,16">
         <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
-                Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ToggleRegistrationPanelCommand}" />
+                Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).CloseRegistrationPanelCommand}" />
         <TextBlock Classes="page-title" Text="Register" />
       </DockPanel>
 
-      <TextBlock Text="Submit this definition to the ASOR API."
-                 FontSize="12" Opacity="0.5" />
+      <!-- Connection Section -->
+      <TextBlock Classes="section-header" Text="Connection" />
+      <TextBlock Classes="section-desc" Text="Configure your Workday environment. This token is also used for WQL lookups." />
 
-      <StackPanel Spacing="3">
-        <TextBlock Classes="field-label" Text="REGION" />
-        <ComboBox ItemsSource="{Binding Regions}"
-                  SelectedItem="{Binding SelectedRegion}"
-                  PlaceholderText="Select region..."
-                  HorizontalAlignment="Stretch">
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
+      <StackPanel Spacing="10">
+        <StackPanel Spacing="3">
+          <TextBlock Classes="field-label" Text="REGION" />
+          <ComboBox ItemsSource="{Binding Regions}"
+                    SelectedItem="{Binding SelectedRegion}"
+                    PlaceholderText="Select region..."
+                    HorizontalAlignment="Stretch">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel Spacing="3">
+          <TextBlock Classes="field-label" Text="TENANT NAME" />
+          <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
+        </StackPanel>
+
+        <StackPanel Spacing="3">
+          <TextBlock Classes="field-label" Text="BEARER TOKEN" />
+          <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste bearer token"
+                   PasswordChar="*" RevealPassword="False" />
+        </StackPanel>
       </StackPanel>
 
-      <StackPanel Spacing="3">
-        <TextBlock Classes="field-label" Text="TENANT NAME" />
-        <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
-      </StackPanel>
+      <Separator Classes="section-divider" />
+
+      <!-- Registration Section -->
+      <TextBlock Classes="section-header" Text="Submit" />
 
       <!-- URL Preview -->
-      <Border Classes="surface-inner" Padding="10,8"
+      <Border Classes="surface-inner" Padding="10,8" Margin="0,8,0,12"
               IsVisible="{Binding ResolvedUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
         <StackPanel Spacing="2">
           <TextBlock Classes="field-label" Text="ENDPOINT" />
@@ -45,13 +60,22 @@
         </StackPanel>
       </Border>
 
-      <Button Classes="action-primary" Content="Register Agent"
+      <!-- Readiness check -->
+      <StackPanel Spacing="4" Margin="0,0,0,12"
+                  IsVisible="{Binding !IsConnectionConfigured}">
+        <TextBlock Text="⚠ Missing configuration" FontSize="12" Foreground="#ffb080" FontWeight="SemiBold" />
+        <TextBlock FontSize="11" Opacity="0.5" TextWrapping="Wrap">
+          <Run Text="Select a region and enter a bearer token above to enable registration." />
+        </TextBlock>
+      </StackPanel>
+
+      <Button Classes="action-primary" Content="Register Agent Definition"
               Command="{Binding RegisterCommand}"
               IsEnabled="{Binding !IsRegistering}"
               HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
 
       <!-- Response -->
-      <StackPanel Spacing="6"
+      <StackPanel Spacing="6" Margin="0,16,0,0"
                   IsVisible="{Binding ResponseText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
         <TextBlock Classes="field-label" Text="RESPONSE" />
         <TextBox Classes="mono" Text="{Binding ResponseText}" IsReadOnly="True"

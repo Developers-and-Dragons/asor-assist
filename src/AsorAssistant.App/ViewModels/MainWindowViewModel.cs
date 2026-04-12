@@ -9,19 +9,16 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsEditorPage))]
     [NotifyPropertyChangedFor(nameof(IsJsonPage))]
     [NotifyPropertyChangedFor(nameof(IsDraftsPage))]
-    [NotifyPropertyChangedFor(nameof(IsWqlPage))]
+    [NotifyPropertyChangedFor(nameof(IsLookupsPage))]
     private int _selectedPageIndex;
+
+    [ObservableProperty]
+    private bool _isRegistrationPanelOpen;
 
     public bool IsEditorPage => SelectedPageIndex == 0;
     public bool IsJsonPage => SelectedPageIndex == 1;
     public bool IsDraftsPage => SelectedPageIndex == 2;
-    public bool IsWqlPage => SelectedPageIndex == 3;
-
-    [ObservableProperty]
-    private string? _bearerToken;
-
-    [ObservableProperty]
-    private bool _isRegistrationPanelOpen;
+    public bool IsLookupsPage => SelectedPageIndex == 3;
 
     public DefinitionEditorViewModel Editor { get; }
     public JsonPreviewViewModel JsonPreview { get; }
@@ -44,14 +41,20 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ToggleRegistrationPanel()
+    private void OpenRegistrationPanel()
     {
-        IsRegistrationPanelOpen = !IsRegistrationPanelOpen;
+        IsRegistrationPanelOpen = true;
     }
 
     [RelayCommand]
-    private void NavigateToEditor()
+    private void CloseRegistrationPanel()
     {
-        SelectedPageIndex = 0;
+        IsRegistrationPanelOpen = false;
+    }
+
+    [RelayCommand]
+    private void ToggleRegistrationPanel()
+    {
+        IsRegistrationPanelOpen = !IsRegistrationPanelOpen;
     }
 }

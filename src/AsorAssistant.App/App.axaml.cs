@@ -29,9 +29,8 @@ public partial class App : Application
         {
             var mainVm = Services.GetRequiredService<MainWindowViewModel>();
 
-            // Wire central bearer token to registration and WQL viewmodels
-            mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
-            mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
+            // Wire token provider: WQL uses the token from Registration
+            mainVm.WqlLookup.BearerTokenProvider = () => mainVm.Registration.BearerToken;
 
             desktop.MainWindow = new MainWindow { DataContext = mainVm };
         }

@@ -9,20 +9,56 @@
     <!-- Toolbar -->
     <Border DockPanel.Dock="Top" Classes="toolbar" Margin="20,16,20,0">
       <DockPanel>
-        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-          <!-- Validation badge -->
-          <Border Classes="badge" Background="#20ffffff"
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <!-- Status badges -->
+          <Border Classes="badge" Background="#1880d0a0"
                   IsVisible="{Binding IsValid}">
-            <TextBlock Text="Valid" FontSize="11" Foreground="#80d0a0" FontWeight="SemiBold" />
+            <TextBlock Text="✓ Valid" FontSize="11" Foreground="#80d0a0" FontWeight="SemiBold" />
           </Border>
           <Border Classes="badge" Background="#30ff6060"
                   IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-            <TextBlock Text="Errors" FontSize="11" Foreground="#ff8080" FontWeight="SemiBold" />
+            <TextBlock Text="✕ Invalid" FontSize="11" Foreground="#ff8080" FontWeight="SemiBold" />
           </Border>
 
+          <!-- Connection status -->
+          <Border Classes="badge" Background="#1880a0d0"
+                  IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).Registration.IsConnectionConfigured}">
+            <TextBlock FontSize="11" Foreground="#80a0d0" FontWeight="SemiBold">
+              <TextBlock.Text>
+                <MultiBinding StringFormat="🔗 {0}">
+                  <Binding Path="$parent[Window].((vm:MainWindowViewModel)DataContext).Registration.ConnectionStatusText" />
+                </MultiBinding>
+              </TextBlock.Text>
+            </TextBlock>
+          </Border>
+          <Border Classes="badge" Background="#20ffffff"
+                  IsVisible="{Binding !$parent[Window].((vm:MainWindowViewModel)DataContext).Registration.IsConnectionConfigured}">
+            <TextBlock Text="⚠ No connection" FontSize="11" Opacity="0.5" FontWeight="SemiBold" />
+          </Border>
+
+          <Separator Width="1" Height="20" Margin="4,0" Opacity="0.15" />
+
+          <!-- Actions -->
           <Button Classes="action" Content="Validate" Command="{Binding ValidateCommand}" />
-          <Button Classes="action" Content="Register"
-                  Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ToggleRegistrationPanelCommand}" />
+
+          <Button Classes="action" Content="Save Draft"
+                  Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).DraftManager.SaveCommand}">
+            <Button.Flyout>
+              <Flyout Placement="BottomEdgeAlignedRight">
+                <StackPanel Spacing="8" Width="280">
+                  <TextBlock Text="Save Draft" FontWeight="SemiBold" />
+                  <TextBox Text="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).DraftManager.DraftName}"
+                           PlaceholderText="Draft name" />
+                  <Button Classes="action-primary" Content="Save" HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Center"
+                          Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).DraftManager.SaveCommand}" />
+                </StackPanel>
+              </Flyout>
+            </Button.Flyout>
+          </Button>
+
+          <Button Classes="action-primary" Content="Register"
+                  Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).OpenRegistrationPanelCommand}" />
         </StackPanel>
 
         <TextBlock Classes="page-title" Text="Agent Definition" VerticalAlignment="Center" />

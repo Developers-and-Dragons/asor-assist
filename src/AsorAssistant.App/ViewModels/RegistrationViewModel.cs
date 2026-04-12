@@ -11,14 +11,18 @@ public partial class RegistrationViewModel : ObservableObject
     private readonly IAsorRegistrationClient _registrationClient;
     private readonly DefinitionEditorViewModel _editor;
 
-    /// <summary>Provides the bearer token from the central app state.</summary>
-    public Func<string?>? BearerTokenProvider { get; set; }
-
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsConnectionConfigured))]
+    [NotifyPropertyChangedFor(nameof(ConnectionStatusText))]
     private AsorRegion? _selectedRegion;
 
     [ObservableProperty]
     private string? _tenantName;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsConnectionConfigured))]
+    [NotifyPropertyChangedFor(nameof(ConnectionStatusText))]
+    private string? _bearerToken;
 
     [ObservableProperty]
     private string? _resolvedUrl;
@@ -32,6 +36,12 @@ public partial class RegistrationViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSuccess;
 
+    public bool IsConnectionConfigured =>
+        SelectedRegion is not null && !string.IsNullOrWhiteSpace(BearerToken);
+
+    public string ConnectionStatusText =>
+        IsConnectionConfigured ? $"{SelectedRegion!.Name} region" : "Not configured";
+
     public IReadOnlyList<AsorRegion> Regions => AsorRegion.All;
 
     public RegistrationViewModel(IAsorRegistrationClient registrationClient, DefinitionEditorViewModel editor)
@@ -42,24 +52,17 @@ public partial class RegistrationViewModel : ObservableObject
 
     partial void OnSelectedRegionChanged(AsorRegion? value)
     {
-        UpdateResolvedUrl();
-    }
-
-    private void UpdateResolvedUrl()
-    {
-        ResolvedUrl = SelectedRegion is not null
-            ? $"{SelectedRegion.BaseUrl}/asor/v1/agentDefinition"
+        ResolvedUrl = value is not null
+            ? $"{value.BaseUrl}/asor/v1/agentDefinition"
             : null;
     }
 
     [RelayCommand]
     private async Task Register()
     {
-        var token = BearerTokenProvider?.Invoke();
-
-        if (SelectedRegion is null || string.IsNullOrWhiteSpace(token))
+        if (!IsConnectionConfigured)
         {
-            ResponseText = "Region and bearer token are required. Set the token via the 🔑 button in the nav rail.";
+            ResponseText = "Select a region and enter a bearer token above.";
             IsSuccess = false;
             return;
         }
@@ -81,7 +84,7 @@ public partial class RegistrationViewModel : ObservableObject
             {
                 Region = SelectedRegion,
                 TenantName = TenantName,
-                BearerToken = token
+                BearerToken = BearerToken
             };
 
             var definition = _editor.ToModel();
