@@ -75,12 +75,12 @@
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label" Text="NAME" />
             <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
-            <TextBlock Classes="helper" Text="Display name shown to Workday admins and users." />
+            <TextBlock Classes="helper" Text="Human-readable name of the agent." />
           </StackPanel>
 
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label" Text="DESCRIPTION" />
-            <TextBox Text="{Binding Description}" PlaceholderText="What this agent does — helps users and other agents understand its capabilities."
+            <TextBox Text="{Binding Description}" PlaceholderText="Used to assist users and other agents in understanding what the agent can do."
                      AcceptsReturn="True" TextWrapping="Wrap" Height="72" />
           </StackPanel>
 
@@ -88,12 +88,12 @@
             <StackPanel Spacing="3">
               <TextBlock Classes="field-label" Text="URL" />
               <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
-              <TextBlock Classes="helper" Text="The publicly reachable endpoint Workday will call." />
+              <TextBlock Classes="helper" Text="URL to the address the agent is hosted at." />
             </StackPanel>
             <StackPanel Grid.Column="2" Spacing="3">
               <TextBlock Classes="field-label" Text="VERSION" />
               <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
-              <TextBlock Classes="helper" Text="Semver recommended." />
+              <TextBlock Classes="helper" Text="Format is up to the provider." />
             </StackPanel>
           </Grid>
         </StackPanel>
@@ -116,7 +116,7 @@
             <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
                      IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                      Margin="0,4,0,0" />
-            <TextBlock Classes="helper" Text="The organisation that built or manages this agent." />
+            <TextBlock Classes="helper" Text="The service provider of the agent." />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="3">
             <TextBlock Classes="field-label" Text="PLATFORM" />
@@ -129,7 +129,7 @@
             <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Custom platform ID"
                      IsVisible="{Binding SelectedPlatformId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                      Margin="0,4,0,0" />
-            <TextBlock Classes="helper" Text="The runtime or framework the agent is deployed on." />
+            <TextBlock Classes="helper" Text="The platform this agent executes on. Use OTHER if none match." />
           </StackPanel>
         </Grid>
 
@@ -142,13 +142,13 @@
         <StackPanel Spacing="8">
           <ToggleSwitch Content="Push Notifications" IsChecked="{Binding PushNotifications}"
                         OnContent="Enabled" OffContent="Disabled"
-                        ToolTip.Tip="Agent can send async updates to Workday without polling." />
+                        ToolTip.Tip="True if the agent can notify updates to client." />
           <ToggleSwitch Content="Streaming (SSE)" IsChecked="{Binding Streaming}"
                         OnContent="Enabled" OffContent="Disabled"
-                        ToolTip.Tip="Agent supports Server-Sent Events for real-time streaming." />
+                        ToolTip.Tip="True if the agent supports SSE." />
           <ToggleSwitch Content="State Transition History" IsChecked="{Binding StateTransitionHistory}"
                         OnContent="Enabled" OffContent="Disabled"
-                        ToolTip.Tip="Agent tracks and exposes task state transitions." />
+                        ToolTip.Tip="True if the agent exposes status change history for tasks." />
         </StackPanel>
 
         <Separator Classes="section-divider" />
@@ -159,7 +159,7 @@
                   Command="{Binding AddSkillCommand}" VerticalAlignment="Top" />
           <StackPanel>
             <TextBlock Classes="section-header" Text="Skills" />
-            <TextBlock Classes="section-desc" Text="At least one skill is required. Each defines a discrete capability the agent offers." />
+            <TextBlock Classes="section-desc" Text="At least one skill is required. A skill is a unit of capability that an agent can perform." />
           </StackPanel>
         </DockPanel>
 
@@ -187,7 +187,7 @@
                       <StackPanel Spacing="3">
                         <TextBlock Classes="field-label" Text="ID" />
                         <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
-                        <TextBlock Classes="helper" Text="Stable identifier used in API calls." />
+                        <TextBlock Classes="helper" Text="Unique identifier for this skill." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label" Text="NAME" />
@@ -197,14 +197,14 @@
 
                     <StackPanel Spacing="3">
                       <TextBlock Classes="field-label" Text="DESCRIPTION" />
-                      <TextBox Text="{Binding Description}" PlaceholderText="What this skill does"
+                      <TextBox Text="{Binding Description}" PlaceholderText="Used by the client or a human as a hint to understand what the skill does."
                                AcceptsReturn="True" TextWrapping="Wrap" Height="48" />
                     </StackPanel>
 
                     <StackPanel Spacing="3">
                       <TextBlock Classes="field-label" Text="TAGS (comma-separated)" />
                       <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
-                      <TextBlock Classes="helper" Text="Classification keywords to help Workday categorise this skill." />
+                      <TextBlock Classes="helper" Text="Tagwords describing classes of capabilities for this skill." />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,16,*">
@@ -272,7 +272,7 @@
                                   SelectedItem="{Binding SelectedExecutionMode}"
                                   PlaceholderText="Select mode..."
                                   HorizontalAlignment="Stretch" />
-                        <TextBlock Classes="helper" Text="Ambient = no human invocation. Delegate = human-triggered." />
+                        <TextBlock Classes="helper" Text="Delegate = requires human invocation. Ambient = no human required. Determines the grant type." />
                       </StackPanel>
                     </Grid>
 
@@ -301,18 +301,18 @@
                                 <StackPanel Spacing="3">
                                   <TextBlock Classes="field-label" Text="TOOL NAME" />
                                   <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers" />
-                                  <TextBlock Classes="helper" Text="The endpoint or task this tool represents." />
+                                  <TextBlock Classes="helper" Text="The operation that defines what this tool can do — e.g. an endpoint or task." />
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Spacing="3">
                                   <TextBlock Classes="field-label" Text="AGENT RESOURCE ID" />
                                   <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday tool WID" />
-                                  <TextBlock Classes="helper" Text="Use Lookups tab to find WIDs." />
+                                  <TextBlock Classes="helper" Text="Workday ID of the tool required for this skill. Use Lookups tab to find WIDs." />
                                 </StackPanel>
                               </Grid>
 
                               <StackPanel Spacing="3">
                                 <TextBlock Classes="field-label" Text="DESCRIPTION" />
-                                <TextBox Text="{Binding Description}" PlaceholderText="What this tool does" />
+                                <TextBox Text="{Binding Description}" PlaceholderText="Description of the operation" />
                               </StackPanel>
 
                               <!-- Securable Items -->
@@ -320,14 +320,14 @@
                                 <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Item"
                                         Command="{Binding AddToolCommand}" VerticalAlignment="Top" />
                                 <TextBlock Classes="field-label" Text="SECURABLE ITEMS"
-                                           VerticalAlignment="Center" ToolTip.Tip="SOAP Ops, REST Ops, Data Sources, CRF Fields, etc." />
+                                           VerticalAlignment="Center" ToolTip.Tip="Workday Securable Items related to this tool — e.g. CRF Fields, Data Sources." />
                               </DockPanel>
 
                               <ItemsControl ItemsSource="{Binding Tools}">
                                 <ItemsControl.ItemTemplate>
                                   <DataTemplate x:DataType="vm:SecurableItemViewModel">
                                     <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,4">
-                                      <TextBox Text="{Binding Id}" PlaceholderText="Securable item WID" Width="420" />
+                                      <TextBox Text="{Binding Id}" PlaceholderText="Workday ID of the securable item (CRF Field, Data Source, etc.)" Width="420" />
                                       <Button Classes="action-subtle" Content="✕"
                                               Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
                                               CommandParameter="{Binding}" />
@@ -362,29 +362,29 @@
           <StackPanel Spacing="12" Margin="0,10,0,0">
             <StackPanel Spacing="3">
               <TextBlock Classes="field-label" Text="OVERVIEW" />
-              <TextBox Text="{Binding Overview}" PlaceholderText="Summary display text"
+              <TextBox Text="{Binding Overview}" PlaceholderText="Message displayed when summarizing or initially invoking this agent."
                        AcceptsReturn="True" TextWrapping="Wrap" Height="48" />
             </StackPanel>
 
             <Grid ColumnDefinitions="*,16,*">
               <StackPanel Spacing="3">
                 <TextBlock Classes="field-label" Text="ICON URL" />
-                <TextBox Text="{Binding IconUrl}" PlaceholderText="https://..." />
+                <TextBox Text="{Binding IconUrl}" PlaceholderText="URL to an icon for the agent" />
               </StackPanel>
               <StackPanel Grid.Column="2" Spacing="3">
                 <TextBlock Classes="field-label" Text="DOCUMENTATION URL" />
-                <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="https://..." />
+                <TextBox Text="{Binding DocumentationUrl}" PlaceholderText="URL to documentation for the agent" />
               </StackPanel>
             </Grid>
 
             <Grid ColumnDefinitions="*,16,*">
               <StackPanel Spacing="3">
                 <TextBlock Classes="field-label" Text="EXTERNAL AGENT ID" />
-                <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Partner system identifier" />
+                <TextBox Text="{Binding ExternalAgentId}" PlaceholderText="Referenceable ID for callbacks from Workday" />
               </StackPanel>
               <StackPanel Grid.Column="2" Spacing="3">
                 <TextBlock Classes="field-label" Text="EXTERNAL TENANT ID" />
-                <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="Tenant locator" />
+                <TextBox Text="{Binding ExternalTenantId}" PlaceholderText="ID to locate this agent in the partner system" />
               </StackPanel>
             </Grid>
 
