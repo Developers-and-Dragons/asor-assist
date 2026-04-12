@@ -360,7 +360,7 @@
                              Foreground="{StaticResource AppAccentBrush}" />
                   <TextBlock Text="{Binding HelpContent}" FontSize="12.5"
                              Foreground="{StaticResource AppTextSecondaryBrush}"
-                             TextWrapping="Wrap" LineHeight="20" />
+                             TextWrapping="Wrap" LineHeight="22" />
                 </StackPanel>
               </ScrollViewer>
             </DockPanel>
