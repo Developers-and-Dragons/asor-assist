@@ -4,16 +4,17 @@
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
-        <!-- Palette: soft dark slate -->
-        <Color x:Key="AppBase">#1b1e24</Color>
-        <Color x:Key="AppSurface">#22262e</Color>
-        <Color x:Key="AppSurfaceRaised">#2a2f39</Color>
-        <Color x:Key="AppSurfaceHigh">#323843</Color>
-        <Color x:Key="AppBorder">#3d4350</Color>
-        <Color x:Key="AppBorderSubtle">#2f343e</Color>
-        <Color x:Key="AppTextPrimary">#e8eaef</Color>
-        <Color x:Key="AppTextSecondary">#9ea3b0</Color>
-        <Color x:Key="AppTextMuted">#6d7280</Color>
+        <!-- Palette: soft dark slate — tuned for readability -->
+        <Color x:Key="AppBase">#1a1d23</Color>
+        <Color x:Key="AppSurface">#21252d</Color>
+        <Color x:Key="AppSurfaceRaised">#282d37</Color>
+        <Color x:Key="AppSurfaceHigh">#313742</Color>
+        <Color x:Key="AppBorder">#3e4452</Color>
+        <Color x:Key="AppBorderSubtle">#2e333d</Color>
+        <Color x:Key="AppTextPrimary">#ecedF1</Color>
+        <Color x:Key="AppTextSecondary">#b3b8c4</Color>
+        <Color x:Key="AppTextMuted">#8a8f9d</Color>
+        <Color x:Key="AppTextPlaceholder">#585e6c</Color>
         <Color x:Key="AppAccent">#5b9bd5</Color>
         <Color x:Key="AppSuccess">#5cbd78</Color>
         <Color x:Key="AppWarning">#e0a458</Color>
@@ -29,6 +30,7 @@
         <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="{StaticResource AppTextPrimary}" />
         <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="{StaticResource AppTextSecondary}" />
         <SolidColorBrush x:Key="AppTextMutedBrush" Color="{StaticResource AppTextMuted}" />
+        <SolidColorBrush x:Key="AppTextPlaceholderBrush" Color="{StaticResource AppTextPlaceholder}" />
         <SolidColorBrush x:Key="AppAccentBrush" Color="{StaticResource AppAccent}" />
         <SolidColorBrush x:Key="AppSuccessBrush" Color="{StaticResource AppSuccess}" />
         <SolidColorBrush x:Key="AppWarningBrush" Color="{StaticResource AppWarning}" />
@@ -86,22 +88,30 @@
 
         <Style Selector="TextBlock.section-desc">
           <Setter Property="FontSize" Value="12" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
           <Setter Property="Margin" Value="0,0,0,14" />
         </Style>
 
         <Style Selector="TextBlock.field-label">
           <Setter Property="FontSize" Value="11" />
           <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
+          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,4" />
           <Setter Property="LetterSpacing" Value="0.5" />
         </Style>
 
         <Style Selector="TextBlock.helper">
-          <Setter Property="FontSize" Value="11" />
+          <Setter Property="FontSize" Value="11.5" />
           <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
           <Setter Property="Margin" Value="0,3,0,0" />
+        </Style>
+
+        <!-- TextBox: brighten typed text, dim placeholders -->
+        <Style Selector="TextBox">
+          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+        </Style>
+        <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
+          <Setter Property="Foreground" Value="{StaticResource AppTextPlaceholderBrush}" />
         </Style>
 
         <Style Selector="TextBlock.card-title">
@@ -142,10 +152,10 @@
           <Setter Property="Padding" Value="24,20" />
         </Style>
 
-        <!-- Connection bar -->
+        <!-- Connection bar — slightly brighter than page headers for prominence -->
         <Style Selector="Border.connection-bar">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="{StaticResource AppSurfaceHighBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
           <Setter Property="Padding" Value="28,10" />
         </Style>
