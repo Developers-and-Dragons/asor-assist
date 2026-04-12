@@ -13,7 +13,7 @@
       <!-- Actions -->
       <StackPanel Spacing="8">
         <TextBlock Classes="section-header" Text="Service Operation Lookup" />
-        <TextBlock Classes="section-desc" Text="Search for SOAP or REST service operation WIDs. Uses the bearer token from the Register panel on the Editor page." />
+        <TextBlock Classes="section-desc" Text="Search for SOAP or REST service operation WIDs. Uses the bearer token from the connection bar at the top." />
         <TextBlock Opacity="0.4" FontSize="11" Margin="0,2,0,0"
                    Text="Returns Workday IDs (WIDs) you can paste into Agent Resource ID or Securable Items fields." />
 

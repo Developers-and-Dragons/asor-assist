@@ -29,8 +29,9 @@ public partial class App : Application
         {
             var mainVm = Services.GetRequiredService<MainWindowViewModel>();
 
-            // Wire token provider: WQL uses the token from Registration
-            mainVm.WqlLookup.BearerTokenProvider = () => mainVm.Registration.BearerToken;
+            // Wire token providers: both Registration and WQL read from the app-level token
+            mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
+            mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
 
             desktop.MainWindow = new MainWindow { DataContext = mainVm };
         }

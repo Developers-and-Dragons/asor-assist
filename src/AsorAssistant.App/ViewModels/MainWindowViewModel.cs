@@ -13,12 +13,23 @@ public partial class MainWindowViewModel : ObservableObject
     private int _selectedPageIndex;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasToken))]
+    [NotifyPropertyChangedFor(nameof(TokenStatusText))]
+    private string? _bearerToken;
+
+    [ObservableProperty]
+    private bool _isConnectionBarExpanded;
+
+    [ObservableProperty]
     private bool _isRegistrationPanelOpen;
 
     public bool IsEditorPage => SelectedPageIndex == 0;
     public bool IsJsonPage => SelectedPageIndex == 1;
     public bool IsDraftsPage => SelectedPageIndex == 2;
     public bool IsLookupsPage => SelectedPageIndex == 3;
+
+    public bool HasToken => !string.IsNullOrWhiteSpace(BearerToken);
+    public string TokenStatusText => HasToken ? "Token set" : "No token";
 
     public DefinitionEditorViewModel Editor { get; }
     public JsonPreviewViewModel JsonPreview { get; }
@@ -56,5 +67,11 @@ public partial class MainWindowViewModel : ObservableObject
     private void ToggleRegistrationPanel()
     {
         IsRegistrationPanelOpen = !IsRegistrationPanelOpen;
+    }
+
+    [RelayCommand]
+    private void ToggleConnectionBar()
+    {
+        IsConnectionBarExpanded = !IsConnectionBarExpanded;
     }
 }

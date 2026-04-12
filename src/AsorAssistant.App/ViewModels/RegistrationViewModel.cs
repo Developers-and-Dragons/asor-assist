@@ -11,6 +11,9 @@ public partial class RegistrationViewModel : ObservableObject
     private readonly IAsorRegistrationClient _registrationClient;
     private readonly DefinitionEditorViewModel _editor;
 
+    /// <summary>Provides the bearer token from the app-level connection bar.</summary>
+    public Func<string?>? BearerTokenProvider { get; set; }
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsConnectionConfigured))]
     [NotifyPropertyChangedFor(nameof(ConnectionStatusText))]
@@ -18,11 +21,6 @@ public partial class RegistrationViewModel : ObservableObject
 
     [ObservableProperty]
     private string? _tenantName;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsConnectionConfigured))]
-    [NotifyPropertyChangedFor(nameof(ConnectionStatusText))]
-    private string? _bearerToken;
 
     [ObservableProperty]
     private string? _resolvedUrl;
@@ -37,7 +35,7 @@ public partial class RegistrationViewModel : ObservableObject
     private bool _isSuccess;
 
     public bool IsConnectionConfigured =>
-        SelectedRegion is not null && !string.IsNullOrWhiteSpace(BearerToken);
+        SelectedRegion is not null && !string.IsNullOrWhiteSpace(BearerTokenProvider?.Invoke());
 
     public string ConnectionStatusText =>
         IsConnectionConfigured ? $"{SelectedRegion!.Name} region" : "Not configured";
@@ -60,9 +58,11 @@ public partial class RegistrationViewModel : ObservableObject
     [RelayCommand]
     private async Task Register()
     {
-        if (!IsConnectionConfigured)
+        var token = BearerTokenProvider?.Invoke();
+
+        if (SelectedRegion is null || string.IsNullOrWhiteSpace(token))
         {
-            ResponseText = "Select a region and enter a bearer token above.";
+            ResponseText = "Region and bearer token are required. Set the token in the connection bar at the top of the app.";
             IsSuccess = false;
             return;
         }
@@ -84,7 +84,7 @@ public partial class RegistrationViewModel : ObservableObject
             {
                 Region = SelectedRegion,
                 TenantName = TenantName,
-                BearerToken = BearerToken
+                BearerToken = token
             };
 
             var definition = _editor.ToModel();

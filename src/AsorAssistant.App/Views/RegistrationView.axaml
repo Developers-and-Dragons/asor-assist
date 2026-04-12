@@ -15,11 +15,9 @@
         <TextBlock Classes="page-title" Text="Register" />
       </DockPanel>
 
-      <!-- Connection Section -->
-      <TextBlock Classes="section-header" Text="Connection" />
-      <TextBlock Classes="section-desc" Text="Configure your Workday environment. This token is also used for WQL lookups." />
-      <TextBlock Opacity="0.4" FontSize="11" Margin="0,2,0,6"
-                 Text="Get a bearer token from Workday OAuth (API Client &gt; Generate Token). It is not saved to disk." />
+      <!-- Endpoint config -->
+      <TextBlock Classes="section-header" Text="Endpoint" />
+      <TextBlock Classes="section-desc" Text="Select the Workday region for this registration." />
 
       <StackPanel Spacing="10">
         <StackPanel Spacing="3">
@@ -42,22 +40,22 @@
           <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
           <TextBlock Opacity="0.4" FontSize="11" Text="Your Workday tenant identifier, as shown in your Workday URL." />
         </StackPanel>
-
-        <StackPanel Spacing="3">
-          <TextBlock Classes="field-label" Text="BEARER TOKEN" />
-          <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste bearer token"
-                   PasswordChar="*" RevealPassword="False" />
-          <TextBlock Opacity="0.4" FontSize="11" Text="Kept in memory only. You will need to re-enter it each session." />
-        </StackPanel>
       </StackPanel>
 
       <Separator Classes="section-divider" />
 
-      <!-- Registration Section -->
+      <!-- Submit -->
       <TextBlock Classes="section-header" Text="Submit" />
 
+      <!-- Token reminder -->
+      <Border CornerRadius="4" Padding="8,6" Margin="0,6,0,10" Background="#18ffb080"
+              IsVisible="{Binding !$parent[Window].((vm:MainWindowViewModel)DataContext).HasToken}">
+        <TextBlock Text="⚠ Set a bearer token in the connection bar above before registering."
+                   FontSize="11" Foreground="#ffb080" TextWrapping="Wrap" />
+      </Border>
+
       <!-- URL Preview -->
-      <Border Classes="surface-inner" Padding="10,8" Margin="0,8,0,12"
+      <Border Classes="surface-inner" Padding="10,8" Margin="0,0,0,12"
               IsVisible="{Binding ResolvedUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
         <StackPanel Spacing="2">
           <TextBlock Classes="field-label" Text="ENDPOINT" />
@@ -66,13 +64,12 @@
         </StackPanel>
       </Border>
 
-      <!-- Readiness check -->
+      <!-- Readiness -->
       <StackPanel Spacing="4" Margin="0,0,0,12"
                   IsVisible="{Binding !IsConnectionConfigured}">
         <TextBlock Text="⚠ Missing configuration" FontSize="12" Foreground="#ffb080" FontWeight="SemiBold" />
-        <TextBlock FontSize="11" Opacity="0.5" TextWrapping="Wrap">
-          <Run Text="Select a region and enter a bearer token above to enable registration." />
-        </TextBlock>
+        <TextBlock FontSize="11" Opacity="0.5" TextWrapping="Wrap"
+                   Text="Select a region above and set a bearer token in the connection bar." />
       </StackPanel>
 
       <Button Classes="action-primary" Content="Register Agent Definition"
