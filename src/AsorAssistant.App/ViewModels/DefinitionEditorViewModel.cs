@@ -83,6 +83,134 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isValid;
 
+    // Help panel
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HelpTitle))]
+    [NotifyPropertyChangedFor(nameof(HelpContent))]
+    private string _activeSection = "default";
+
+    public string HelpTitle => ActiveSection switch
+    {
+        "identity" => "Identity",
+        "provider" => "Provider & Platform",
+        "capabilities" => "Capabilities",
+        "skills" => "Skills",
+        "workdayconfig" => "Workday Config",
+        "optional" => "Optional Fields",
+        _ => "Getting Started"
+    };
+
+    public string HelpContent => ActiveSection switch
+    {
+        "identity" => """
+        These fields identify your agent in the Workday catalog.
+
+        Required fields:
+        • Name — human-readable, shown to admins
+        • Description — helps users understand what the agent does
+        • URL — where the agent is hosted
+        • Version — format is up to you
+
+        Tips:
+        • Name + Provider + Version must be unique — duplicates update the existing registration
+        • URL should be publicly reachable by Workday
+        """,
+
+        "provider" => """
+        Provider identifies who built the agent. Platform identifies where it runs.
+
+        • Select from the known list, or choose "Custom..." to enter a reference ID
+        • IDs use the format Provider=VALUE and Platform=VALUE
+        • If your provider isn't listed, use "Custom..." and enter the ID manually
+
+        Common platforms:
+        • Microsoft Copilot Studio, Azure AI Foundry
+        • Amazon Bedrock AgentCore
+        • Salesforce Agentforce
+        • Use "Other" if none match
+        """,
+
+        "capabilities" => """
+        Feature flags that tell Workday what your agent supports.
+
+        • Push Notifications — agent can send async updates without polling
+        • Streaming — supports Server-Sent Events (SSE)
+        • State Transition History — tracks and exposes task state changes
+
+        Leave disabled unless your agent actively implements these. All three are included in the JSON with true/false values.
+        """,
+
+        "skills" => """
+        Skills define what your agent can do. At least one is required.
+
+        Required per skill:
+        • ID — unique, stable identifier (used in API calls and Workday Config references)
+        • Name — human-readable
+        • Description — helps clients understand the skill
+
+        Optional:
+        • Tags — classification keywords
+        • Input/Output Modes — MIME types (e.g., application/json)
+
+        Tips:
+        • Skill IDs are referenced by Workday Config entries
+        • Keep IDs stable across versions
+        """,
+
+        "workdayconfig" => """
+        Maps skills to Workday resources and execution modes.
+
+        Each entry links a Skill ID to:
+        • Execution Mode
+          - Delegate: requires human invocation (interactive)
+          - Ambient: runs without human trigger (background)
+          - This determines the OAuth grant type
+        • Workday Resources — the operations this skill uses
+
+        Per resource:
+        • Tool Name — the endpoint or task name
+        • Agent Resource ID — Workday tool WID (use Lookups to find)
+        • Securable Items — related data sources, CRF fields, etc.
+
+        Tip: Use the Lookups tab to search for WIDs by operation name.
+        """,
+
+        "optional" => """
+        These fields are not required but add useful metadata.
+
+        • Overview — shown when summarizing or initially invoking the agent
+        • Icon URL — visual representation in the Workday catalog
+        • Documentation URL — link to external docs
+        • External Agent ID — partner system identifier, useful for Workday callbacks
+        • External Tenant ID — locates the agent in the partner system
+        • Default Input/Output Modes — MIME types applied to all skills (overridable per skill)
+        • Authenticated Extended Card — set true if the agent provides an extended card for authenticated users
+        """,
+
+        _ => """
+        Welcome to ASOR Assistant. This tool helps you create and register agent definitions for the Workday Agent System of Record.
+
+        Quick start:
+        • Open — load a saved draft or fetch agents from a tenant
+        • New — start a blank definition
+        • Visual / JSON — switch between form and code editing
+        • Save — save your work as a local draft
+        • Register — POST to the Workday ASOR API
+
+        Typical workflow:
+        1. Set your region and bearer token in the connection bar above
+        2. Open an existing definition or create new
+        3. Fill in required fields (Identity, Provider, Skills)
+        4. Add Workday Config mappings if needed
+        5. Validate the definition
+        6. Save as draft and/or register with Workday
+
+        Use the Lookups tab to search for Workday service operation WIDs to use in your Workday Config.
+
+        Click on any section in the editor to see specific guidance here.
+        """
+    };
+
     // Lookup data (with Custom option at the end)
     public IReadOnlyList<LookupOption> PlatformOptions { get; } =
         KnownPlatforms.All.Select(p => new LookupOption { Name = p.Name, Id = p.Id })

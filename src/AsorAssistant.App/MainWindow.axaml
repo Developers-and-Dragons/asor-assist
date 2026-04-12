@@ -135,6 +135,7 @@
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="280" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
 
@@ -337,8 +338,25 @@
             </Border>
           </DockPanel>
 
-          <!-- Registration Panel (right) -->
-          <Border Grid.Column="2" Classes="panel" Width="400"
+          <!-- Help Panel (right side, always visible in visual mode) -->
+          <Border Grid.Column="2" Padding="20,20,20,20"
+                  Background="{StaticResource AppSurfaceBrush}"
+                  BorderBrush="{StaticResource AppBorderSubtleBrush}"
+                  BorderThickness="1,0,0,0"
+                  IsVisible="{Binding IsVisualMode}">
+            <ScrollViewer>
+              <StackPanel Spacing="12" DataContext="{Binding Editor}">
+                <TextBlock Text="{Binding HelpTitle}" FontSize="15" FontWeight="SemiBold"
+                           Foreground="{StaticResource AppAccentBrush}" />
+                <TextBlock Text="{Binding HelpContent}" FontSize="12"
+                           Foreground="{StaticResource AppTextSecondaryBrush}"
+                           TextWrapping="Wrap" LineHeight="20" />
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+
+          <!-- Registration Panel (slide-over, right) -->
+          <Border Grid.Column="3" Classes="panel" Width="400"
                   IsVisible="{Binding IsRegistrationPanelOpen}">
             <views:RegistrationView DataContext="{Binding Registration}" />
           </Border>

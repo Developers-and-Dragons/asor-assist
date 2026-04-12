@@ -10,10 +10,9 @@
       <StackPanel Spacing="0" MaxWidth="1100">
 
         <!-- IDENTITY -->
+        <StackPanel x:Name="SectionIdentity" Spacing="12">
         <TextBlock Classes="section-header" Text="Identity" />
         <TextBlock Classes="section-desc" Text="Core fields that appear in the Workday agent catalog." />
-
-        <StackPanel Spacing="12">
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label" Text="NAME" />
             <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
@@ -43,6 +42,7 @@
         <Separator Classes="section-divider" />
 
         <!-- PROVIDER + PLATFORM -->
+        <StackPanel x:Name="SectionProvider" Spacing="12">
         <TextBlock Classes="section-header" Text="Provider &amp; Platform" />
         <TextBlock Classes="section-desc" Text="Who built this agent and what platform it runs on. Select 'Other' to enter a custom ID." />
 
@@ -74,14 +74,14 @@
             <TextBlock Classes="helper" Text="The platform this agent executes on. Use OTHER if none match." />
           </StackPanel>
         </Grid>
+        </StackPanel>
 
         <Separator Classes="section-divider" />
 
         <!-- CAPABILITIES -->
+        <StackPanel x:Name="SectionCapabilities" Spacing="8">
         <TextBlock Classes="section-header" Text="Capabilities" />
         <TextBlock Classes="section-desc" Text="Feature flags. Leave disabled unless your agent actively supports these." />
-
-        <StackPanel Spacing="8">
           <ToggleSwitch Content="Push Notifications" IsChecked="{Binding PushNotifications}"
                         OnContent="Enabled" OffContent="Disabled"
                         ToolTip.Tip="True if the agent can notify updates to client." />
@@ -96,6 +96,7 @@
         <Separator Classes="section-divider" />
 
         <!-- SKILLS -->
+        <StackPanel x:Name="SectionSkills">
         <DockPanel Margin="0,0,0,6">
           <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Add Skill"
                   Command="{Binding AddSkillCommand}" VerticalAlignment="Top" />
@@ -165,10 +166,12 @@
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
+        </StackPanel>
 
         <Separator Classes="section-divider" />
 
         <!-- WORKDAY CONFIG -->
+        <StackPanel x:Name="SectionWorkdayConfig">
         <DockPanel Margin="0,0,0,6">
           <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Add Mapping"
                   Command="{Binding AddWorkdayConfigEntryCommand}" VerticalAlignment="Top" />
@@ -290,11 +293,12 @@
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
+        </StackPanel>
 
         <Separator Classes="section-divider" />
 
         <!-- OPTIONAL FIELDS -->
-        <Expander IsExpanded="False" HorizontalAlignment="Stretch">
+        <Expander x:Name="SectionOptional" IsExpanded="False" HorizontalAlignment="Stretch">
           <Expander.Header>
             <StackPanel>
               <TextBlock Classes="section-header" Text="Optional Fields" />
