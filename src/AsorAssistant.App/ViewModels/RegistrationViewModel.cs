@@ -43,6 +43,7 @@ public partial class RegistrationViewModel : ObservableObject
     {
         _registrationClient = registrationClient;
         _editor = editor;
+        SelectedRegion = AsorRegion.All[0]; // Default to US
     }
 
     partial void OnSelectedRegionChanged(AsorRegion? value)

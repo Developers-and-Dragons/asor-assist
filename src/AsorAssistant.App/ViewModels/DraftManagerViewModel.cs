@@ -51,6 +51,7 @@ public partial class DraftManagerViewModel : ObservableObject
         _draftStore = draftStore;
         _queryClient = queryClient;
         _editor = editor;
+        SelectedRegion = AsorRegion.All[0]; // Default to US
     }
 
     // --- Local drafts ---
