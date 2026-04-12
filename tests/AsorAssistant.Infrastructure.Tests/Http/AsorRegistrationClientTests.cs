@@ -12,7 +12,6 @@ public class AsorRegistrationClientTests
     private static RegistrationContext CreateContext() => new()
     {
         Region = new AsorRegion { Name = "US", BaseUrl = "https://us.agent.workday.com" },
-        TenantName = "test-tenant",
         BearerToken = "test-token-abc123"
     };
 

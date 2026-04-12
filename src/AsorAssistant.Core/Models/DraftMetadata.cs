@@ -7,6 +7,5 @@ public class DraftMetadata
     public string? Provider { get; set; }
     public string? Version { get; set; }
     public string? RegionName { get; set; }
-    public string? TenantName { get; set; }
     public DateTimeOffset LastModified { get; set; }
 }

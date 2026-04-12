@@ -11,6 +11,4 @@ public static class AsorUrlBuilder
     public static string BuildWqlUrl() =>
         "https://api.workday.com/wql/v1/data";
 
-    public static string BuildTokenUrl(string regionBaseUrl, string tenantName) =>
-        $"{regionBaseUrl.TrimEnd('/')}/auth/oauth2/{Uri.EscapeDataString(tenantName)}/token";
 }

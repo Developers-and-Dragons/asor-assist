@@ -31,7 +31,6 @@ public class FileDraftStoreTests : IDisposable
             Provider = "test-provider",
             Version = "1.0.0",
             RegionName = "US",
-            TenantName = "test-tenant",
             LastModified = DateTimeOffset.UtcNow
         },
         Definition = new AgentDefinition

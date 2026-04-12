@@ -35,11 +35,6 @@
           <TextBlock Classes="helper" Text="Determines the ASOR endpoint: {region}.agent.workday.com" />
         </StackPanel>
 
-        <StackPanel Spacing="3">
-          <TextBlock Classes="field-label" Text="TENANT NAME" />
-          <TextBox Text="{Binding TenantName}" PlaceholderText="your-tenant-name" />
-          <TextBlock Classes="helper" Text="Your Workday tenant identifier, as shown in your Workday URL." />
-        </StackPanel>
       </StackPanel>
 
       <Separator Classes="section-divider" />

@@ -20,9 +20,6 @@ public partial class RegistrationViewModel : ObservableObject
     private AsorRegion? _selectedRegion;
 
     [ObservableProperty]
-    private string? _tenantName;
-
-    [ObservableProperty]
     private string? _resolvedUrl;
 
     [ObservableProperty]
@@ -83,7 +80,6 @@ public partial class RegistrationViewModel : ObservableObject
             var context = new RegistrationContext
             {
                 Region = SelectedRegion,
-                TenantName = TenantName,
                 BearerToken = token
             };
 
