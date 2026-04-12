@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using AsorAssistant.Core.Models;
 using AsorAssistant.Core.Services;
+using Avalonia.Input.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -21,6 +22,12 @@ public partial class WqlLookupViewModel : ObservableObject
     private string? _statusMessage;
 
     [ObservableProperty]
+    private string? _resultTypeLabel;
+
+    [ObservableProperty]
+    private bool _showServiceColumn;
+
+    [ObservableProperty]
     private ServiceOperationLookup? _selectedResult;
 
     [ObservableProperty]
@@ -37,12 +44,16 @@ public partial class WqlLookupViewModel : ObservableObject
     [RelayCommand]
     private async Task LookupSoap()
     {
+        ShowServiceColumn = true;
+        ResultTypeLabel = "SOAP Operations";
         await RunLookup(() => _lookupService.LookupSoapOperationsAsync(BearerToken!));
     }
 
     [RelayCommand]
     private async Task LookupRest()
     {
+        ShowServiceColumn = false;
+        ResultTypeLabel = "REST Operations";
         await RunLookup(() => _lookupService.LookupRestOperationsAsync(BearerToken!));
     }
 
@@ -63,7 +74,7 @@ public partial class WqlLookupViewModel : ObservableObject
             var results = await lookup();
             foreach (var r in results)
                 Results.Add(r);
-            StatusMessage = $"Found {results.Count} operations.";
+            StatusMessage = $"{results.Count} operations found";
         }
         catch (Exception ex)
         {
@@ -76,7 +87,7 @@ public partial class WqlLookupViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void CopyWid()
+    private async Task CopyWid(IClipboard? clipboard)
     {
         if (SelectedResult is null)
         {
@@ -84,6 +95,9 @@ public partial class WqlLookupViewModel : ObservableObject
             return;
         }
 
-        StatusMessage = $"WID: {SelectedResult.WorkdayId} — use this in your workdayConfig tool definitions.";
+        if (clipboard is not null)
+            await clipboard.SetTextAsync(SelectedResult.WorkdayId);
+
+        StatusMessage = $"Copied: {SelectedResult.WorkdayId}";
     }
 }
