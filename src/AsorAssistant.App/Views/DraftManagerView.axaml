@@ -56,7 +56,7 @@
 
     <!-- Status -->
     <TextBlock Text="{Binding StatusMessage}" Margin="4,4,0,0"
-               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+               Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
   </StackPanel>
 

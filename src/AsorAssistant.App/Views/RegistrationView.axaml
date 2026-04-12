@@ -45,7 +45,7 @@
             <StackPanel Spacing="2">
               <TextBlock Classes="field-label" Text="Registration URL" />
               <TextBlock Text="{Binding ResolvedUrl}" Classes="mono"
-                         Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" />
+                         Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="13" />
             </StackPanel>
           </Border>
         </StackPanel>

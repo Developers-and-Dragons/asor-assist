@@ -32,7 +32,7 @@
       <StackPanel Spacing="12">
         <DockPanel>
           <TextBlock DockPanel.Dock="Right" Text="{Binding StatusMessage}"
-                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                      VerticalAlignment="Center" FontSize="13"
                      IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
           <TextBlock Classes="section-header" Text="Results" />

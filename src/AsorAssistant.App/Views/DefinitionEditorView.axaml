@@ -128,7 +128,7 @@
                     </StackPanel>
 
                     <StackPanel Spacing="4">
-                      <TextBlock Classes="field-label" Text="Tags * (comma-separated)" />
+                      <TextBlock Classes="field-label" Text="Tags (comma-separated)" />
                       <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
                     </StackPanel>
 
@@ -324,7 +324,7 @@
           <TextBox Classes="mono" Text="{Binding ValidationErrors}" IsReadOnly="True"
                    AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="200"
                    IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                   Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                   Foreground="Red" />
         </StackPanel>
       </Border>
 

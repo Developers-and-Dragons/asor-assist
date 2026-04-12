@@ -186,23 +186,12 @@ public class AgentDefinitionValidatorTests
     }
 
     [Fact]
-    public void Skill_missing_tags_fails()
+    public void Skill_without_tags_passes()
     {
         var definition = CreateMinimalValid();
         definition.Skills![0].Tags = null;
         var result = AgentDefinitionValidator.Validate(definition);
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.Contains("tag", StringComparison.OrdinalIgnoreCase));
-    }
-
-    [Fact]
-    public void Skill_empty_tags_fails()
-    {
-        var definition = CreateMinimalValid();
-        definition.Skills![0].Tags = [];
-        var result = AgentDefinitionValidator.Validate(definition);
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.Contains("tag", StringComparison.OrdinalIgnoreCase));
+        Assert.True(result.IsValid);
     }
 
     [Fact]

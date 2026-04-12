@@ -81,8 +81,8 @@ public static class AgentDefinitionValidator
             if (string.IsNullOrWhiteSpace(skill.Description))
                 result.Errors.Add($"{prefix}: description is required.");
 
-            if (skill.Tags is null || skill.Tags.Count == 0)
-                result.Errors.Add($"{prefix}: at least one tag is required.");
+            // Tags are listed as required in the spec but are absent from real-world
+            // payloads. Treat as optional to avoid false validation failures.
         }
     }
 

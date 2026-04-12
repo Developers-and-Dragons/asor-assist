@@ -7,17 +7,17 @@
         Title="ASOR Assistant"
         Width="1100" Height="850"
         MinWidth="850" MinHeight="650"
-        Background="{DynamicResource LayerFillColorAltBrush}">
+>
 
   <DockPanel>
     <!-- App header -->
     <Border DockPanel.Dock="Top"
-            Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
             Padding="24,16">
       <StackPanel Spacing="2">
         <TextBlock Text="ASOR Assistant" FontSize="22" FontWeight="Bold" />
         <TextBlock Text="Agent System of Record — Definition Manager"
-                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" />
+                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="13" />
       </StackPanel>
     </Border>
 
