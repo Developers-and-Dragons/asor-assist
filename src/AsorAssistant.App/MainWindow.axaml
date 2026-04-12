@@ -134,8 +134,8 @@
         <Grid IsVisible="{Binding IsEditorPage}">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" MinWidth="240" MaxWidth="320" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
 
