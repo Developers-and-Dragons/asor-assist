@@ -104,28 +104,26 @@
             </Button>
           </StackPanel>
           <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="10">
-            <Grid ColumnDefinitions="*,16,200">
-              <StackPanel Spacing="3">
-                <TextBlock Classes="field-label" Text="BEARER TOKEN" />
-                <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
-                         PasswordChar="*" RevealPassword="False" />
-              </StackPanel>
-              <StackPanel Grid.Column="2" Spacing="3">
-                <TextBlock Classes="field-label" Text="REGION" />
-                <ComboBox ItemsSource="{Binding Regions}"
-                          SelectedItem="{Binding SelectedRegion}"
-                          PlaceholderText="Region"
-                          HorizontalAlignment="Stretch">
-                  <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                      <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                  </ComboBox.ItemTemplate>
-                </ComboBox>
-              </StackPanel>
-            </Grid>
-            <TextBlock Classes="helper"
-                       Text="Generate a token at the Workday Developer Site (upper right corner of page — login to tenant and copy token). Session-only — not saved to disk." />
+            <StackPanel Spacing="3">
+              <TextBlock Classes="field-label" Text="REGION" />
+              <ComboBox ItemsSource="{Binding Regions}"
+                        SelectedItem="{Binding SelectedRegion}"
+                        PlaceholderText="Select region..."
+                        Width="200" HorizontalAlignment="Left">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Spacing="3">
+              <TextBlock Classes="field-label" Text="BEARER TOKEN" />
+              <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
+                       PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
+              <TextBlock Classes="helper"
+                         Text="Generate a token at the Workday Developer Site (upper right corner of page — login to tenant and copy token). Session-only — not saved to disk." />
+            </StackPanel>
           </StackPanel>
         </StackPanel>
       </Border>

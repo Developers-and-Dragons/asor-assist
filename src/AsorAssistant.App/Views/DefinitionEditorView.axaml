@@ -5,8 +5,8 @@
              x:DataType="vm:DefinitionEditorViewModel"
              x:Name="EditorRoot">
 
-  <ScrollViewer Padding="28,20,28,48" HorizontalScrollBarVisibility="Disabled">
-      <StackPanel Spacing="0" MaxWidth="960" HorizontalAlignment="Left">
+  <ScrollViewer Padding="24,20,24,48" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="0">
 
         <!-- IDENTITY -->
         <TextBlock Classes="section-header" Text="Identity" />
