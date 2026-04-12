@@ -119,13 +119,16 @@
           <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
         </Style>
 
-        <!-- TextBox styling -->
+        <!-- TextBox styling — darker than surrounding surfaces so inputs are visible -->
         <Style Selector="TextBox">
           <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
-          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
         </Style>
         <Style Selector="TextBox:focus">
+          <Setter Property="BorderBrush" Value="{StaticResource AppAccentBrush}" />
+        </Style>
+        <Style Selector="TextBox:pointerover">
           <Setter Property="BorderBrush" Value="{StaticResource AppAccentBrush}" />
         </Style>
         <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
@@ -134,7 +137,7 @@
 
         <!-- ComboBox styling -->
         <Style Selector="ComboBox">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
+          <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
           <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
           <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
         </Style>
