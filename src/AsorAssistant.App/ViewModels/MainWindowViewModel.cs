@@ -109,7 +109,6 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (JsonModeActive && !string.IsNullOrWhiteSpace(JsonText))
         {
-            // Parse JSON back into the editor
             try
             {
                 var definition = AgentDefinitionSerializer.Deserialize(JsonText);
@@ -118,10 +117,12 @@ public partial class MainWindowViewModel : ObservableObject
             }
             catch
             {
-                StatusMessage = "Invalid JSON — changes not applied.";
+                StatusMessage = "⚠ Invalid JSON — fix errors before switching to Visual mode.";
+                return;
             }
         }
         JsonModeActive = false;
+        StatusMessage = null;
     }
 
     [RelayCommand]
