@@ -39,7 +39,8 @@
           <Separator Width="1" Height="20" Margin="4,0" Opacity="0.15" />
 
           <!-- Actions -->
-          <Button Classes="action" Content="Validate" Command="{Binding ValidateCommand}" />
+          <Button Classes="action" Content="Validate" Command="{Binding ValidateCommand}"
+                  ToolTip.Tip="Check the definition against ASOR v1.2 spec rules." />
 
           <Button Classes="action" Content="Save Draft"
                   Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).DraftManager.SaveCommand}">
@@ -58,7 +59,8 @@
           </Button>
 
           <Button Classes="action-primary" Content="Register"
-                  Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).OpenRegistrationPanelCommand}" />
+                  Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).OpenRegistrationPanelCommand}"
+                  ToolTip.Tip="Open the registration panel to POST this definition to Workday ASOR." />
         </StackPanel>
 
         <TextBlock Classes="page-title" Text="Agent Definition" VerticalAlignment="Center" />
@@ -82,12 +84,13 @@
 
         <!-- IDENTITY -->
         <TextBlock Classes="section-header" Text="Identity" />
-        <TextBlock Classes="section-desc" Text="Core fields required by the ASOR spec." />
+        <TextBlock Classes="section-desc" Text="Core fields required by the ASOR spec. These appear in the Workday agent catalog." />
 
         <StackPanel Spacing="10">
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label" Text="NAME" />
             <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
+            <TextBlock Opacity="0.4" FontSize="11" Text="Display name shown to Workday admins and end users." />
           </StackPanel>
 
           <StackPanel Spacing="3">
@@ -100,10 +103,12 @@
             <StackPanel Spacing="3">
               <TextBlock Classes="field-label" Text="URL" />
               <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
+              <TextBlock Opacity="0.4" FontSize="11" Text="The publicly reachable endpoint Workday will call." />
             </StackPanel>
             <StackPanel Grid.Column="2" Spacing="3">
               <TextBlock Classes="field-label" Text="VERSION" />
               <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
+              <TextBlock Opacity="0.4" FontSize="11" Text="Semver recommended." />
             </StackPanel>
           </Grid>
         </StackPanel>
@@ -112,7 +117,7 @@
 
         <!-- PROVIDER + PLATFORM -->
         <TextBlock Classes="section-header" Text="Provider &amp; Platform" />
-        <TextBlock Classes="section-desc" Text="Who built this agent and what platform it runs on." />
+        <TextBlock Classes="section-desc" Text="Who built this agent and what platform it runs on. Select 'Other' to enter a custom ID." />
 
         <Grid ColumnDefinitions="*,12,*">
           <StackPanel Spacing="3">
@@ -126,6 +131,7 @@
             <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
                      IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                      Margin="0,4,0,0" />
+            <TextBlock Opacity="0.4" FontSize="11" Text="The organisation that built or manages this agent." />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="3">
             <TextBlock Classes="field-label" Text="PLATFORM" />
@@ -138,6 +144,7 @@
             <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Custom platform ID"
                      IsVisible="{Binding SelectedPlatformId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                      Margin="0,4,0,0" />
+            <TextBlock Opacity="0.4" FontSize="11" Text="The runtime or framework the agent is deployed on." />
           </StackPanel>
         </Grid>
 
@@ -145,15 +152,18 @@
 
         <!-- CAPABILITIES -->
         <TextBlock Classes="section-header" Text="Capabilities" />
-        <TextBlock Classes="section-desc" Text="Feature flags for this agent." />
+        <TextBlock Classes="section-desc" Text="Feature flags for this agent. Leave disabled unless your agent actively supports these." />
 
         <StackPanel Spacing="8">
           <ToggleSwitch Content="Push Notifications" IsChecked="{Binding PushNotifications}"
-                        OnContent="Enabled" OffContent="Disabled" />
+                        OnContent="Enabled" OffContent="Disabled"
+                        ToolTip.Tip="Agent can send async updates to Workday without polling." />
           <ToggleSwitch Content="Streaming (SSE)" IsChecked="{Binding Streaming}"
-                        OnContent="Enabled" OffContent="Disabled" />
+                        OnContent="Enabled" OffContent="Disabled"
+                        ToolTip.Tip="Agent supports Server-Sent Events for real-time streaming." />
           <ToggleSwitch Content="State Transition History" IsChecked="{Binding StateTransitionHistory}"
-                        OnContent="Enabled" OffContent="Disabled" />
+                        OnContent="Enabled" OffContent="Disabled"
+                        ToolTip.Tip="Agent tracks and exposes task state transitions." />
         </StackPanel>
 
         <Separator Classes="section-divider" />
@@ -164,7 +174,7 @@
                   Command="{Binding AddSkillCommand}" VerticalAlignment="Top" />
           <StackPanel>
             <TextBlock Classes="section-header" Text="Skills" />
-            <TextBlock Classes="section-desc" Text="At least one skill is required." />
+            <TextBlock Classes="section-desc" Text="At least one skill is required. Each skill defines a discrete capability." />
           </StackPanel>
         </DockPanel>
 
@@ -192,6 +202,7 @@
                       <StackPanel Spacing="3">
                         <TextBlock Classes="field-label" Text="ID" />
                         <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
+                        <TextBlock Opacity="0.4" FontSize="11" Text="Stable identifier used in API calls." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label" Text="NAME" />
@@ -208,16 +219,19 @@
                     <StackPanel Spacing="3">
                       <TextBlock Classes="field-label" Text="TAGS (comma-separated)" />
                       <TextBox Text="{Binding TagsText}" PlaceholderText="tag1, tag2, tag3" />
+                      <TextBlock Opacity="0.4" FontSize="11" Text="Optional labels for categorisation and search." />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*,12,*">
                       <StackPanel Spacing="3">
                         <TextBlock Classes="field-label" Text="INPUT MODES (comma-separated)" />
                         <TextBox Text="{Binding InputModesText}" PlaceholderText="application/json" />
+                        <TextBlock Opacity="0.4" FontSize="11" Text="MIME types the skill accepts." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label" Text="OUTPUT MODES (comma-separated)" />
                         <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
+                        <TextBlock Opacity="0.4" FontSize="11" Text="MIME types the skill returns." />
                       </StackPanel>
                     </Grid>
                   </StackPanel>
@@ -235,7 +249,7 @@
                   Command="{Binding AddWorkdayConfigEntryCommand}" VerticalAlignment="Top" />
           <StackPanel>
             <TextBlock Classes="section-header" Text="Workday Config" />
-            <TextBlock Classes="section-desc" Text="Map skills to Workday resources and execution modes." />
+            <TextBlock Classes="section-desc" Text="Map skills to Workday resources and execution modes. Use the Lookups page to find WIDs." />
           </StackPanel>
         </DockPanel>
 
@@ -275,6 +289,7 @@
                                   SelectedItem="{Binding SelectedExecutionMode}"
                                   PlaceholderText="Select mode..."
                                   HorizontalAlignment="Stretch" />
+                        <TextBlock Opacity="0.4" FontSize="11" Text="Ambient = no human needed. Delegate = human invocation required." />
                       </StackPanel>
                     </Grid>
 
@@ -303,10 +318,12 @@
                                 <StackPanel Spacing="3">
                                   <TextBlock Classes="field-label" Text="TOOL NAME" />
                                   <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers" />
+                                  <TextBlock Opacity="0.4" FontSize="11" Text="SOAP/REST operation or data source name." />
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Spacing="3">
                                   <TextBlock Classes="field-label" Text="AGENT RESOURCE ID" />
                                   <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday tool WID" />
+                                  <TextBlock Opacity="0.4" FontSize="11" Text="WID from Workday. Use Lookups to find it." />
                                 </StackPanel>
                               </Grid>
 
@@ -320,7 +337,8 @@
                                 <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Item"
                                         Command="{Binding AddToolCommand}" VerticalAlignment="Top" />
                                 <TextBlock Classes="field-label" Text="SECURABLE ITEMS (SOAP Ops, REST Ops, Data Sources)"
-                                           VerticalAlignment="Center" />
+                                           VerticalAlignment="Center"
+                                           ToolTip.Tip="Workday security domain items the resource needs access to." />
                               </DockPanel>
 
                               <ItemsControl ItemsSource="{Binding Tools}">
@@ -401,7 +419,8 @@
 
             <ToggleSwitch Content="Supports Authenticated Extended Card"
                           IsChecked="{Binding SupportsAuthenticatedExtendedCard}"
-                          OnContent="Yes" OffContent="No" />
+                          OnContent="Yes" OffContent="No"
+                          ToolTip.Tip="Enable if the agent renders rich cards inside Workday." />
           </StackPanel>
         </Expander>
 

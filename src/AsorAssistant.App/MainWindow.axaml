@@ -44,6 +44,32 @@
             </StackPanel>
           </ListBoxItem>
         </ListBox>
+
+        <!-- Docs link pinned to bottom -->
+        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Margin="0,0,0,16">
+          <Separator Margin="8,0" Opacity="0.1" />
+          <Button Classes="nav-rail-help" HorizontalAlignment="Center" Margin="0,10,0,0"
+                  ToolTip.Tip="Open ASOR v1.2 spec on GitHub">
+            <Button.Flyout>
+              <Flyout Placement="RightEdgeAlignedTop">
+                <StackPanel Spacing="8" Width="260" Margin="4">
+                  <TextBlock Text="Help &amp; Docs" FontWeight="SemiBold" FontSize="13" />
+                  <TextBlock TextWrapping="Wrap" FontSize="12" Opacity="0.6"
+                             Text="This tool registers external agents against the Workday Agent System of Record (ASOR) API v1.2." />
+                  <TextBlock Text="ASOR v1.2 Spec" FontSize="12" Foreground="#80a0d0"
+                             Cursor="Hand"
+                             Tag="https://github.com/Workday/asor/blob/main/versions/v1.2.md" />
+                  <TextBlock TextWrapping="Wrap" FontSize="11" Opacity="0.4"
+                             Text="Region endpoints: US / EU / UK / SIN / IND / JPN at {region}.agent.workday.com" />
+                </StackPanel>
+              </Flyout>
+            </Button.Flyout>
+            <StackPanel Spacing="4" HorizontalAlignment="Center">
+              <TextBlock Text="?" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold" />
+              <TextBlock Text="Help" FontSize="10" HorizontalAlignment="Center" Opacity="0.7" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
       </DockPanel>
     </Border>
 
