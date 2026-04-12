@@ -48,7 +48,7 @@
     </Border>
 
     <!-- Validation Errors -->
-    <Border DockPanel.Dock="Top" Padding="28,10" Background="#18d95555"
+    <Border DockPanel.Dock="Top" Padding="28,10" Background="#18e05555"
             BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
             IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
       <DockPanel>
