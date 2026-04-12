@@ -8,6 +8,8 @@ namespace AsorAssistant.Application.Serialization;
 [JsonSerializable(typeof(DraftEnvelope))]
 [JsonSerializable(typeof(AsorValidationErrorResponse))]
 [JsonSerializable(typeof(AsorErrorResponse))]
+[JsonSerializable(typeof(WqlQueryRequest))]
+[JsonSerializable(typeof(WqlResponse))]
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,

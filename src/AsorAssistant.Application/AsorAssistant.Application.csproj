@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="AsorAssistant.Application.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AsorAssistant.Domain\AsorAssistant.Domain.csproj" />
   </ItemGroup>
 
