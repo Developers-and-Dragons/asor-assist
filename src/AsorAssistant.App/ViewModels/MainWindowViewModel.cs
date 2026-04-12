@@ -24,9 +24,9 @@ public partial class MainWindowViewModel : ObservableObject
     private bool _isRegistrationPanelOpen;
 
     public bool IsEditorPage => SelectedPageIndex == 0;
-    public bool IsJsonPage => SelectedPageIndex == 1;
-    public bool IsDraftsPage => SelectedPageIndex == 2;
-    public bool IsLookupsPage => SelectedPageIndex == 3;
+    public bool IsLookupsPage => SelectedPageIndex == 1;
+    public bool IsJsonPage => SelectedPageIndex == 2;
+    public bool IsDraftsPage => SelectedPageIndex == 3;
 
     public bool HasToken => !string.IsNullOrWhiteSpace(BearerToken);
     public string TokenStatusText => HasToken ? "Token set" : "No token";

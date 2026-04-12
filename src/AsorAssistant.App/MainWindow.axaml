@@ -65,6 +65,13 @@
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
+          <ListBoxItem ToolTip.Tip="Service Operation Lookups">
+            <StackPanel Spacing="3" HorizontalAlignment="Center">
+              <TextBlock Text="🔍" FontSize="18" HorizontalAlignment="Center" />
+              <TextBlock Text="Lookups" FontSize="9" HorizontalAlignment="Center"
+                         Foreground="{StaticResource AppTextSecondaryBrush}" />
+            </StackPanel>
+          </ListBoxItem>
           <ListBoxItem ToolTip.Tip="JSON Preview">
             <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="{}{}" FontSize="15" HorizontalAlignment="Center" FontFamily="Cascadia Mono, Consolas, monospace" />
@@ -76,13 +83,6 @@
             <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="📄" FontSize="18" HorizontalAlignment="Center" />
               <TextBlock Text="Drafts" FontSize="9" HorizontalAlignment="Center"
-                         Foreground="{StaticResource AppTextSecondaryBrush}" />
-            </StackPanel>
-          </ListBoxItem>
-          <ListBoxItem ToolTip.Tip="Service Operation Lookups">
-            <StackPanel Spacing="3" HorizontalAlignment="Center">
-              <TextBlock Text="🔍" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Lookups" FontSize="9" HorizontalAlignment="Center"
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
@@ -126,7 +126,7 @@
             <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
                      PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
             <TextBlock Classes="helper"
-                       Text="Generate a token at the Workday Developer Site (API Client → Generate Token). Session-only — not saved to disk." />
+                       Text="Generate a token at the Workday Developer Site (upper right corner of page — login to tenant and copy token). Session-only — not saved to disk." />
           </StackPanel>
         </StackPanel>
       </Border>

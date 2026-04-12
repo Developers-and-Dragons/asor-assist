@@ -11,15 +11,18 @@ public partial class AgentSkillResourceViewModel : ObservableObject
     private string? _skillId;
 
     [ObservableProperty]
-    private string? _selectedExecutionMode;
+    private LookupOption? _selectedExecutionModeOption;
 
     public ObservableCollection<WorkdayResourceViewModel> WorkdayResources { get; } = [];
 
     /// <summary>Reference to the editor's skills collection for the skill ID dropdown.</summary>
     public ObservableCollection<SkillViewModel>? AvailableSkills { get; set; }
 
-    public static IReadOnlyList<string> ExecutionModeOptions { get; } =
-        [ExecutionMode.Ambient, ExecutionMode.Delegate];
+    public static IReadOnlyList<LookupOption> ExecutionModeOptions { get; } =
+    [
+        new LookupOption { Name = "Ambient", Id = ExecutionMode.Ambient },
+        new LookupOption { Name = "Delegate", Id = ExecutionMode.Delegate },
+    ];
 
     [RelayCommand]
     private void AddWorkdayResource()
@@ -36,7 +39,7 @@ public partial class AgentSkillResourceViewModel : ObservableObject
     public AgentSkillResource ToModel() => new()
     {
         SkillId = SkillId,
-        ExecutionMode = new ExecutionMode { Id = SelectedExecutionMode },
+        ExecutionMode = new ExecutionMode { Id = SelectedExecutionModeOption?.Id },
         WorkdayResources = WorkdayResources.Select(r => r.ToModel()).ToList()
     };
 
@@ -46,7 +49,7 @@ public partial class AgentSkillResourceViewModel : ObservableObject
         {
             AvailableSkills = availableSkills,
             SkillId = resource.SkillId,
-            SelectedExecutionMode = resource.ExecutionMode?.Id
+            SelectedExecutionModeOption = ExecutionModeOptions.FirstOrDefault(o => o.Id == resource.ExecutionMode?.Id)
         };
 
         if (resource.WorkdayResources is not null)

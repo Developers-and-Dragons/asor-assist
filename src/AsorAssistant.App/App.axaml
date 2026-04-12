@@ -133,8 +133,11 @@
         <!-- ComboBox styling -->
         <Style Selector="ComboBox">
           <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
           <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+        </Style>
+        <Style Selector="ComboBox:focus, ComboBox:pointerover">
+          <Setter Property="BorderBrush" Value="{StaticResource AppAccentBrush}" />
         </Style>
 
         <!-- ToggleSwitch -->

@@ -10,14 +10,6 @@
     <Border DockPanel.Dock="Top" Classes="page-header">
       <DockPanel>
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-          <Border Classes="badge-success" IsVisible="{Binding IsValid}">
-            <TextBlock Text="✓ Valid" FontSize="10" Foreground="{StaticResource AppSuccessBrush}" FontWeight="SemiBold" />
-          </Border>
-          <Border Classes="badge-error"
-                  IsVisible="{Binding ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-            <TextBlock Text="✕ Invalid" FontSize="10" Foreground="{StaticResource AppErrorBrush}" FontWeight="SemiBold" />
-          </Border>
-
           <Button Classes="action" Content="Validate" Command="{Binding ValidateCommand}"
                   ToolTip.Tip="Check definition against ASOR v1.2 spec." />
           <Button Classes="action" Content="Save Draft"
@@ -47,6 +39,14 @@
       </DockPanel>
     </Border>
 
+    <!-- Validation Success -->
+    <Border DockPanel.Dock="Top" Padding="28,8" Background="#185ec26a"
+            BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+            IsVisible="{Binding IsValid}">
+      <TextBlock Text="✓ No validation issues" FontSize="11" FontWeight="SemiBold"
+                 Foreground="{StaticResource AppSuccessBrush}" />
+    </Border>
+
     <!-- Validation Errors -->
     <Border DockPanel.Dock="Top" Padding="28,10" Background="#18e05555"
             BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
@@ -54,7 +54,7 @@
       <DockPanel>
         <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
                 Command="{Binding DismissErrorsCommand}"
-                ToolTip.Tip="Dismiss errors" VerticalAlignment="Top" />
+                ToolTip.Tip="Dismiss" VerticalAlignment="Top" />
         <StackPanel Spacing="2">
           <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
           <TextBlock Text="{Binding ValidationErrors}" FontSize="11" Foreground="{StaticResource AppErrorBrush}"
@@ -113,8 +113,8 @@
                       DisplayMemberBinding="{Binding Name}"
                       PlaceholderText="Select provider..."
                       HorizontalAlignment="Stretch" />
-            <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Custom provider ID"
-                     IsVisible="{Binding SelectedProviderId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Enter custom provider ID"
+                     IsVisible="{Binding IsCustomProvider}"
                      Margin="0,4,0,0" />
             <TextBlock Classes="helper" Text="The service provider of the agent." />
           </StackPanel>
@@ -126,8 +126,8 @@
                       DisplayMemberBinding="{Binding Name}"
                       PlaceholderText="Select platform..."
                       HorizontalAlignment="Stretch" />
-            <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Custom platform ID"
-                     IsVisible="{Binding SelectedPlatformId, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Enter custom platform ID"
+                     IsVisible="{Binding IsCustomPlatform}"
                      Margin="0,4,0,0" />
             <TextBlock Classes="helper" Text="The platform this agent executes on. Use OTHER if none match." />
           </StackPanel>
@@ -249,7 +249,7 @@
                       <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock Classes="card-title" Text="{Binding SkillId, FallbackValue='Unmapped'}"
                                    VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding SelectedExecutionMode}" Foreground="{StaticResource AppTextMutedBrush}" FontSize="11"
+                        <TextBlock Text="{Binding SelectedExecutionModeOption.Name}" Foreground="{StaticResource AppTextMutedBrush}" FontSize="11"
                                    VerticalAlignment="Center" />
                       </StackPanel>
                     </DockPanel>
@@ -269,10 +269,12 @@
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label" Text="EXECUTION MODE" />
                         <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
-                                  SelectedItem="{Binding SelectedExecutionMode}"
+                                  SelectedItem="{Binding SelectedExecutionModeOption}"
+                                  DisplayMemberBinding="{Binding Name}"
                                   PlaceholderText="Select mode..."
                                   HorizontalAlignment="Stretch" />
-                        <TextBlock Classes="helper" Text="Delegate = requires human invocation. Ambient = no human required. Determines the grant type." />
+                        <TextBlock Classes="helper" TextWrapping="Wrap"
+                                   Text="Delegate = requires human invocation. Ambient = no human required. Determines the grant type." />
                       </StackPanel>
                     </Grid>
 

@@ -83,12 +83,20 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isValid;
 
-    // Lookup data
+    // Lookup data (with Custom option at the end)
     public IReadOnlyList<LookupOption> PlatformOptions { get; } =
-        KnownPlatforms.All.Select(p => new LookupOption { Name = p.Name, Id = p.Id }).ToList();
+        KnownPlatforms.All.Select(p => new LookupOption { Name = p.Name, Id = p.Id })
+            .Append(new LookupOption { Name = "Custom...", Id = "__CUSTOM__" }).ToList();
 
     public IReadOnlyList<LookupOption> ProviderOptions { get; } =
-        KnownProviders.All.Select(p => new LookupOption { Name = p.Name, Id = p.Id }).ToList();
+        KnownProviders.All.Select(p => new LookupOption { Name = p.Name, Id = p.Id })
+            .Append(new LookupOption { Name = "Custom...", Id = "__CUSTOM__" }).ToList();
+
+    public bool IsCustomProvider => SelectedProviderId == "__CUSTOM__";
+    public bool IsCustomPlatform => SelectedPlatformId == "__CUSTOM__";
+
+    partial void OnSelectedProviderIdChanged(string? value) => OnPropertyChanged(nameof(IsCustomProvider));
+    partial void OnSelectedPlatformIdChanged(string? value) => OnPropertyChanged(nameof(IsCustomPlatform));
 
     public DefinitionEditorViewModel()
     {
@@ -152,9 +160,9 @@ public partial class DefinitionEditorViewModel : ObservableObject
             Platform = new Platform { Id = platformId },
             Capabilities = new Capabilities
             {
-                PushNotifications = PushNotifications ? true : null,
-                Streaming = Streaming ? true : null,
-                StateTransitionHistory = StateTransitionHistory ? true : null
+                PushNotifications = PushNotifications,
+                Streaming = Streaming,
+                StateTransitionHistory = StateTransitionHistory
             },
             Skills = Skills.Select(s => s.ToModel()).ToList(),
             Overview = NullIfEmpty(Overview),
