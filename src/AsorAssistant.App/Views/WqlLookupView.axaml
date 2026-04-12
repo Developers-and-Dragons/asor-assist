@@ -4,71 +4,60 @@
              x:Class="AsorAssistant.App.Views.WqlLookupView"
              x:DataType="vm:WqlLookupViewModel">
 
-  <DockPanel Margin="24,20">
-    <!-- Header -->
-    <TextBlock DockPanel.Dock="Top" Classes="page-title" Text="Service Operation Lookups" Margin="0,0,0,20" />
-
-    <StackPanel Spacing="16">
-
-      <!-- Actions -->
-      <StackPanel Spacing="8">
-        <TextBlock Classes="section-header" Text="Service Operation Lookup" />
-        <TextBlock Classes="section-desc" Text="Search for SOAP or REST service operation WIDs. Uses the bearer token from the connection bar at the top." />
-        <TextBlock Classes="helper" Margin="0,2,0,0"
-                   Text="Returns Workday IDs (WIDs) you can paste into Agent Resource ID or Securable Items fields." />
-
-        <StackPanel Orientation="Horizontal" Spacing="8">
+  <DockPanel>
+    <!-- Page Header -->
+    <Border DockPanel.Dock="Top" Classes="page-header">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="{Binding StatusMessage}" FontSize="11"
+                     Foreground="{StaticResource AppTextMutedBrush}" VerticalAlignment="Center"
+                     IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
           <Button Classes="action-primary" Content="SOAP Operations" Command="{Binding LookupSoapCommand}"
                   IsEnabled="{Binding !IsLoading}"
-                  ToolTip.Tip="Query allSoapOperations via WQL to list SOAP service operation WIDs." />
+                  ToolTip.Tip="Query publicWebServices for SOAP service operation WIDs." />
           <Button Classes="action" Content="REST Operations" Command="{Binding LookupRestCommand}"
                   IsEnabled="{Binding !IsLoading}"
-                  ToolTip.Tip="Query allRestOperations via WQL to list REST service operation WIDs." />
+                  ToolTip.Tip="Query allPublicServiceOperations for REST WIDs." />
+          <Button Classes="action" Content="Copy WID" Command="{Binding CopyWidCommand}"
+                  CommandParameter="{Binding $parent[TopLevel].Clipboard}"
+                  ToolTip.Tip="Copy the selected Workday ID to clipboard." />
         </StackPanel>
-      </StackPanel>
-
-      <Separator Classes="section-divider" />
-
-      <!-- Results -->
-      <DockPanel Margin="0,0,0,8">
-        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
-          <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="{StaticResource AppTextSecondaryBrush}"
-                     VerticalAlignment="Center"
-                     IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <TextBlock Classes="section-header" Text="Results" VerticalAlignment="Center" />
-          <TextBlock Classes="section-header" Text="{Binding ResultTypeLabel}" Foreground="{StaticResource AppTextMutedBrush}"
-                     VerticalAlignment="Center"
-                     IsVisible="{Binding ResultTypeLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <StackPanel>
+          <TextBlock Classes="page-title" Text="Service Operation Lookups" />
+          <TextBlock Classes="page-subtitle" Text="Find Workday IDs (WIDs) for Agent Resource and Securable Item fields." />
         </StackPanel>
       </DockPanel>
+    </Border>
 
-      <TextBox Text="{Binding FilterText}" PlaceholderText="Filter results..." />
+    <!-- Body -->
+    <DockPanel Margin="28,16">
+      <!-- Filter + result type -->
+      <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+        <TextBlock DockPanel.Dock="Right" Text="{Binding ResultTypeLabel}"
+                   Foreground="{StaticResource AppTextMutedBrush}" FontSize="12" FontWeight="SemiBold"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding ResultTypeLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <TextBox Text="{Binding FilterText}" PlaceholderText="Filter results..." Margin="0,0,16,0" />
+      </DockPanel>
 
+      <!-- Results table fills space -->
       <DataGrid ItemsSource="{Binding Results}"
                 SelectedItem="{Binding SelectedResult}"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
-                Height="380"
                 SelectionMode="Single"
                 GridLinesVisibility="Horizontal"
                 BorderThickness="1"
                 BorderBrush="{StaticResource AppBorderSubtleBrush}"
-                CornerRadius="6">
+                CornerRadius="8">
         <DataGrid.Columns>
-          <DataGridTextColumn Header="Operation" Binding="{Binding Name}" Width="350" />
-          <DataGridTextColumn Header="Workday ID" Binding="{Binding WorkdayId}" Width="280" />
-          <DataGridTextColumn Header="Service" Binding="{Binding ServiceName}" Width="180"
+          <DataGridTextColumn Header="Operation" Binding="{Binding Name}" Width="*" />
+          <DataGridTextColumn Header="Workday ID" Binding="{Binding WorkdayId}" Width="300" />
+          <DataGridTextColumn Header="Service" Binding="{Binding ServiceName}" Width="200"
                               IsVisible="{Binding $parent[UserControl].((vm:WqlLookupViewModel)DataContext).ShowServiceColumn}" />
         </DataGrid.Columns>
       </DataGrid>
-
-      <Button Classes="action" Content="Copy Selected WID"
-              Command="{Binding CopyWidCommand}"
-              CommandParameter="{Binding $parent[TopLevel].Clipboard}"
-              ToolTip.Tip="Copy the Workday ID to clipboard for pasting into the editor." />
-    </StackPanel>
+    </DockPanel>
   </DockPanel>
 
 </UserControl>

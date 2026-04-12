@@ -4,23 +4,33 @@
              x:Class="AsorAssistant.App.Views.JsonPreviewView"
              x:DataType="vm:JsonPreviewViewModel">
 
-  <DockPanel Margin="24,20">
-    <!-- Header -->
-    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,16">
-      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <Button Classes="action" Content="Refresh" Command="{Binding RefreshCommand}" />
-        <Button Classes="action" Content="Copy" Command="{Binding CopyToClipboardCommand}"
-                CommandParameter="{Binding $parent[TopLevel].Clipboard}" />
-        <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"
-                   FontSize="12" Foreground="{StaticResource AppSuccessBrush}"
-                   IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-      </StackPanel>
-      <TextBlock Classes="page-title" Text="JSON Preview" VerticalAlignment="Center" />
-    </DockPanel>
+  <DockPanel>
+    <!-- Page Header -->
+    <Border DockPanel.Dock="Top" Classes="page-header">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"
+                     FontSize="11" Foreground="{StaticResource AppSuccessBrush}"
+                     IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <Button Classes="action" Content="Refresh from Editor" Command="{Binding RefreshCommand}"
+                  ToolTip.Tip="Regenerate JSON from the current editor state." />
+          <Button Classes="action-primary" Content="Copy to Clipboard" Command="{Binding CopyToClipboardCommand}"
+                  CommandParameter="{Binding $parent[TopLevel].Clipboard}" />
+        </StackPanel>
+        <StackPanel>
+          <TextBlock Classes="page-title" Text="JSON Preview" />
+          <TextBlock Classes="page-subtitle" Text="Serialized agent definition payload ready for the ASOR API." />
+        </StackPanel>
+      </DockPanel>
+    </Border>
 
-    <!-- JSON output -->
-    <TextBox Classes="mono" Text="{Binding JsonText}" IsReadOnly="True"
-             AcceptsReturn="True" TextWrapping="NoWrap" />
+    <!-- JSON Body -->
+    <Border Margin="28,20" Background="{StaticResource AppSurfaceRaisedBrush}"
+            BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1"
+            CornerRadius="8" Padding="4">
+      <TextBox Classes="mono" Text="{Binding JsonText}" IsReadOnly="True"
+               AcceptsReturn="True" TextWrapping="NoWrap" />
+    </Border>
   </DockPanel>
 
 </UserControl>

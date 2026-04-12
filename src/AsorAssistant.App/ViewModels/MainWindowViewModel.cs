@@ -18,7 +18,7 @@ public partial class MainWindowViewModel : ObservableObject
     private string? _bearerToken;
 
     [ObservableProperty]
-    private bool _isConnectionBarExpanded;
+    private bool _isConnectionBarExpanded = true; // Start expanded so users see it
 
     [ObservableProperty]
     private bool _isRegistrationPanelOpen;

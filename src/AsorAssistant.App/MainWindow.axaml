@@ -9,41 +9,46 @@
         Width="1200" Height="850"
         MinWidth="900" MinHeight="650">
 
-  <Grid ColumnDefinitions="68,*">
+  <Grid ColumnDefinitions="72,*">
 
-    <!-- Left Navigation Rail -->
+    <!-- Navigation Rail -->
     <Border Grid.Column="0" Background="{StaticResource AppSurfaceBrush}"
             BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,1,0">
       <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Text="ASOR" FontSize="11" FontWeight="Bold"
-                   HorizontalAlignment="Center" Margin="0,16,0,12"
-                   Foreground="{StaticResource AppTextMutedBrush}" />
+        <!-- Brand -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,16,0,16" HorizontalAlignment="Center">
+          <TextBlock Text="ASOR" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"
+                     Foreground="{StaticResource AppAccentBrush}" />
+          <TextBlock Text="Assistant" FontSize="8" HorizontalAlignment="Center"
+                     Foreground="{StaticResource AppTextMutedBrush}" Margin="0,1,0,0" />
+        </StackPanel>
 
-        <!-- Help pinned to bottom -->
-        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Margin="0,0,0,16">
-          <Separator Margin="8,0" Background="{StaticResource AppBorderSubtleBrush}" />
+        <!-- Help at bottom -->
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,0,0,12">
+          <Separator Margin="10,0" Background="{StaticResource AppBorderSubtleBrush}" />
           <Button HorizontalAlignment="Center" Margin="0,10,0,0"
                   Background="Transparent" CornerRadius="8" Padding="8"
                   ToolTip.Tip="Help &amp; Documentation">
             <Button.Flyout>
               <Flyout Placement="RightEdgeAlignedTop">
-                <StackPanel Spacing="8" Width="260" Margin="4">
-                  <TextBlock Text="Help &amp; Docs" FontWeight="SemiBold" FontSize="13" />
+                <StackPanel Spacing="8" Width="280" Margin="4">
+                  <TextBlock Text="ASOR Assistant" FontWeight="SemiBold" FontSize="14" />
                   <TextBlock TextWrapping="Wrap" FontSize="12"
                              Foreground="{StaticResource AppTextSecondaryBrush}"
-                             Text="This tool registers external agents against the Workday Agent System of Record (ASOR) API v1.2." />
-                  <TextBlock Text="ASOR v1.2 Spec" FontSize="12"
+                             Text="Register external agents against the Workday Agent System of Record (ASOR) API v1.2." />
+                  <TextBlock Text="→ ASOR v1.2 Specification" FontSize="12"
                              Foreground="{StaticResource AppLinkBrush}" Cursor="Hand" />
+                  <Separator Background="{StaticResource AppBorderSubtleBrush}" />
                   <TextBlock TextWrapping="Wrap" FontSize="11"
                              Foreground="{StaticResource AppTextMutedBrush}"
-                             Text="Region endpoints: US / EU / UK / SIN / IND / JPN at {region}.agent.workday.com" />
+                             Text="Regions: US · EU · UK · SIN · IND · JPN&#x0a;Endpoints: {region}.agent.workday.com" />
                 </StackPanel>
               </Flyout>
             </Button.Flyout>
-            <StackPanel Spacing="4" HorizontalAlignment="Center">
-              <TextBlock Text="?" FontSize="18" HorizontalAlignment="Center" FontWeight="Bold"
+            <StackPanel Spacing="3" HorizontalAlignment="Center">
+              <TextBlock Text="?" FontSize="16" HorizontalAlignment="Center" FontWeight="Bold"
                          Foreground="{StaticResource AppTextMutedBrush}" />
-              <TextBlock Text="Help" FontSize="10" HorizontalAlignment="Center"
+              <TextBlock Text="Help" FontSize="9" HorizontalAlignment="Center"
                          Foreground="{StaticResource AppTextMutedBrush}" />
             </StackPanel>
           </Button>
@@ -52,30 +57,30 @@
         <!-- Nav items -->
         <ListBox Classes="nav-rail" SelectedIndex="{Binding SelectedPageIndex}">
           <ListBoxItem ToolTip.Tip="Agent Definition Editor">
-            <StackPanel Spacing="4" HorizontalAlignment="Center">
+            <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="✏" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Editor" FontSize="10" HorizontalAlignment="Center"
+              <TextBlock Text="Editor" FontSize="9" HorizontalAlignment="Center"
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="JSON Preview">
-            <StackPanel Spacing="4" HorizontalAlignment="Center">
-              <TextBlock Text="{}{}" FontSize="16" HorizontalAlignment="Center" FontFamily="Cascadia Mono, Consolas, monospace" />
-              <TextBlock Text="JSON" FontSize="10" HorizontalAlignment="Center"
+            <StackPanel Spacing="3" HorizontalAlignment="Center">
+              <TextBlock Text="{}{}" FontSize="15" HorizontalAlignment="Center" FontFamily="Cascadia Mono, Consolas, monospace" />
+              <TextBlock Text="JSON" FontSize="9" HorizontalAlignment="Center"
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="Saved Drafts">
-            <StackPanel Spacing="4" HorizontalAlignment="Center">
+            <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="📄" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Drafts" FontSize="10" HorizontalAlignment="Center"
+              <TextBlock Text="Drafts" FontSize="9" HorizontalAlignment="Center"
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="Service Operation Lookups">
-            <StackPanel Spacing="4" HorizontalAlignment="Center">
+            <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="🔍" FontSize="18" HorizontalAlignment="Center" />
-              <TextBlock Text="Lookups" FontSize="10" HorizontalAlignment="Center"
+              <TextBlock Text="Lookups" FontSize="9" HorizontalAlignment="Center"
                          Foreground="{StaticResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
@@ -83,54 +88,52 @@
       </DockPanel>
     </Border>
 
-    <!-- Right: Connection Bar + Content -->
+    <!-- Main Content -->
     <DockPanel Grid.Column="1">
 
-      <!-- Connection Bar -->
+      <!-- Connection Bar: always visible, prominent -->
       <Border DockPanel.Dock="Top" Classes="connection-bar">
         <DockPanel>
           <Button DockPanel.Dock="Right" Classes="action-subtle"
-                  Content="⋯" Command="{Binding ToggleConnectionBarCommand}"
-                  ToolTip.Tip="Show/hide token field"
-                  VerticalAlignment="Top" Margin="8,0,0,0" />
+                  Content="{Binding IsConnectionBarExpanded, FallbackValue=▼}"
+                  Command="{Binding ToggleConnectionBarCommand}"
+                  ToolTip.Tip="Show/hide token input"
+                  VerticalAlignment="Top" Margin="12,0,0,0" />
 
           <StackPanel Spacing="6">
-            <StackPanel Orientation="Horizontal" Spacing="12">
-              <TextBlock Text="🔑" FontSize="14" VerticalAlignment="Center" />
+            <!-- Summary: always visible -->
+            <StackPanel Orientation="Horizontal" Spacing="10">
               <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"
                          Foreground="{StaticResource AppTextPrimaryBrush}" />
 
               <Border Classes="badge-success" IsVisible="{Binding HasToken}">
-                <TextBlock Text="✓ Token set" FontSize="11" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
+                <TextBlock Text="✓ Token configured" FontSize="10" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
               </Border>
               <Border Classes="badge-warning" IsVisible="{Binding !HasToken}">
-                <TextBlock Text="⚠ No token" FontSize="11" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
+                <TextBlock Text="⚠ Bearer token required" FontSize="10" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
               </Border>
-
-              <TextBlock Text="Used for registration and WQL lookups" FontSize="11"
-                         Foreground="{StaticResource AppTextMutedBrush}" VerticalAlignment="Center" />
             </StackPanel>
 
-            <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4" Margin="26,2,0,0">
-              <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token here"
-                       PasswordChar="*" RevealPassword="False" MaxWidth="500" HorizontalAlignment="Left" />
+            <!-- Expanded: token input -->
+            <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4">
+              <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your Workday bearer token"
+                       PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
               <TextBlock Classes="helper"
-                         Text="From Workday OAuth (API Client > Generate Token). Kept in memory only — not saved to disk." />
+                         Text="From Workday OAuth (API Client → Generate Token). Session-only — not saved to disk. Used for both registration and service operation lookups." />
             </StackPanel>
           </StackPanel>
         </DockPanel>
       </Border>
 
-      <!-- Content Area -->
+      <!-- Page Content -->
       <Panel>
+        <!-- Editor + Registration Panel -->
         <Grid IsVisible="{Binding IsEditorPage}">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-
           <views:DefinitionEditorView DataContext="{Binding Editor}" />
-
           <Border Grid.Column="1" Classes="panel" Width="400"
                   IsVisible="{Binding IsRegistrationPanelOpen}">
             <views:RegistrationView DataContext="{Binding Registration}" />
@@ -139,15 +142,12 @@
 
         <views:JsonPreviewView DataContext="{Binding JsonPreview}"
                                IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsJsonPage}" />
-
         <views:DraftManagerView DataContext="{Binding DraftManager}"
                                 IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsDraftsPage}" />
-
         <views:WqlLookupView DataContext="{Binding WqlLookup}"
                              IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsLookupsPage}" />
       </Panel>
     </DockPanel>
-
   </Grid>
 
 </Window>
