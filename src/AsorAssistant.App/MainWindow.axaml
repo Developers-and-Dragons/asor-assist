@@ -93,36 +93,39 @@
 
       <!-- Connection Bar: always visible, prominent -->
       <Border DockPanel.Dock="Top" Classes="connection-bar">
-        <DockPanel>
-          <Button DockPanel.Dock="Right" Classes="action-subtle"
-                  Content="{Binding IsConnectionBarExpanded, FallbackValue=▼}"
-                  Command="{Binding ToggleConnectionBarCommand}"
-                  ToolTip.Tip="Show/hide token input"
-                  VerticalAlignment="Top" Margin="12,0,0,0" />
+        <StackPanel Spacing="6">
+          <!-- Summary row with inline toggle -->
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"
+                       Foreground="{StaticResource AppTextPrimaryBrush}" />
 
-          <StackPanel Spacing="6">
-            <!-- Summary: always visible -->
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"
-                         Foreground="{StaticResource AppTextPrimaryBrush}" />
+            <Border Classes="badge-success" IsVisible="{Binding HasToken}">
+              <TextBlock Text="✓ Token configured" FontSize="10" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
+            </Border>
+            <Border Classes="badge-warning" IsVisible="{Binding !HasToken}">
+              <TextBlock Text="⚠ Bearer token required" FontSize="10" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
+            </Border>
 
-              <Border Classes="badge-success" IsVisible="{Binding HasToken}">
-                <TextBlock Text="✓ Token configured" FontSize="10" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
-              </Border>
-              <Border Classes="badge-warning" IsVisible="{Binding !HasToken}">
-                <TextBlock Text="⚠ Bearer token required" FontSize="10" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
-              </Border>
-            </StackPanel>
-
-            <!-- Expanded: token input -->
-            <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4">
-              <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your Workday bearer token"
-                       PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
-              <TextBlock Classes="helper"
-                         Text="From Workday OAuth (API Client → Generate Token). Session-only — not saved to disk. Used for both registration and service operation lookups." />
-            </StackPanel>
+            <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
+                    ToolTip.Tip="Show/hide token input" VerticalAlignment="Center">
+              <TextBlock Text="▾" FontSize="12" IsVisible="{Binding !IsConnectionBarExpanded}" />
+            </Button>
+            <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
+                    ToolTip.Tip="Show/hide token input" VerticalAlignment="Center"
+                    IsVisible="{Binding IsConnectionBarExpanded}">
+              <TextBlock Text="▴" FontSize="12" />
+            </Button>
           </StackPanel>
-        </DockPanel>
+
+          <!-- Expanded: token input -->
+          <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="4">
+            <TextBlock Classes="field-label" Text="BEARER TOKEN" />
+            <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
+                     PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
+            <TextBlock Classes="helper"
+                       Text="Generate a token at the Workday Developer Site (API Client → Generate Token). Session-only — not saved to disk." />
+          </StackPanel>
+        </StackPanel>
       </Border>
 
       <!-- Page Content -->
