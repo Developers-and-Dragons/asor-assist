@@ -5,7 +5,7 @@
              x:DataType="vm:DefinitionEditorViewModel"
              x:Name="EditorRoot">
 
-  <ScrollViewer Padding="24,20,24,48" HorizontalScrollBarVisibility="Disabled">
+  <ScrollViewer Padding="24,20,40,48" HorizontalScrollBarVisibility="Disabled">
       <StackPanel Spacing="0">
 
         <!-- IDENTITY -->

@@ -95,6 +95,7 @@
           <Setter Property="FontSize" Value="12.5" />
           <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,14" />
+          <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style Selector="TextBlock.field-label">
@@ -109,6 +110,7 @@
           <Setter Property="FontSize" Value="12" />
           <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
           <Setter Property="Margin" Value="0,3,0,0" />
+          <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style Selector="TextBlock.card-title">
