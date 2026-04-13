@@ -126,12 +126,16 @@ jobs:
         run: |
           APP="./Asor Assistant.app"
           PAYLOAD="$APP/Contents/Resources/app"
+          ENTITLEMENTS="./packaging/macos/Entitlements.plist"
           echo "Signing native payload binaries..."
-          # Sign Mach-O dylibs + executables; managed dlls are not native code.
-          find "$PAYLOAD" -type f \( -name "*.dylib" -o -perm +111 \) ! -name "*.dll" -print0 \
+          # Sign the main executable with entitlements (needed for .NET JIT under hardened runtime).
+          codesign --force --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$MACOS_SIGNING_IDENTITY" "$PAYLOAD/AsorAssistant.App"
+
+          # Sign other Mach-O dylibs + executables; managed dlls are not native code.
+          find "$PAYLOAD" -type f \( -name "*.dylib" -o -perm +111 \) ! -name "*.dll" ! -name "AsorAssistant.App" -print0 \
             | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
           echo "Signing app bundle (deep)..."
-          codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+          codesign --force --deep --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$MACOS_SIGNING_IDENTITY" "$APP"
           echo "Verifying signatures..."
           codesign --verify --deep --strict --verbose=4 "$APP"
           echo "Signing complete."
