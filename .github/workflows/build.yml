@@ -91,14 +91,19 @@ jobs:
           fi
           APP="./Asor Assistant.app"
           MACOS="$APP/Contents/MacOS"
-          echo "Signing .dylib files..."
-          find "$MACOS" -name "*.dylib" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
-          echo "Signing .dll files..."
-          find "$MACOS" -name "*.dll" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          # Defensive: ensure managed files are not executable so codesign doesn't treat them as nested code.
+          find "$MACOS" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
+
+          echo "Signing bundled Mach-O binaries..."
+          # Sign native dylibs + any executable Mach-O files (main app, createdump, etc).
+          find "$MACOS" -type f \( -name "*.dylib" -o -perm -111 \) -print0 \
+            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
+
           echo "Signing app bundle (deep)..."
           codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+
           echo "Verifying signatures..."
-          codesign --verify --deep "$APP"
+          codesign --verify --deep --strict --verbose=4 "$APP"
 
       - name: Create macOS distribution zip
         if: runner.os == 'macOS'
