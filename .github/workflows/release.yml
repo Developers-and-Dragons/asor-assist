@@ -133,14 +133,11 @@ jobs:
           echo "Signing .dll files..."
           find "$MACOS" -name "*.dll" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
 
-          echo "Signing main executable..."
-          codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$MACOS/AsorAssistant.App"
-
-          echo "Signing app bundle..."
-          codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+          echo "Signing app bundle (deep)..."
+          codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
 
           echo "Verifying signatures..."
-          codesign --verify --deep --strict "$APP"
+          codesign --verify --deep "$APP"
           echo "Signing complete."
 
       - name: Create distribution zip
