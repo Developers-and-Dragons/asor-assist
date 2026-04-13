@@ -35,6 +35,8 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:DebugType=none
+          -p:DebugSymbols=false
           --output ./publish
 
       - name: Upload unsigned artifact
@@ -98,6 +100,8 @@ jobs:
           --configuration Release
           --runtime osx-arm64
           --self-contained true
+          -p:DebugType=none
+          -p:DebugSymbols=false
           --output ./publish
 
       - name: Create .app bundle
