@@ -29,7 +29,7 @@ Get the latest build from [GitHub Releases](https://github.com/Developers-and-Dr
 | Platform | File | Notes |
 |----------|------|-------|
 | Windows x64 | `AsorAssistant_Windows_x64.zip` | EV code signed |
-| macOS ARM64 | `AsorAssistant_macOS_ARM64.zip` | Signed + notarized |
+| macOS ARM64 | `AsorAssistant_macOS_ARM64.dmg` | Signed + notarized |
 
 ### 2. Install & Run
 
@@ -45,8 +45,9 @@ Get the latest build from [GitHub Releases](https://github.com/Developers-and-Dr
 
 **macOS**
 
-1. Download and extract the zip
-2. Open `Asor Assistant.app`
+1. Download `AsorAssistant_macOS_ARM64.dmg`
+2. Open the DMG and drag **Asor Assistant** to Applications
+3. Open from Launchpad or Finder
 
 > **macOS Gatekeeper Notice**
 > The first time you open the app, macOS may show "App is from an unidentified developer."
