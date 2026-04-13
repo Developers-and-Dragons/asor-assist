@@ -1,8 +1,8 @@
-name: Release (Main)
+name: Release
 
 on:
   push:
-    branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -211,12 +211,17 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo "version=$(date +'%Y.%m.%d')-$(echo ${{ github.sha }} | head -c 7)" >> $GITHUB_OUTPUT
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=v$(date +'%Y.%m.%d')-$(echo ${{ github.sha }} | head -c 7)" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
           name: ASOR Assistant ${{ steps.version.outputs.version }}
           draft: true
           files: |
