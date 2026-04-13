@@ -1,8 +1,8 @@
-name: Release (Main)
+name: Release
 
 on:
   push:
-    branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -125,41 +125,71 @@ jobs:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
           APP="./Asor Assistant.app"
-          MACOS="$APP/Contents/MacOS"
+          PAYLOAD="$APP/Contents/Resources/app"
+          ENTITLEMENTS="./packaging/macos/Entitlements.plist"
 
-          echo "Signing .dylib files..."
-          find "$MACOS" -name "*.dylib" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          # Strip execute bits from managed files so codesign doesn't treat them as nested code.
+          find "$PAYLOAD" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
 
-          echo "Signing .dll files..."
-          find "$MACOS" -name "*.dll" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          echo "Signing main executable with entitlements..."
+          codesign --force --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$MACOS_SIGNING_IDENTITY" "$PAYLOAD/AsorAssistant.App"
+
+          echo "Signing other native binaries..."
+          find "$PAYLOAD" -type f \( -name "*.dylib" -o -perm +111 \) ! -name "*.dll" ! -name "AsorAssistant.App" -print0 \
+            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
 
           echo "Signing app bundle (deep)..."
-          codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+          codesign --force --deep --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$MACOS_SIGNING_IDENTITY" "$APP"
 
           echo "Verifying signatures..."
-          codesign --verify --deep "$APP"
+          codesign --verify --deep --strict --verbose=4 "$APP"
           echo "Signing complete."
 
-      - name: Create distribution zip
-        run: ditto -c -k --keepParent "./Asor Assistant.app" AsorAssistant_macOS_ARM64.zip
-
-      - name: Notarize
+      - name: Notarize app
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
         run: |
-          xcrun notarytool submit AsorAssistant_macOS_ARM64.zip \
+          ditto -c -k --keepParent "./Asor Assistant.app" AsorAssistant_app.zip
+          xcrun notarytool submit AsorAssistant_app.zip \
             --apple-id "$APPLE_ID" \
             --team-id "$APPLE_TEAM_ID" \
             --password "$APPLE_APP_SPECIFIC_PASSWORD" \
             --wait --timeout 30m
+          xcrun stapler staple "./Asor Assistant.app"
+
+      - name: Create DMG
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        run: |
+          hdiutil create -volname "ASOR Assistant" \
+            -srcfolder "./Asor Assistant.app" \
+            -ov -format UDZO \
+            AsorAssistant_macOS_ARM64.dmg
+          codesign --force --sign "$MACOS_SIGNING_IDENTITY" AsorAssistant_macOS_ARM64.dmg
+
+      - name: Notarize DMG
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          xcrun notarytool submit AsorAssistant_macOS_ARM64.dmg \
+            --apple-id "$APPLE_ID" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --wait --timeout 30m
+          xcrun stapler staple AsorAssistant_macOS_ARM64.dmg
+
+      - name: Staple notarization ticket
+        run: xcrun stapler staple "./Asor Assistant.app"
 
       - name: Upload signed artifact
         uses: actions/upload-artifact@v4
         with:
           name: AsorAssistant-osx-arm64-signed
-          path: AsorAssistant_macOS_ARM64.zip
+          path: AsorAssistant_macOS_ARM64.dmg
 
   # ─── Create GitHub Release ───
   publish:
@@ -189,17 +219,22 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo "version=$(date +'%Y.%m.%d')-$(echo ${{ github.sha }} | head -c 7)" >> $GITHUB_OUTPUT
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=v$(date +'%Y.%m.%d')-$(echo ${{ github.sha }} | head -c 7)" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
           name: ASOR Assistant ${{ steps.version.outputs.version }}
           draft: true
           files: |
             AsorAssistant_Windows_x64.zip
-            ./release/macos/AsorAssistant_macOS_ARM64.zip
+            ./release/macos/AsorAssistant_macOS_ARM64.dmg
           body: |
             ## ASOR Assistant
 
@@ -210,13 +245,13 @@ jobs:
             | Platform | File | Signed |
             |----------|------|--------|
             | Windows x64 | `AsorAssistant_Windows_x64.zip` | ✅ EV Code Signed |
-            | macOS ARM64 | `AsorAssistant_macOS_ARM64.zip` | ✅ Signed + Notarized |
+            | macOS ARM64 | `AsorAssistant_macOS_ARM64.dmg` | ✅ Signed + Notarized |
 
             ### Windows
             1. Download and extract the zip
             2. Run `AsorAssistant.App.exe`
 
             ### macOS
-            1. Download and extract the zip
-            2. Open `Asor Assistant.app`
-            3. If prompted about an unidentified developer, go to System Settings → Privacy & Security → Open Anyway
+            1. Download `AsorAssistant_macOS_ARM64.dmg`
+            2. Open the DMG and drag **Asor Assistant** to Applications
+            3. Open from Launchpad or Finder

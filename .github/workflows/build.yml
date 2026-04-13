@@ -62,6 +62,91 @@ jobs:
         if: runner.os == 'macOS'
         run: ./scripts/macos/create-app-bundle.sh ./publish "./Asor Assistant.app"
 
+      - name: Import macOS signing certificate
+        if: runner.os == 'macOS'
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          if [ -z "$MACOS_CERTIFICATE" ]; then
+            echo "No signing certificate configured, skipping."
+            exit 0
+          fi
+          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p buildchain build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p buildchain build.keychain
+          security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k buildchain build.keychain
+          rm certificate.p12
+
+      - name: Sign .app bundle
+        if: runner.os == 'macOS'
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        run: |
+          if [ -z "$MACOS_SIGNING_IDENTITY" ]; then
+            echo "No signing identity configured, skipping."
+            exit 0
+          fi
+          APP="./Asor Assistant.app"
+          PAYLOAD="$APP/Contents/Resources/app"
+          ENTITLEMENTS="./packaging/macos/Entitlements.plist"
+          # Defensive: ensure managed files are not executable so codesign doesn't treat them as nested code.
+          find "$PAYLOAD" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
+
+          echo "Checking for executable managed files (should be none)..."
+          # Use BSD find compatible syntax: `-perm +111` = any execute bit set (user/group/other).
+          BAD_DLLS="$(find "$PAYLOAD" -type f -name "*.dll" -perm +111 -print | head -50 || true)"
+          if [ -n "$BAD_DLLS" ]; then
+            echo "Found executable .dll files after chmod (this will break signing):"
+            echo "$BAD_DLLS"
+            exit 1
+          fi
+
+          echo "Signing bundled Mach-O binaries..."
+          # Sign the main executable with entitlements (needed for .NET JIT under hardened runtime).
+          codesign --force --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$MACOS_SIGNING_IDENTITY" "$PAYLOAD/AsorAssistant.App"
+
+          # Sign other native files (dylibs + executables) without entitlements.
+          find "$PAYLOAD" -type f \( -name "*.dylib" -o -perm +111 \) ! -name "*.dll" ! -name "AsorAssistant.App" -print0 \
+            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
+
+          echo "Signing app bundle (deep)..."
+          codesign --force --deep --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+
+          echo "Verifying signatures..."
+          codesign --verify --deep --strict --verbose=4 "$APP"
+
+      - name: Create macOS distribution zip
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p ./dist
+          ditto -c -k --keepParent "./Asor Assistant.app" ./dist/AsorAssistant_macOS_ARM64.zip
+
+      - name: Notarize macOS app (optional)
+        if: runner.os == 'macOS'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          if [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ] || [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then
+            echo "No notarization credentials configured, skipping."
+            exit 0
+          fi
+
+          xcrun notarytool submit ./dist/AsorAssistant_macOS_ARM64.zip \
+            --apple-id "$APPLE_ID" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --wait --timeout 30m
+
+          xcrun stapler staple "./Asor Assistant.app"
+
+          # Re-zip after stapling so the ticket is included in the artifact.
+          ditto -c -k --keepParent "./Asor Assistant.app" ./dist/AsorAssistant_macOS_ARM64.zip
+
       - name: Upload artifact (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
@@ -75,5 +160,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}-unsigned
-          path: Asor Assistant.app
+          path: ./dist/AsorAssistant_macOS_ARM64.zip
           retention-days: 14
