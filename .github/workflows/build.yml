@@ -1,0 +1,56 @@
+name: Build (Develop)
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            artifact-name: AsorAssistant-win-x64
+          - os: macos-latest
+            rid: osx-arm64
+            artifact-name: AsorAssistant-osx-arm64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore AsorAssistant.slnx
+
+      - name: Build
+        run: dotnet build AsorAssistant.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test AsorAssistant.slnx --configuration Release --no-build --verbosity normal
+
+      - name: Publish
+        run: >
+          dotnet publish src/AsorAssistant.App/AsorAssistant.App.csproj
+          --configuration Release
+          --runtime ${{ matrix.rid }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          --output ./publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}-unsigned
+          path: ./publish/
+          retention-days: 14

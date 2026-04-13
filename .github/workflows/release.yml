@@ -1,0 +1,214 @@
+name: Release (Main)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # ─── Windows Build ───
+  windows-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore AsorAssistant.slnx
+
+      - name: Test
+        run: dotnet test AsorAssistant.slnx --configuration Release --verbosity normal
+
+      - name: Publish
+        run: >
+          dotnet publish src/AsorAssistant.App/AsorAssistant.App.csproj
+          --configuration Release
+          --runtime win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          --output ./publish
+
+      - name: Upload unsigned artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-unsigned
+          path: ./publish/
+
+  # ─── Windows Sign (self-hosted runner with EV cert) ───
+  windows-sign:
+    needs: windows-build
+    runs-on: self-hosted
+
+    steps:
+      - name: Download unsigned artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-unsigned
+          path: ./unsigned
+
+      - name: Sign executables
+        shell: pwsh
+        run: |
+          $thumb = "A5EBA89B65F776DB3DEB350BD3681BFF52AFE2E8"
+          $files = Get-ChildItem -Path ./unsigned -Filter "*.exe" -Recurse
+          foreach ($file in $files) {
+            Write-Host "Signing: $($file.FullName)"
+            & signtool.exe sign /sha1 $thumb /fd sha256 /td sha256 /tr http://timestamp.digicert.com $file.FullName
+            if ($LASTEXITCODE -ne 0) { throw "Signing failed for $($file.FullName)" }
+            & signtool.exe verify /pa $file.FullName
+            if ($LASTEXITCODE -ne 0) { throw "Verification failed for $($file.FullName)" }
+          }
+
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AsorAssistant-win-x64-signed
+          path: ./unsigned/
+
+  # ─── macOS Build + Sign + Notarize ───
+  mac-build-sign:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore AsorAssistant.slnx
+
+      - name: Test
+        run: dotnet test AsorAssistant.slnx --configuration Release --verbosity normal
+
+      - name: Publish
+        run: >
+          dotnet publish src/AsorAssistant.App/AsorAssistant.App.csproj
+          --configuration Release
+          --runtime osx-arm64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          --output ./publish
+
+      - name: Import signing certificate
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p buildchain build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p buildchain build.keychain
+          security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k buildchain build.keychain
+          rm certificate.p12
+
+      - name: Sign binaries
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        run: |
+          echo "Signing .dylib files..."
+          find ./publish -name "*.dylib" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+
+          echo "Signing main executable..."
+          codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" ./publish/AsorAssistant.App
+
+          echo "Verifying signatures..."
+          codesign --verify --deep --strict ./publish/AsorAssistant.App
+          echo "Signing complete."
+
+      - name: Create distribution zip
+        run: |
+          cd ./publish
+          zip -r ../AsorAssistant_macOS_ARM64.zip .
+          cd ..
+
+      - name: Notarize
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          xcrun notarytool submit AsorAssistant_macOS_ARM64.zip \
+            --apple-id "$APPLE_ID" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --wait --timeout 30m
+
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AsorAssistant-osx-arm64-signed
+          path: AsorAssistant_macOS_ARM64.zip
+
+  # ─── Create GitHub Release ───
+  publish:
+    needs: [windows-sign, mac-build-sign]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AsorAssistant-win-x64-signed
+          path: ./release/windows
+
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AsorAssistant-osx-arm64-signed
+          path: ./release/macos
+
+      - name: Package Windows release
+        run: |
+          cd ./release/windows
+          zip -r ../../AsorAssistant_Windows_x64.zip .
+          cd ../..
+
+      - name: Get version
+        id: version
+        run: echo "version=$(date +'%Y.%m.%d')-$(echo ${{ github.sha }} | head -c 7)" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: ASOR Assistant ${{ steps.version.outputs.version }}
+          draft: true
+          files: |
+            AsorAssistant_Windows_x64.zip
+            ./release/macos/AsorAssistant_macOS_ARM64.zip
+          body: |
+            ## ASOR Assistant
+
+            Agent registration tool for the Workday Agent System of Record (ASOR) v1.2.
+
+            ### Downloads
+
+            | Platform | File | Signed |
+            |----------|------|--------|
+            | Windows x64 | `AsorAssistant_Windows_x64.zip` | ✅ EV Code Signed |
+            | macOS ARM64 | `AsorAssistant_macOS_ARM64.zip` | ✅ Signed + Notarized |
+
+            ### Windows
+            1. Download and extract the zip
+            2. Run `AsorAssistant.App.exe`
+
+            ### macOS
+            1. Download and extract the zip
+            2. Run `AsorAssistant.App`
+            3. If prompted about an unidentified developer, go to System Settings → Privacy & Security → Open Anyway
