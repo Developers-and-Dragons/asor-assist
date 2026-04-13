@@ -56,8 +56,6 @@ cp "$PLIST_SRC" "$OUT_ABS/Contents/Info.plist"
 # and use a small launcher script as CFBundleExecutable. This avoids codesign treating
 # Windows-format managed assemblies (*.dll) as native nested code.
 PAYLOAD_DIR="$OUT_ABS/Contents/Resources/app"
-PAYLOAD_EXE="$PAYLOAD_DIR/AsorAssistant.App"
-mv "$PAYLOAD_EXE" "$PAYLOAD_DIR/AsorAssistant.App.bin"
 
 cat > "$OUT_ABS/Contents/MacOS/AsorAssistant.App" <<'EOF'
 #!/usr/bin/env bash
@@ -65,10 +63,10 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PAYLOAD="$HERE/../Resources/app"
 cd "$PAYLOAD"
-exec "$PAYLOAD/AsorAssistant.App.bin" "$@"
+exec "$PAYLOAD/AsorAssistant.App" "$@"
 EOF
 
-chmod +x "$OUT_ABS/Contents/MacOS/AsorAssistant.App" "$PAYLOAD_DIR/AsorAssistant.App.bin"
+chmod +x "$OUT_ABS/Contents/MacOS/AsorAssistant.App" "$PAYLOAD_DIR/AsorAssistant.App"
 
 # `dotnet publish` can leave many managed assemblies marked executable. On macOS this
 # can cause Gatekeeper/codesign to treat them as nested code, breaking launch/signing.
