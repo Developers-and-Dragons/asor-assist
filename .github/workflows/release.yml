@@ -163,8 +163,13 @@ jobs:
         env:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
+          # Create a staging folder with the app + Applications alias
+          mkdir -p dmg-staging
+          cp -R "./Asor Assistant.app" dmg-staging/
+          ln -s /Applications dmg-staging/Applications
+
           hdiutil create -volname "ASOR Assistant" \
-            -srcfolder "./Asor Assistant.app" \
+            -srcfolder dmg-staging \
             -ov -format UDZO \
             AsorAssistant_macOS_ARM64.dmg
           codesign --force --sign "$MACOS_SIGNING_IDENTITY" AsorAssistant_macOS_ARM64.dmg
