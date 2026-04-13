@@ -126,18 +126,16 @@ jobs:
         run: |
           APP="./Asor Assistant.app"
           MACOS="$APP/Contents/MacOS"
-
-          echo "Signing .dylib files..."
-          find "$MACOS" -name "*.dylib" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
-
-          echo "Signing .dll files..."
-          find "$MACOS" -name "*.dll" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          echo "Signing bundled Mach-O binaries (Hardened Runtime)..."
+          # Sign Mach-O binaries only; managed .dll files should not be executable and are sealed as resources.
+          find "$MACOS" -type f \( -name "*.dylib" -o -perm -111 -o -name "AsorAssistant.App" -o -name "createdump" \) -print0 \
+            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
 
           echo "Signing app bundle (deep)..."
           codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
 
           echo "Verifying signatures..."
-          codesign --verify --deep "$APP"
+          codesign --verify --deep --strict --verbose=4 "$APP"
           echo "Signing complete."
 
       - name: Notarize app
@@ -176,6 +174,9 @@ jobs:
             --password "$APPLE_APP_SPECIFIC_PASSWORD" \
             --wait --timeout 30m
           xcrun stapler staple AsorAssistant_macOS_ARM64.dmg
+
+      - name: Staple notarization ticket
+        run: xcrun stapler staple "./Asor Assistant.app"
 
       - name: Upload signed artifact
         uses: actions/upload-artifact@v4

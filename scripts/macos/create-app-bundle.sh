@@ -42,7 +42,9 @@ if [[ ! -f "$PLIST_SRC" ]]; then
   exit 1
 fi
 
-OUT_ABS="$(cd "$(dirname "$OUT_PATH")" && pwd)/$(basename "$OUT_PATH")"
+OUT_DIR="$(dirname "$OUT_PATH")"
+mkdir -p "$OUT_DIR"
+OUT_ABS="$(cd "$OUT_DIR" && pwd)/$(basename "$OUT_PATH")"
 rm -rf "$OUT_ABS"
 mkdir -p "$OUT_ABS/Contents/MacOS" "$OUT_ABS/Contents/Resources"
 
@@ -51,5 +53,9 @@ cp "$ICNS_SRC" "$OUT_ABS/Contents/Resources/"
 cp "$PLIST_SRC" "$OUT_ABS/Contents/Info.plist"
 
 chmod +x "$OUT_ABS/Contents/MacOS/AsorAssistant.App"
+
+# `dotnet publish` can leave many managed assemblies marked executable. On macOS this
+# can cause Gatekeeper/codesign to treat them as nested code, breaking launch/signing.
+find "$OUT_ABS/Contents/MacOS" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
 
 echo "Created: $OUT_ABS"

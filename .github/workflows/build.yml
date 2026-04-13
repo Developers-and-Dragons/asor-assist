@@ -62,6 +62,41 @@ jobs:
         if: runner.os == 'macOS'
         run: ./scripts/macos/create-app-bundle.sh ./publish "./Asor Assistant.app"
 
+      - name: Import macOS signing certificate (optional)
+        if: runner.os == 'macOS' && secrets.MACOS_CERTIFICATE != '' && secrets.MACOS_CERTIFICATE_PASSWORD != '' && secrets.MACOS_SIGNING_IDENTITY != ''
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p buildchain build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p buildchain build.keychain
+          security import certificate.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k buildchain build.keychain
+          rm certificate.p12
+
+      - name: Sign .app bundle (optional)
+        if: runner.os == 'macOS' && secrets.MACOS_SIGNING_IDENTITY != ''
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+        run: |
+          APP="./Asor Assistant.app"
+          MACOS="$APP/Contents/MacOS"
+          echo "Signing bundled Mach-O binaries..."
+          find "$MACOS" -type f \( -name "*.dylib" -o -perm -111 -o -name "AsorAssistant.App" -o -name "createdump" \) -print0 \
+            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
+          echo "Signing app bundle..."
+          codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+          echo "Verifying signatures..."
+          codesign --verify --strict --verbose=4 "$APP"
+
+      - name: Create macOS distribution zip
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p ./dist
+          ditto -c -k --keepParent "./Asor Assistant.app" ./dist/AsorAssistant_macOS_ARM64.zip
+
       - name: Upload artifact (Windows)
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
@@ -75,5 +110,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}-unsigned
-          path: Asor Assistant.app
+          path: ./dist/AsorAssistant_macOS_ARM64.zip
           retention-days: 14
