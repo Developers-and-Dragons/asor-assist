@@ -94,6 +94,14 @@ jobs:
           # Defensive: ensure managed files are not executable so codesign doesn't treat them as nested code.
           find "$MACOS" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
 
+          echo "Checking for executable managed files (should be none)..."
+          BAD_DLLS="$(find "$MACOS" -type f -name "*.dll" -perm -111 -print | head -50 || true)"
+          if [ -n "$BAD_DLLS" ]; then
+            echo "Found executable .dll files after chmod (this will break signing):"
+            echo "$BAD_DLLS"
+            exit 1
+          fi
+
           echo "Signing bundled Mach-O binaries..."
           # Sign native dylibs + any executable Mach-O files (main app, createdump, etc).
           find "$MACOS" -type f \( -name "*.dylib" -o -perm -111 \) -print0 \
