@@ -91,13 +91,14 @@ jobs:
           fi
           APP="./Asor Assistant.app"
           MACOS="$APP/Contents/MacOS"
-          echo "Signing bundled Mach-O binaries..."
-          find "$MACOS" -type f \( -name "*.dylib" -o -perm +111 -o -name "AsorAssistant.App" -o -name "createdump" \) -print0 \
-            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
-          echo "Signing app bundle..."
-          codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+          echo "Signing .dylib files..."
+          find "$MACOS" -name "*.dylib" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          echo "Signing .dll files..."
+          find "$MACOS" -name "*.dll" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          echo "Signing app bundle (deep)..."
+          codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
           echo "Verifying signatures..."
-          codesign --verify --strict --verbose=4 "$APP"
+          codesign --verify --deep "$APP"
 
       - name: Create macOS distribution zip
         if: runner.os == 'macOS'
