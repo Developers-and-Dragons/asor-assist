@@ -98,8 +98,6 @@ jobs:
           --configuration Release
           --runtime osx-arm64
           --self-contained true
-          -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
           --output ./publish
 
       - name: Import signing certificate
