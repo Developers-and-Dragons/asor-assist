@@ -35,6 +35,8 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:DebugType=none
+          -p:DebugSymbols=false
           --output ./publish
 
       - name: Upload unsigned artifact
@@ -98,6 +100,8 @@ jobs:
           --configuration Release
           --runtime osx-arm64
           --self-contained true
+          -p:DebugType=none
+          -p:DebugSymbols=false
           --output ./publish
 
       - name: Create .app bundle
@@ -127,11 +131,11 @@ jobs:
           find "$MACOS" -type f \( -name "*.dylib" -o -perm -111 -o -name "AsorAssistant.App" -o -name "createdump" \) -print0 \
             | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
 
-          echo "Signing app bundle..."
-          codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
+          echo "Signing app bundle (deep)..."
+          codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
 
           echo "Verifying signatures..."
-          codesign --verify --strict --verbose=4 "$APP"
+          codesign --verify --deep --strict --verbose=4 "$APP"
           echo "Signing complete."
 
       - name: Create distribution zip
