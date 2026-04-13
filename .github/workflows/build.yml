@@ -95,7 +95,8 @@ jobs:
           find "$MACOS" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
 
           echo "Checking for executable managed files (should be none)..."
-          BAD_DLLS="$(find "$MACOS" -type f -name "*.dll" -perm -111 -print | head -50 || true)"
+          # `-perm /111` = any execute bit set (user/group/other). `-perm -111` would miss user-only exec.
+          BAD_DLLS="$(find "$MACOS" -type f -name "*.dll" -perm /111 -print | head -50 || true)"
           if [ -n "$BAD_DLLS" ]; then
             echo "Found executable .dll files after chmod (this will break signing):"
             echo "$BAD_DLLS"
@@ -104,7 +105,7 @@ jobs:
 
           echo "Signing bundled Mach-O binaries..."
           # Sign native dylibs + any executable Mach-O files (main app, createdump, etc).
-          find "$MACOS" -type f \( -name "*.dylib" -o -perm -111 \) -print0 \
+          find "$MACOS" -type f \( -name "*.dylib" -o -perm /111 \) -print0 \
             | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
 
           echo "Signing app bundle (deep)..."
