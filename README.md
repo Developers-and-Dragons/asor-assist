@@ -33,7 +33,7 @@ See [Releases](https://github.com/Developers-and-Dragons/asor-assist/releases) f
 ### macOS
 
 1. Download and extract the zip
-2. Run `AsorAssistant.App`
+2. Open `Asor Assistant.app`
 3. If prompted about an unidentified developer: System Settings → Privacy & Security → Open Anyway
 
 ## Getting started

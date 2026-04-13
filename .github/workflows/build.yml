@@ -58,9 +58,22 @@ jobs:
           --self-contained true
           --output ./publish
 
-      - name: Upload artifact
+      - name: Create .app bundle (macOS)
+        if: runner.os == 'macOS'
+        run: ./scripts/macos/create-app-bundle.sh ./publish "./Asor Assistant.app"
+
+      - name: Upload artifact (Windows)
+        if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}-unsigned
           path: ./publish/
+          retention-days: 14
+
+      - name: Upload artifact (macOS)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}-unsigned
+          path: Asor Assistant.app
           retention-days: 14
