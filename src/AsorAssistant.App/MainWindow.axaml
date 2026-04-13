@@ -8,7 +8,7 @@
         x:DataType="vm:MainWindowViewModel"
         x:Name="MainWin"
         Title="ASOR Assistant"
-        Icon="avares://AsorAssistant.App/Assets/app-icon.png"
+        Icon="avares://AsorAssistant.App/Assets/app-icon.ico"
         Width="1200" Height="850"
         MinWidth="900" MinHeight="650">
 
