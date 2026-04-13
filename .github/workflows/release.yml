@@ -125,15 +125,15 @@ jobs:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
           APP="./Asor Assistant.app"
-          MACOS="$APP/Contents/MacOS"
-          echo "Signing .dylib files..."
-          find "$MACOS" -name "*.dylib" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
-          echo "Signing .dll files..."
-          find "$MACOS" -name "*.dll" -exec codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" {} \;
+          PAYLOAD="$APP/Contents/Resources/app"
+          echo "Signing native payload binaries..."
+          # Sign Mach-O dylibs + executables; managed dlls are not native code.
+          find "$PAYLOAD" -type f \( -name "*.dylib" -o -perm +111 \) ! -name "*.dll" -print0 \
+            | xargs -0 codesign --force --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY"
           echo "Signing app bundle (deep)..."
           codesign --force --deep --options runtime --timestamp --sign "$MACOS_SIGNING_IDENTITY" "$APP"
           echo "Verifying signatures..."
-          codesign --verify --deep "$APP"
+          codesign --verify --deep --strict --verbose=4 "$APP"
           echo "Signing complete."
 
       - name: Notarize app

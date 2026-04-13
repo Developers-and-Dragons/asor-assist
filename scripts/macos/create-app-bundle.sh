@@ -46,16 +46,32 @@ OUT_DIR="$(dirname "$OUT_PATH")"
 mkdir -p "$OUT_DIR"
 OUT_ABS="$(cd "$OUT_DIR" && pwd)/$(basename "$OUT_PATH")"
 rm -rf "$OUT_ABS"
-mkdir -p "$OUT_ABS/Contents/MacOS" "$OUT_ABS/Contents/Resources"
+mkdir -p "$OUT_ABS/Contents/MacOS" "$OUT_ABS/Contents/Resources/app"
 
-cp -R "$PUBLISH_DIR/"* "$OUT_ABS/Contents/MacOS/"
+cp -R "$PUBLISH_DIR/"* "$OUT_ABS/Contents/Resources/app/"
 cp "$ICNS_SRC" "$OUT_ABS/Contents/Resources/"
 cp "$PLIST_SRC" "$OUT_ABS/Contents/Info.plist"
 
-chmod +x "$OUT_ABS/Contents/MacOS/AsorAssistant.App"
+# Keep `Contents/MacOS` minimal. Put the published payload under `Contents/Resources/app`
+# and use a small launcher script as CFBundleExecutable. This avoids codesign treating
+# Windows-format managed assemblies (*.dll) as native nested code.
+PAYLOAD_DIR="$OUT_ABS/Contents/Resources/app"
+PAYLOAD_EXE="$PAYLOAD_DIR/AsorAssistant.App"
+mv "$PAYLOAD_EXE" "$PAYLOAD_DIR/AsorAssistant.App.bin"
+
+cat > "$OUT_ABS/Contents/MacOS/AsorAssistant.App" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PAYLOAD="$HERE/../Resources/app"
+cd "$PAYLOAD"
+exec "$PAYLOAD/AsorAssistant.App.bin" "$@"
+EOF
+
+chmod +x "$OUT_ABS/Contents/MacOS/AsorAssistant.App" "$PAYLOAD_DIR/AsorAssistant.App.bin"
 
 # `dotnet publish` can leave many managed assemblies marked executable. On macOS this
 # can cause Gatekeeper/codesign to treat them as nested code, breaking launch/signing.
-find "$OUT_ABS/Contents/MacOS" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
+find "$PAYLOAD_DIR" -type f \( -name "*.dll" -o -name "*.json" -o -name "*.pdb" -o -name "*.dat" -o -name "*.txt" \) -exec chmod a-x {} \; 2>/dev/null || true
 
 echo "Created: $OUT_ABS"
