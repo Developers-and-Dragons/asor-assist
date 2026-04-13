@@ -1,42 +1,58 @@
 # ASOR Assistant
 
-A cross-platform desktop tool for registering external agents against the Workday Agent System of Record (ASOR) API v1.2.
+*A desktop tool for registering external agents against the Workday Agent System of Record (ASOR).*
 
 Built by [Developers and Dragons](https://github.com/Developers-and-Dragons).
 
-![.NET 10](https://img.shields.io/badge/.NET-10-512BD4) ![Avalonia UI](https://img.shields.io/badge/Avalonia-12-blue) ![License](https://img.shields.io/github/license/Developers-and-Dragons/asor-assist)
+![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge) ![Avalonia UI](https://img.shields.io/badge/Avalonia-12-blue?style=for-the-badge) [![Download](https://img.shields.io/badge/Download_Latest-orange?style=for-the-badge)](https://github.com/Developers-and-Dragons/asor-assist/releases)
+
+---
 
 ## What it does
 
 - **Visual editor** for authoring ASOR agent definitions with inline validation
 - **JSON mode** for direct editing of the raw payload
-- **Registration** — POST definitions directly to a Workday tenant's ASOR API
+- **Registration** — POST definitions directly to a Workday tenant
 - **Fetch from tenant** — pull existing registered agents and edit them locally
-- **Service operation lookups** — search for SOAP and REST WIDs via WQL
+- **Service operation lookups** — search for SOAP and REST WIDs
 - **Local drafts** — save, load, and manage definitions locally
 - **Contextual help** — right-side guidance panel for each section
 
-## Download
+---
 
-See [Releases](https://github.com/Developers-and-Dragons/asor-assist/releases) for signed builds:
+## Quick Start
+
+### 1. Download
+
+Get the latest build from [GitHub Releases](https://github.com/Developers-and-Dragons/asor-assist/releases):
 
 | Platform | File | Notes |
 |----------|------|-------|
 | Windows x64 | `AsorAssistant_Windows_x64.zip` | EV code signed |
 | macOS ARM64 | `AsorAssistant_macOS_ARM64.zip` | Signed + notarized |
 
-### Windows
+### 2. Install & Run
+
+**Windows**
 
 1. Download and extract the zip
 2. Run `AsorAssistant.App.exe`
 
-### macOS
+> **Windows SmartScreen Notice**
+> Even with code signing, Windows SmartScreen may show "Windows protected your PC" until the app builds download reputation with Microsoft.
+> This is normal for new or updated releases. Click **More info** → **Run anyway** to proceed.
+> The warning will disappear as more users successfully run the signed app.
+
+**macOS**
 
 1. Download and extract the zip
 2. Open `Asor Assistant.app`
-3. If prompted about an unidentified developer: System Settings → Privacy & Security → Open Anyway
 
-## Getting started
+> **macOS Gatekeeper Notice**
+> The first time you open the app, macOS may show "App is from an unidentified developer."
+> Right-click → **Open** once to approve; future launches will be trusted.
+
+### 3. Get started
 
 1. **Connection** — set your region and paste a bearer token from the Workday Developer Site (upper right corner — login to tenant and copy token)
 2. **Open** — load a saved draft or fetch existing agents from a tenant
@@ -46,7 +62,9 @@ See [Releases](https://github.com/Developers-and-Dragons/asor-assist/releases) f
 6. **Save** — save as a local draft
 7. **Register** — POST to the Workday ASOR API
 
-## ASOR spec
+---
+
+## ASOR Spec
 
 This tool targets the [ASOR v1.2 specification](https://github.com/Workday/asor/blob/main/versions/v1.2.md).
 
@@ -61,51 +79,20 @@ This tool targets the [ASOR v1.2 specification](https://github.com/Workday/asor/
 | IND | `https://in.agent.workday.com` |
 | JPN | `https://jp.agent.workday.com` |
 
-## Development
+---
 
-### Prerequisites
+## Building from source
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
-
-### Build and run
+Requires [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```bash
 dotnet build AsorAssistant.slnx
 dotnet run --project src/AsorAssistant.App
-```
-
-### Run tests
-
-```bash
 dotnet test AsorAssistant.slnx
 ```
 
-### Project structure
-
-```
-src/
-  AsorAssistant.App/            # Avalonia UI, ViewModels, DI
-  AsorAssistant.Core/           # Use cases, serialization, ports
-  AsorAssistant.Domain/         # Models, validation
-  AsorAssistant.Infrastructure/ # HTTP clients, file persistence
-tests/
-  AsorAssistant.Domain.Tests/
-  AsorAssistant.Core.Tests/
-  AsorAssistant.Infrastructure.Tests/
-```
-
-### Architecture
-
-```
-Domain (zero dependencies)
-  ↑
-Core (serialization, ports, services)
-  ↑
-Infrastructure (HTTP, file storage)
-  ↑
-App (Avalonia UI, ViewModels, DI wiring)
-```
+---
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+Licensed under the **MIT License** — see [LICENSE](LICENSE).
