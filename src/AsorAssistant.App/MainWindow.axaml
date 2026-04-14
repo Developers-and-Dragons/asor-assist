@@ -15,20 +15,30 @@
   <Grid ColumnDefinitions="72,*">
 
     <!-- Navigation Rail -->
-    <Border Grid.Column="0" Background="{StaticResource AppSurfaceBrush}"
-            BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,1,0">
+    <Border Grid.Column="0" Background="{DynamicResource AppSurfaceBrush}"
+            BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="0,0,1,0">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="0,16,0,16" HorizontalAlignment="Center">
           <TextBlock Text="ASOR" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"
-                     Foreground="{StaticResource AppAccentBrush}" />
+                     Foreground="{DynamicResource AppAccentBrush}" />
           <TextBlock Text="Assistant" FontSize="8" HorizontalAlignment="Center"
-                     Foreground="{StaticResource AppTextMutedBrush}" Margin="0,1,0,0" />
+                     Foreground="{DynamicResource AppTextMutedBrush}" Margin="0,1,0,0" />
         </StackPanel>
 
-        <!-- Help -->
-        <StackPanel DockPanel.Dock="Bottom" Margin="0,0,0,12">
-          <Separator Margin="10,0" Background="{StaticResource AppBorderSubtleBrush}" />
-          <Button HorizontalAlignment="Center" Margin="0,10,0,0"
+        <!-- Bottom: theme + help -->
+        <StackPanel DockPanel.Dock="Bottom" Spacing="4" Margin="0,0,0,12">
+          <Separator Margin="10,0,10,4" Background="{DynamicResource AppBorderSubtleBrush}" />
+          <Button HorizontalAlignment="Center"
+                  Background="Transparent" CornerRadius="8" Padding="8"
+                  Command="{Binding ToggleThemeCommand}"
+                  ToolTip.Tip="Toggle light/dark mode">
+            <StackPanel Spacing="2" HorizontalAlignment="Center">
+              <TextBlock Text="{Binding ThemeIcon}" FontSize="14" HorizontalAlignment="Center" />
+              <TextBlock Text="Theme" FontSize="8" HorizontalAlignment="Center"
+                         Foreground="{DynamicResource AppTextMutedBrush}" />
+            </StackPanel>
+          </Button>
+          <Button HorizontalAlignment="Center"
                   Background="Transparent" CornerRadius="8" Padding="8"
                   ToolTip.Tip="Help &amp; Documentation">
             <Button.Flyout>
@@ -36,24 +46,24 @@
                 <StackPanel Spacing="8" Width="280" Margin="4">
                   <TextBlock Text="ASOR Assistant" FontWeight="SemiBold" FontSize="14" />
                   <TextBlock TextWrapping="Wrap" FontSize="12"
-                             Foreground="{StaticResource AppTextSecondaryBrush}"
+                             Foreground="{DynamicResource AppTextSecondaryBrush}"
                              Text="Register external agents against the Workday Agent System of Record (ASOR) API v1.2." />
                   <Button Content="→ ASOR v1.2 Specification" FontSize="12"
-                          Foreground="{StaticResource AppLinkBrush}" Cursor="Hand"
+                          Foreground="{DynamicResource AppLinkBrush}" Cursor="Hand"
                           Background="Transparent" Padding="0" BorderThickness="0"
                           Click="OnSpecLinkClick" />
-                  <Separator Background="{StaticResource AppBorderSubtleBrush}" />
+                  <Separator Background="{DynamicResource AppBorderSubtleBrush}" />
                   <TextBlock TextWrapping="Wrap" FontSize="11"
-                             Foreground="{StaticResource AppTextMutedBrush}"
+                             Foreground="{DynamicResource AppTextMutedBrush}"
                              Text="Regions: US · EU · UK · SIN · IND · JPN&#x0a;Endpoints: {region}.agent.workday.com" />
                 </StackPanel>
               </Flyout>
             </Button.Flyout>
-            <StackPanel Spacing="3" HorizontalAlignment="Center">
-              <TextBlock Text="?" FontSize="16" HorizontalAlignment="Center" FontWeight="Bold"
-                         Foreground="{StaticResource AppTextMutedBrush}" />
-              <TextBlock Text="Help" FontSize="9" HorizontalAlignment="Center"
-                         Foreground="{StaticResource AppTextMutedBrush}" />
+            <StackPanel Spacing="2" HorizontalAlignment="Center">
+              <TextBlock Text="?" FontSize="14" HorizontalAlignment="Center" FontWeight="Bold"
+                         Foreground="{DynamicResource AppTextMutedBrush}" />
+              <TextBlock Text="Help" FontSize="8" HorizontalAlignment="Center"
+                         Foreground="{DynamicResource AppTextMutedBrush}" />
             </StackPanel>
           </Button>
         </StackPanel>
@@ -64,14 +74,14 @@
             <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="✏" FontSize="18" HorizontalAlignment="Center" />
               <TextBlock Text="Editor" FontSize="9" HorizontalAlignment="Center"
-                         Foreground="{StaticResource AppTextSecondaryBrush}" />
+                         Foreground="{DynamicResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
           <ListBoxItem ToolTip.Tip="Service Operation Lookups">
             <StackPanel Spacing="3" HorizontalAlignment="Center">
               <TextBlock Text="🔍" FontSize="18" HorizontalAlignment="Center" />
               <TextBlock Text="Lookups" FontSize="9" HorizontalAlignment="Center"
-                         Foreground="{StaticResource AppTextSecondaryBrush}" />
+                         Foreground="{DynamicResource AppTextSecondaryBrush}" />
             </StackPanel>
           </ListBoxItem>
         </ListBox>
@@ -81,50 +91,57 @@
     <!-- Main Content -->
     <DockPanel Grid.Column="1">
 
-      <!-- Connection Bar -->
+      <!-- Connection Bar — compact card -->
       <Border DockPanel.Dock="Top" Classes="connection-bar">
         <StackPanel Spacing="6">
+          <!-- Summary row -->
           <StackPanel Orientation="Horizontal" Spacing="10">
-            <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"
-                       Foreground="{StaticResource AppTextPrimaryBrush}" />
+            <TextBlock Text="Connection" FontSize="12" FontWeight="SemiBold"
+                       Foreground="{DynamicResource AppTextPrimaryBrush}" VerticalAlignment="Center" />
             <Border Classes="badge-success" IsVisible="{Binding HasToken}">
-              <TextBlock Text="✓ Token configured" FontSize="10" Foreground="{StaticResource AppSuccessBrush}" FontWeight="Medium" />
+              <TextBlock Text="✓ Connected" FontSize="10" Foreground="{DynamicResource AppSuccessBrush}" FontWeight="Medium" />
             </Border>
             <Border Classes="badge-warning" IsVisible="{Binding !HasToken}">
-              <TextBlock Text="⚠ Bearer token required" FontSize="10" Foreground="{StaticResource AppWarningBrush}" FontWeight="Medium" />
+              <TextBlock Text="⚠ Token required" FontSize="10" Foreground="{DynamicResource AppWarningBrush}" FontWeight="Medium" />
             </Border>
+            <TextBlock Text="{Binding SelectedRegion.Name}" FontSize="11"
+                       Foreground="{DynamicResource AppTextMutedBrush}" VerticalAlignment="Center"
+                       IsVisible="{Binding !IsConnectionBarExpanded}" />
             <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
-                    ToolTip.Tip="Show/hide token input" VerticalAlignment="Center"
+                    ToolTip.Tip="Show/hide connection details" VerticalAlignment="Center"
                     IsVisible="{Binding !IsConnectionBarExpanded}">
               <TextBlock Text="▾" FontSize="12" />
             </Button>
             <Button Classes="action-subtle" Command="{Binding ToggleConnectionBarCommand}"
-                    ToolTip.Tip="Show/hide token input" VerticalAlignment="Center"
+                    ToolTip.Tip="Show/hide connection details" VerticalAlignment="Center"
                     IsVisible="{Binding IsConnectionBarExpanded}">
               <TextBlock Text="▴" FontSize="12" />
             </Button>
           </StackPanel>
-          <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="10">
-            <StackPanel Spacing="3">
-              <TextBlock Classes="field-label" Text="REGION" />
-              <ComboBox ItemsSource="{Binding Regions}"
-                        SelectedItem="{Binding SelectedRegion}"
-                        PlaceholderText="Select region..."
-                        Width="200" HorizontalAlignment="Left">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
+
+          <!-- Expanded fields -->
+          <StackPanel IsVisible="{Binding IsConnectionBarExpanded}" Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+              <StackPanel Spacing="3">
+                <TextBlock Classes="field-label" Text="REGION" />
+                <ComboBox ItemsSource="{Binding Regions}"
+                          SelectedItem="{Binding SelectedRegion}"
+                          PlaceholderText="Select region..." Width="160">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </StackPanel>
+              <StackPanel Spacing="3" MinWidth="300">
+                <TextBlock Classes="field-label" Text="BEARER TOKEN" />
+                <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste token from Workday Developer Site"
+                         PasswordChar="*" RevealPassword="False" />
+              </StackPanel>
             </StackPanel>
-            <StackPanel Spacing="3">
-              <TextBlock Classes="field-label" Text="BEARER TOKEN" />
-              <TextBox Text="{Binding BearerToken}" PlaceholderText="Paste your bearer token from the Workday Developer Site"
-                       PasswordChar="*" RevealPassword="False" MaxWidth="600" HorizontalAlignment="Left" />
-              <TextBlock Classes="helper"
-                         Text="Generate a token at the Workday Developer Site (upper right corner of page — login to tenant and copy token). Session-only — not saved to disk." />
-            </StackPanel>
+            <TextBlock Classes="helper"
+                       Text="Generate at the Workday Developer Site (upper right — login to tenant, copy token). Session-only." />
           </StackPanel>
         </StackPanel>
       </Border>
@@ -134,10 +151,9 @@
         <!-- Editor Page -->
         <Panel IsVisible="{Binding IsEditorPage}">
 
-          <!-- File Drawer (absolute overlay) -->
+          <!-- File Drawer (overlay) -->
           <Border Classes="panel" Width="360" HorizontalAlignment="Left"
-                  ZIndex="20"
-                  IsVisible="{Binding IsFileDrawerOpen}">
+                  ZIndex="20" IsVisible="{Binding IsFileDrawerOpen}">
             <ScrollViewer>
               <StackPanel Spacing="0">
                 <DockPanel Margin="0,0,0,16">
@@ -146,16 +162,15 @@
                   <TextBlock Classes="page-title" Text="Open" />
                 </DockPanel>
 
-                <!-- Local Drafts -->
                 <TextBlock Classes="section-header" Text="Local Drafts" />
                 <TextBlock Classes="section-desc" Text="Saved on this machine as JSON files." />
 
                 <ItemsControl ItemsSource="{Binding LocalDrafts}">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="models:DraftMetadata">
-                      <Border Background="{StaticResource AppSurfaceRaisedBrush}"
+                      <Border Background="{DynamicResource AppSurfaceRaisedBrush}"
                               CornerRadius="6" Padding="10,8" Margin="0,0,0,4"
-                              BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1">
+                              BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="1">
                         <DockPanel>
                           <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
                             <Button Classes="action-subtle" Content="✕" ToolTip.Tip="Delete this draft"
@@ -167,9 +182,9 @@
                                     Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).LoadDraftCommand}"
                                     CommandParameter="{Binding}">
                               <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="13"
-                                         Foreground="{StaticResource AppTextPrimaryBrush}" />
+                                         Foreground="{DynamicResource AppTextPrimaryBrush}" />
                             </Button>
-                            <TextBlock FontSize="11" Foreground="{StaticResource AppTextMutedBrush}">
+                            <TextBlock FontSize="11" Foreground="{DynamicResource AppTextMutedBrush}">
                               <Run Text="{Binding Version}" /><Run Text=" · " /><Run Text="{Binding LastModified, StringFormat='{}{0:g}'}" />
                             </TextBlock>
                           </StackPanel>
@@ -181,7 +196,6 @@
 
                 <Separator Classes="section-divider" />
 
-                <!-- Remote Agents -->
                 <TextBlock Classes="section-header" Text="From Tenant" />
                 <TextBlock Classes="section-desc" Text="Fetch registered agent definitions from Workday." />
 
@@ -201,23 +215,23 @@
                 </StackPanel>
 
                 <TextBlock Text="{Binding RemoteStatusMessage}" FontSize="11"
-                           Foreground="{StaticResource AppTextMutedBrush}" Margin="0,0,0,6"
+                           Foreground="{DynamicResource AppTextMutedBrush}" Margin="0,0,0,6"
                            IsVisible="{Binding RemoteStatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
 
                 <ItemsControl ItemsSource="{Binding RemoteAgents}">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="domain:AgentDefinition">
-                      <Border Background="{StaticResource AppSurfaceRaisedBrush}"
+                      <Border Background="{DynamicResource AppSurfaceRaisedBrush}"
                               CornerRadius="6" Padding="10,8" Margin="0,0,0,4"
-                              BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1">
+                              BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="1">
                         <Button Background="Transparent" Padding="0" BorderThickness="0" Cursor="Hand"
                                 HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
                                 Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).LoadRemoteAgentCommand}"
                                 CommandParameter="{Binding}">
                           <StackPanel Spacing="1">
                             <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"
-                                       Foreground="{StaticResource AppTextPrimaryBrush}" />
-                            <TextBlock FontSize="11" Foreground="{StaticResource AppTextMutedBrush}">
+                                       Foreground="{DynamicResource AppTextPrimaryBrush}" />
+                            <TextBlock FontSize="11" Foreground="{DynamicResource AppTextMutedBrush}">
                               <Run Text="{Binding Version}" /><Run Text=" · " /><Run Text="{Binding Provider.Descriptor}" />
                             </TextBlock>
                           </StackPanel>
@@ -234,19 +248,21 @@
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*" />
-              <ColumnDefinition Width="360" />
+              <ColumnDefinition Width="340" />
             </Grid.ColumnDefinitions>
 
           <!-- Editor workspace -->
           <DockPanel Grid.Column="0">
-            <!-- Editor Toolbar -->
-            <Border DockPanel.Dock="Top" Classes="page-header">
+            <!-- Toolbar: three zones -->
+            <Border DockPanel.Dock="Top" Classes="page-header" ClipToBounds="True">
               <DockPanel>
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <!-- Right: actions (dock first so they never get clipped) -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
+                            Margin="8,0,0,0">
                   <Button Classes="action" Content="Validate" Command="{Binding Editor.ValidateCommand}"
                           ToolTip.Tip="Check definition against ASOR v1.2 spec." />
                   <Button Classes="action" Content="Save" Command="{Binding SaveCommand}"
-                          ToolTip.Tip="Save to current draft (or prompts for name if untitled).">
+                          ToolTip.Tip="Save to current draft.">
                     <Button.Flyout>
                       <Flyout Placement="BottomEdgeAlignedRight">
                         <StackPanel Spacing="8" Width="280">
@@ -261,67 +277,68 @@
                   </Button>
                   <Button Classes="action-primary" Content="Register"
                           Command="{Binding OpenRegistrationPanelCommand}"
-                          ToolTip.Tip="Open registration panel to POST to Workday ASOR." />
+                          ToolTip.Tip="POST to Workday ASOR." />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                  <!-- File operations -->
+                <!-- Left: file ops + draft name -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
+                            Margin="0,0,8,0">
                   <Button Classes="action" Content="Open" Command="{Binding ToggleFileDrawerCommand}"
                           ToolTip.Tip="Open a local draft or fetch from tenant." />
                   <Button Classes="action" Content="New" Command="{Binding NewDefinitionCommand}"
                           ToolTip.Tip="Start a blank definition." />
-
-                  <Separator Width="1" Height="20" Background="{StaticResource AppBorderSubtleBrush}" />
-
-                  <!-- Mode toggle -->
-                  <StackPanel Orientation="Horizontal" Spacing="0">
-                    <Button Content="Visual" Padding="12,6" CornerRadius="6,0,0,6" FontSize="12"
-                            FontWeight="SemiBold"
-                            Command="{Binding SwitchToVisualCommand}"
-                            IsEnabled="{Binding IsJsonMode}" />
-                    <Button Content="JSON" Padding="12,6" CornerRadius="0,6,6,0" FontSize="12"
-                            FontWeight="SemiBold"
-                            Command="{Binding SwitchToJsonCommand}"
-                            IsEnabled="{Binding IsVisualMode}" />
-                  </StackPanel>
-
-                  <Separator Width="1" Height="20" Background="{StaticResource AppBorderSubtleBrush}" />
-
-                  <!-- Draft name / status -->
+                  <Separator Width="1" Height="18" Background="{DynamicResource AppBorderSubtleBrush}" Margin="4,0" />
                   <TextBlock Text="{Binding CurrentDraftName, FallbackValue='Untitled'}"
-                             Foreground="{StaticResource AppTextSecondaryBrush}" FontSize="13"
-                             VerticalAlignment="Center" />
+                             Foreground="{DynamicResource AppTextMutedBrush}" FontSize="12"
+                             VerticalAlignment="Center" MaxWidth="180"
+                             TextTrimming="CharacterEllipsis" />
                   <TextBlock Text="{Binding StatusMessage}" FontSize="11"
-                             Foreground="{StaticResource AppTextMutedBrush}" VerticalAlignment="Center"
+                             Foreground="{DynamicResource AppAccentBrush}" VerticalAlignment="Center"
                              IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
+
+                <!-- Center: mode toggle (last child, fills and centers) -->
+                <Border Classes="segment-group" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <StackPanel Orientation="Horizontal" Spacing="2">
+                    <Button Classes="segment-active" Content="Visual"
+                            Command="{Binding SwitchToVisualCommand}"
+                            IsVisible="{Binding IsVisualMode}" />
+                    <Button Classes="segment" Content="Visual"
+                            Command="{Binding SwitchToVisualCommand}"
+                            IsVisible="{Binding IsJsonMode}" />
+                    <Button Classes="segment" Content="JSON"
+                            Command="{Binding SwitchToJsonCommand}"
+                            IsVisible="{Binding IsVisualMode}" />
+                    <Button Classes="segment-active" Content="JSON"
+                            Command="{Binding SwitchToJsonCommand}"
+                            IsVisible="{Binding IsJsonMode}" />
+                  </StackPanel>
+                </Border>
               </DockPanel>
             </Border>
 
-            <!-- Save success bar (auto-dismisses) -->
-            <Border DockPanel.Dock="Top" Padding="32,8" Background="#185ec26a"
-                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+            <!-- Status bars -->
+            <Border DockPanel.Dock="Top" Padding="24,6" Background="{DynamicResource AppValidationSuccessBgBrush}"
+                    BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
                     IsVisible="{Binding ShowSaveSuccess}">
               <TextBlock Text="✓ Draft saved" FontSize="11" FontWeight="SemiBold"
-                         Foreground="{StaticResource AppSuccessBrush}" />
+                         Foreground="{DynamicResource AppSuccessBrush}" />
             </Border>
-
-            <!-- Validation bar -->
-            <Border DockPanel.Dock="Top" Padding="32,8" Background="#185ec26a"
-                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+            <Border DockPanel.Dock="Top" Padding="24,6" Background="{DynamicResource AppValidationSuccessBgBrush}"
+                    BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
                     IsVisible="{Binding Editor.IsValid}">
               <TextBlock Text="✓ No validation issues" FontSize="11" FontWeight="SemiBold"
-                         Foreground="{StaticResource AppSuccessBrush}" />
+                         Foreground="{DynamicResource AppSuccessBrush}" />
             </Border>
-            <Border DockPanel.Dock="Top" Padding="28,10" Background="#18e05555"
-                    BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
+            <Border DockPanel.Dock="Top" Padding="24,8" Background="{DynamicResource AppValidationErrorBgBrush}"
+                    BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="0,0,0,1"
                     IsVisible="{Binding Editor.ValidationErrors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
               <DockPanel>
                 <Button DockPanel.Dock="Right" Classes="action-subtle" Content="✕"
                         Command="{Binding Editor.DismissErrorsCommand}" ToolTip.Tip="Dismiss" VerticalAlignment="Top" />
                 <StackPanel Spacing="2">
-                  <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource AppErrorBrush}" />
-                  <TextBlock Text="{Binding Editor.ValidationErrors}" FontSize="11" Foreground="{StaticResource AppErrorBrush}"
+                  <TextBlock Text="Validation Errors" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AppErrorBrush}" />
+                  <TextBlock Text="{Binding Editor.ValidationErrors}" FontSize="11" Foreground="{DynamicResource AppErrorBrush}"
                              TextWrapping="Wrap" />
                 </StackPanel>
               </DockPanel>
@@ -329,13 +346,10 @@
 
             <!-- Editor content (last child — gets DockPanel fill) -->
             <Panel>
-              <!-- Visual Mode -->
               <views:DefinitionEditorView DataContext="{Binding Editor}"
                                           IsVisible="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).IsVisualMode}" />
-
-              <!-- JSON Mode -->
-              <Border Margin="28,20" Background="{StaticResource AppSurfaceRaisedBrush}"
-                      BorderBrush="{StaticResource AppBorderSubtleBrush}" BorderThickness="1"
+              <Border Margin="24,16" Background="{DynamicResource AppSurfaceRaisedBrush}"
+                      BorderBrush="{DynamicResource AppBorderSubtleBrush}" BorderThickness="1"
                       CornerRadius="8" Padding="4"
                       IsVisible="{Binding IsJsonMode}">
                 <TextBox Classes="mono" Text="{Binding JsonText}"
@@ -344,10 +358,10 @@
             </Panel>
           </DockPanel>
 
-          <!-- Help Panel (right column) -->
-          <Border Grid.Column="1" Padding="20"
-                  Background="{StaticResource AppSurfaceBrush}"
-                  BorderBrush="{StaticResource AppBorderSubtleBrush}"
+          <!-- Help Panel — quieter, recessed -->
+          <Border Grid.Column="1" Padding="20,16"
+                  Background="{DynamicResource AppHelpPanelBgBrush}"
+                  BorderBrush="{DynamicResource AppBorderSubtleBrush}"
                   BorderThickness="1,0,0,0"
                   IsVisible="{Binding IsVisualMode}">
             <DockPanel>
@@ -356,12 +370,12 @@
                       HorizontalAlignment="Left" Margin="0,12,0,0"
                       IsVisible="{Binding Editor.IsContextualHelp}" />
               <ScrollViewer>
-                <StackPanel Spacing="12" DataContext="{Binding Editor}">
-                  <TextBlock Text="{Binding HelpTitle}" FontSize="15" FontWeight="SemiBold"
-                             Foreground="{StaticResource AppAccentBrush}" />
+                <StackPanel Spacing="10" DataContext="{Binding Editor}">
+                  <TextBlock Text="{Binding HelpTitle}" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{DynamicResource AppHelpTitleBrush}" />
                   <TextBlock Text="{Binding HelpContent}" FontSize="12.5"
-                             Foreground="{StaticResource AppTextSecondaryBrush}"
-                             TextWrapping="Wrap" LineHeight="22" />
+                             Foreground="{DynamicResource AppHelpBodyBrush}"
+                             TextWrapping="Wrap" LineHeight="21" />
                 </StackPanel>
               </ScrollViewer>
             </DockPanel>
@@ -369,10 +383,9 @@
 
           </Grid>
 
-          <!-- Registration Panel (absolute overlay from right) -->
+          <!-- Registration Panel (overlay) -->
           <Border Classes="panel" Width="400" HorizontalAlignment="Right"
-                  ZIndex="20"
-                  IsVisible="{Binding IsRegistrationPanelOpen}">
+                  ZIndex="20" IsVisible="{Binding IsRegistrationPanelOpen}">
             <views:RegistrationView DataContext="{Binding Registration}" />
           </Border>
         </Panel>

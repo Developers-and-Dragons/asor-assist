@@ -21,7 +21,7 @@
       <Border Classes="badge-warning" CornerRadius="4" Padding="8,6" Margin="0,0,0,12"
               IsVisible="{Binding !$parent[Window].((vm:MainWindowViewModel)DataContext).HasToken}">
         <TextBlock Text="⚠ Set a bearer token and region in the connection bar above."
-                   FontSize="11" Foreground="{StaticResource AppWarningBrush}" TextWrapping="Wrap" />
+                   FontSize="11" Foreground="{DynamicResource AppWarningBrush}" TextWrapping="Wrap" />
       </Border>
 
       <!-- URL Preview -->
@@ -30,7 +30,7 @@
         <StackPanel Spacing="2">
           <TextBlock Classes="field-label" Text="ENDPOINT" />
           <TextBlock Text="{Binding ResolvedUrl}" Classes="mono" FontSize="11"
-                     Foreground="{StaticResource AppTextSecondaryBrush}" TextWrapping="Wrap" />
+                     Foreground="{DynamicResource AppTextSecondaryBrush}" TextWrapping="Wrap" />
         </StackPanel>
       </Border>
 

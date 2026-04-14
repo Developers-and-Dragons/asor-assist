@@ -39,6 +39,10 @@ jobs:
           -p:DebugSymbols=false
           --output ./publish
 
+      - name: Remove symbol files
+        run: Get-ChildItem ./publish -Filter *.pdb -Recurse | Remove-Item -Force
+        shell: pwsh
+
       - name: Upload unsigned artifact
         uses: actions/upload-artifact@v4
         with:
