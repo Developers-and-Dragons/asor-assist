@@ -39,16 +39,8 @@ jobs:
           -p:DebugSymbols=false
           --output ./publish
 
-      - name: List publish output
-        run: Get-ChildItem ./publish -Recurse | Select-Object FullName, Length | Format-Table -AutoSize
-        shell: pwsh
-
       - name: Remove symbol files
-        run: Get-ChildItem ./publish -Filter *.pdb -Recurse | Remove-Item -Force -Verbose
-        shell: pwsh
-
-      - name: List after cleanup
-        run: Get-ChildItem ./publish -Recurse | Select-Object FullName, Length | Format-Table -AutoSize
+        run: Get-ChildItem ./publish -Filter *.pdb -Recurse | Remove-Item -Force
         shell: pwsh
 
       - name: Upload unsigned artifact
@@ -63,11 +55,19 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Clean workspace
+        run: Remove-Item ./unsigned -Recurse -Force -ErrorAction SilentlyContinue
+        shell: pwsh
+
       - name: Download unsigned artifact
         uses: actions/download-artifact@v4
         with:
           name: windows-unsigned
           path: ./unsigned
+
+      - name: Remove symbol files
+        run: Get-ChildItem ./unsigned -Filter *.pdb -Recurse | Remove-Item -Force
+        shell: pwsh
 
       - name: Sign executables
         shell: pwsh
