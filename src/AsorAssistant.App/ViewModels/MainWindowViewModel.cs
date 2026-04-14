@@ -3,6 +3,8 @@ using AsorAssistant.Core.Models;
 using AsorAssistant.Core.Ports;
 using AsorAssistant.Core.Serialization;
 using AsorAssistant.Domain.Models;
+using Avalonia;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -150,6 +152,26 @@ public partial class MainWindowViewModel : ObservableObject
     private void ToggleConnectionBar()
     {
         IsConnectionBarExpanded = !IsConnectionBarExpanded;
+    }
+
+    // --- Theme ---
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ThemeIcon))]
+    private bool _isDarkMode = true;
+
+    public string ThemeIcon => IsDarkMode ? "☀" : "🌙";
+
+    [RelayCommand]
+    private void ToggleTheme()
+    {
+        IsDarkMode = !IsDarkMode;
+        if (Application.Current is not null)
+        {
+            Application.Current.RequestedThemeVariant = IsDarkMode
+                ? ThemeVariant.Dark
+                : ThemeVariant.Light;
+        }
     }
 
     [RelayCommand]

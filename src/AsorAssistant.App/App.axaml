@@ -4,49 +4,84 @@
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
-        <!--
-          Palette: warm neutral dark — inspired by ChatGPT dark mode readability.
-          Neutral charcoal (not blue-gray), strong text contrast, soft surfaces.
-        -->
-        <Color x:Key="AppBase">#212121</Color>
-        <Color x:Key="AppSurface">#2a2a2a</Color>
-        <Color x:Key="AppSurfaceRaised">#333333</Color>
-        <Color x:Key="AppBorder">#4a4a4a</Color>
-        <Color x:Key="AppBorderSubtle">#383838</Color>
-        <Color x:Key="AppTextPrimary">#ececec</Color>
-        <Color x:Key="AppTextSecondary">#c0c0c0</Color>
-        <Color x:Key="AppTextMuted">#999999</Color>
-        <Color x:Key="AppTextPlaceholder">#666666</Color>
-        <Color x:Key="AppAccent">#6baadc</Color>
-        <Color x:Key="AppSuccess">#5ec26a</Color>
-        <Color x:Key="AppWarning">#e0a050</Color>
-        <Color x:Key="AppError">#e05555</Color>
-        <Color x:Key="AppLink">#7cbce8</Color>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- ══════════════ Dark ══════════════ -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AppBaseBrush" Color="#212121" />
+                    <SolidColorBrush x:Key="AppSurfaceBrush" Color="#2a2a2a" />
+                    <SolidColorBrush x:Key="AppSurfaceRaisedBrush" Color="#333333" />
+                    <SolidColorBrush x:Key="AppBorderBrush" Color="#4a4a4a" />
+                    <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="#383838" />
+                    <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#ececec" />
+                    <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#c0c0c0" />
+                    <SolidColorBrush x:Key="AppTextMutedBrush" Color="#999999" />
+                    <SolidColorBrush x:Key="AppTextPlaceholderBrush" Color="#666666" />
+                    <SolidColorBrush x:Key="AppAccentBrush" Color="#6baadc" />
+                    <SolidColorBrush x:Key="AppAccentSubtleBrush" Color="#1a6baadc" />
+                    <SolidColorBrush x:Key="AppSuccessBrush" Color="#5ec26a" />
+                    <SolidColorBrush x:Key="AppWarningBrush" Color="#e0a050" />
+                    <SolidColorBrush x:Key="AppErrorBrush" Color="#e05555" />
+                    <SolidColorBrush x:Key="AppLinkBrush" Color="#7cbce8" />
+                    <SolidColorBrush x:Key="AppBadgeSuccessBrush" Color="#185ec26a" />
+                    <SolidColorBrush x:Key="AppBadgeWarningBrush" Color="#1ae0a050" />
+                    <SolidColorBrush x:Key="AppBadgeErrorBrush" Color="#20e05555" />
+                    <SolidColorBrush x:Key="AppValidationSuccessBgBrush" Color="#185ec26a" />
+                    <SolidColorBrush x:Key="AppValidationErrorBgBrush" Color="#18e05555" />
+                    <SolidColorBrush x:Key="AppSegmentActiveBrush" Color="#444444" />
+                    <SolidColorBrush x:Key="AppSegmentInactiveBrush" Color="#2a2a2a" />
+                    <SolidColorBrush x:Key="AppHelpPanelBgBrush" Color="#242424" />
+                    <SolidColorBrush x:Key="AppHelpTitleBrush" Color="#c0c0c0" />
+                    <SolidColorBrush x:Key="AppHelpBodyBrush" Color="#9a9a9a" />
+                </ResourceDictionary>
 
-        <SolidColorBrush x:Key="AppBaseBrush" Color="{StaticResource AppBase}" />
-        <SolidColorBrush x:Key="AppSurfaceBrush" Color="{StaticResource AppSurface}" />
-        <SolidColorBrush x:Key="AppSurfaceRaisedBrush" Color="{StaticResource AppSurfaceRaised}" />
-        <SolidColorBrush x:Key="AppBorderBrush" Color="{StaticResource AppBorder}" />
-        <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="{StaticResource AppBorderSubtle}" />
-        <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="{StaticResource AppTextPrimary}" />
-        <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="{StaticResource AppTextSecondary}" />
-        <SolidColorBrush x:Key="AppTextMutedBrush" Color="{StaticResource AppTextMuted}" />
-        <SolidColorBrush x:Key="AppTextPlaceholderBrush" Color="{StaticResource AppTextPlaceholder}" />
-        <SolidColorBrush x:Key="AppAccentBrush" Color="{StaticResource AppAccent}" />
-        <SolidColorBrush x:Key="AppSuccessBrush" Color="{StaticResource AppSuccess}" />
-        <SolidColorBrush x:Key="AppWarningBrush" Color="{StaticResource AppWarning}" />
-        <SolidColorBrush x:Key="AppErrorBrush" Color="{StaticResource AppError}" />
-        <SolidColorBrush x:Key="AppLinkBrush" Color="{StaticResource AppLink}" />
+                <!-- ══════════════ Light ══════════════ -->
+                <ResourceDictionary x:Key="Light">
+                    <!-- Surfaces: tinted base, bright workspace, crisp inputs -->
+                    <SolidColorBrush x:Key="AppBaseBrush" Color="#e4e8f0" />
+                    <SolidColorBrush x:Key="AppSurfaceBrush" Color="#f8f9fc" />
+                    <SolidColorBrush x:Key="AppSurfaceRaisedBrush" Color="#ffffff" />
+                    <SolidColorBrush x:Key="AppBorderBrush" Color="#b0b8c8" />
+                    <SolidColorBrush x:Key="AppBorderSubtleBrush" Color="#ccd2de" />
+                    <!-- Text: rich slate -->
+                    <SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#0f172a" />
+                    <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#334155" />
+                    <SolidColorBrush x:Key="AppTextMutedBrush" Color="#64748b" />
+                    <SolidColorBrush x:Key="AppTextPlaceholderBrush" Color="#708090" />
+                    <!-- Accent: bright, confident blue -->
+                    <SolidColorBrush x:Key="AppAccentBrush" Color="#2563eb" />
+                    <SolidColorBrush x:Key="AppAccentSubtleBrush" Color="#dbeafe" />
+                    <!-- Status -->
+                    <SolidColorBrush x:Key="AppSuccessBrush" Color="#16a34a" />
+                    <SolidColorBrush x:Key="AppWarningBrush" Color="#d97706" />
+                    <SolidColorBrush x:Key="AppErrorBrush" Color="#dc2626" />
+                    <SolidColorBrush x:Key="AppLinkBrush" Color="#2563eb" />
+                    <!-- Badges -->
+                    <SolidColorBrush x:Key="AppBadgeSuccessBrush" Color="#d1fae5" />
+                    <SolidColorBrush x:Key="AppBadgeWarningBrush" Color="#fef3c7" />
+                    <SolidColorBrush x:Key="AppBadgeErrorBrush" Color="#fee2e2" />
+                    <SolidColorBrush x:Key="AppValidationSuccessBgBrush" Color="#d1fae5" />
+                    <SolidColorBrush x:Key="AppValidationErrorBgBrush" Color="#fee2e2" />
+                    <!-- Segment: active gets accent tint -->
+                    <SolidColorBrush x:Key="AppSegmentActiveBrush" Color="#ffffff" />
+                    <SolidColorBrush x:Key="AppSegmentInactiveBrush" Color="#dce2ee" />
+                    <!-- Help panel -->
+                    <SolidColorBrush x:Key="AppHelpPanelBgBrush" Color="#eef2ff" />
+                    <SolidColorBrush x:Key="AppHelpTitleBrush" Color="#1e3a5f" />
+                    <SolidColorBrush x:Key="AppHelpBodyBrush" Color="#3b5278" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
-        <!-- Window base -->
+        <!-- Window -->
         <Style Selector="Window">
-          <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppBaseBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
         </Style>
 
         <!-- Nav rail -->
@@ -61,163 +96,157 @@
           <Setter Property="Margin" Value="4,2" />
         </Style>
 
-        <!-- Page header bar -->
+        <!-- Page header -->
         <Style Selector="Border.page-header">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
-          <Setter Property="Padding" Value="32,14" />
+          <Setter Property="Padding" Value="24,10" />
         </Style>
 
         <!-- Typography -->
         <Style Selector="TextBlock.page-title">
           <Setter Property="FontSize" Value="18" />
           <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
         </Style>
-
         <Style Selector="TextBlock.page-subtitle">
           <Setter Property="FontSize" Value="12" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
           <Setter Property="Margin" Value="0,2,0,0" />
         </Style>
-
         <Style Selector="TextBlock.section-header">
           <Setter Property="FontSize" Value="14" />
           <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,2" />
         </Style>
-
         <Style Selector="TextBlock.section-desc">
           <Setter Property="FontSize" Value="12.5" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextSecondaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,14" />
           <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-
         <Style Selector="TextBlock.field-label">
           <Setter Property="FontSize" Value="11" />
           <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextSecondaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextSecondaryBrush}" />
           <Setter Property="Margin" Value="0,0,0,4" />
           <Setter Property="LetterSpacing" Value="0.5" />
         </Style>
-
         <Style Selector="TextBlock.helper">
           <Setter Property="FontSize" Value="12" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
           <Setter Property="Margin" Value="0,3,0,0" />
           <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-
         <Style Selector="TextBlock.card-title">
           <Setter Property="FontSize" Value="13" />
           <Setter Property="FontWeight" Value="SemiBold" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
         </Style>
 
-        <!-- TextBox styling — darker than surrounding surfaces so inputs are visible -->
+        <!-- Inputs -->
         <Style Selector="TextBox">
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
-          <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceRaisedBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
         </Style>
         <Style Selector="TextBox:focus">
-          <Setter Property="BorderBrush" Value="{StaticResource AppAccentBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
         </Style>
         <Style Selector="TextBox:pointerover">
-          <Setter Property="BorderBrush" Value="{StaticResource AppAccentBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
         </Style>
         <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
-          <Setter Property="Foreground" Value="{StaticResource AppTextPlaceholderBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPlaceholderBrush}" />
         </Style>
-
-        <!-- ComboBox styling -->
         <Style Selector="ComboBox">
-          <Setter Property="Background" Value="{StaticResource AppBaseBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceRaisedBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
         </Style>
         <Style Selector="ComboBox:focus, ComboBox:pointerover">
-          <Setter Property="BorderBrush" Value="{StaticResource AppAccentBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
         </Style>
-        <!-- ComboBox dropdown popup -->
         <Style Selector="ComboBox /template/ Popup Border">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
         </Style>
         <Style Selector="ComboBoxItem">
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
         </Style>
-
-        <!-- ToggleSwitch -->
         <Style Selector="ToggleSwitch">
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
         </Style>
 
+        <!-- Divider -->
         <Style Selector="Separator.section-divider">
-          <Setter Property="Margin" Value="0,22,0,22" />
-          <Setter Property="Background" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Margin" Value="0,24,0,24" />
+          <Setter Property="Background" Value="{DynamicResource AppBorderSubtleBrush}" />
         </Style>
 
         <!-- Surfaces -->
         <Style Selector="Border.surface">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="1" />
           <Setter Property="CornerRadius" Value="8" />
           <Setter Property="Padding" Value="16" />
           <Setter Property="Margin" Value="0,0,0,8" />
         </Style>
-
         <Style Selector="Border.surface-inner">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceRaisedBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="1" />
           <Setter Property="CornerRadius" Value="6" />
           <Setter Property="Padding" Value="12" />
           <Setter Property="Margin" Value="0,0,0,6" />
         </Style>
-
-        <!-- Slide panel -->
         <Style Selector="Border.panel">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
           <Setter Property="BorderThickness" Value="1,0,0,0" />
           <Setter Property="Padding" Value="24,20" />
         </Style>
-
-        <!-- Connection bar -->
         <Style Selector="Border.connection-bar">
-          <Setter Property="Background" Value="{StaticResource AppSurfaceRaisedBrush}" />
-          <Setter Property="BorderBrush" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="0,0,0,1" />
-          <Setter Property="Padding" Value="28,10" />
+          <Setter Property="Padding" Value="24,8" />
         </Style>
 
         <!-- Buttons -->
         <Style Selector="Button.action">
-          <Setter Property="Padding" Value="14,7" />
+          <Setter Property="Padding" Value="14,6" />
           <Setter Property="CornerRadius" Value="6" />
           <Setter Property="FontSize" Value="12" />
           <Setter Property="FontWeight" Value="Medium" />
         </Style>
-
         <Style Selector="Button.action-primary">
-          <Setter Property="Padding" Value="16,8" />
+          <Setter Property="Padding" Value="16,7" />
           <Setter Property="CornerRadius" Value="6" />
           <Setter Property="FontSize" Value="12" />
           <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
+          <Setter Property="Foreground" Value="#ffffff" />
         </Style>
-
         <Style Selector="Button.action-subtle">
           <Setter Property="Padding" Value="8,4" />
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="FontSize" Value="11" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
         </Style>
-
+        <Style Selector="Button.action-add">
+          <Setter Property="Padding" Value="10,5" />
+          <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="FontWeight" Value="Medium" />
+          <Setter Property="Background" Value="{DynamicResource AppAccentSubtleBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppAccentBrush}" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+        </Style>
         <Style Selector="Button.help-trigger">
           <Setter Property="Width" Value="20" />
           <Setter Property="Height" Value="20" />
@@ -225,21 +254,43 @@
           <Setter Property="CornerRadius" Value="10" />
           <Setter Property="FontSize" Value="12" />
           <Setter Property="FontWeight" Value="Bold" />
-          <Setter Property="Foreground" Value="{StaticResource AppTextMutedBrush}" />
-          <Setter Property="Background" Value="{StaticResource AppBorderSubtleBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppBorderSubtleBrush}" />
           <Setter Property="BorderThickness" Value="0" />
           <Setter Property="HorizontalContentAlignment" Value="Center" />
           <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Style Selector="Button.help-trigger:pointerover">
-          <Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}" />
-          <Setter Property="Background" Value="{StaticResource AppBorderBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
+          <Setter Property="Background" Value="{DynamicResource AppBorderBrush}" />
         </Style>
 
-        <Style Selector="Button.action-add">
-          <Setter Property="Padding" Value="10,5" />
+        <!-- Segmented control -->
+        <Style Selector="Border.segment-group">
+          <Setter Property="Background" Value="{DynamicResource AppSegmentInactiveBrush}" />
           <Setter Property="CornerRadius" Value="6" />
+          <Setter Property="Padding" Value="2" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppBorderSubtleBrush}" />
+        </Style>
+        <Style Selector="Button.segment">
+          <Setter Property="Padding" Value="14,5" />
+          <Setter Property="CornerRadius" Value="4" />
           <Setter Property="FontSize" Value="12" />
+          <Setter Property="FontWeight" Value="Medium" />
+          <Setter Property="Background" Value="Transparent" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextSecondaryBrush}" />
+        </Style>
+        <Style Selector="Button.segment-active">
+          <Setter Property="Padding" Value="14,5" />
+          <Setter Property="CornerRadius" Value="4" />
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="FontWeight" Value="SemiBold" />
+          <Setter Property="Background" Value="{DynamicResource AppSegmentActiveBrush}" />
+          <Setter Property="BorderThickness" Value="0,0,0,2" />
+          <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppAccentBrush}" />
         </Style>
 
         <Style Selector="TextBox.mono">
@@ -251,17 +302,17 @@
         <Style Selector="Border.badge-success">
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="Padding" Value="8,3" />
-          <Setter Property="Background" Value="#185ec26a" />
+          <Setter Property="Background" Value="{DynamicResource AppBadgeSuccessBrush}" />
         </Style>
         <Style Selector="Border.badge-warning">
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="Padding" Value="8,3" />
-          <Setter Property="Background" Value="#1ae0a050" />
+          <Setter Property="Background" Value="{DynamicResource AppBadgeWarningBrush}" />
         </Style>
         <Style Selector="Border.badge-error">
           <Setter Property="CornerRadius" Value="4" />
           <Setter Property="Padding" Value="8,3" />
-          <Setter Property="Background" Value="#20e05555" />
+          <Setter Property="Background" Value="{DynamicResource AppBadgeErrorBrush}" />
         </Style>
     </Application.Styles>
 </Application>
