@@ -39,8 +39,16 @@ jobs:
           -p:DebugSymbols=false
           --output ./publish
 
+      - name: List publish output
+        run: Get-ChildItem ./publish -Recurse | Select-Object FullName, Length | Format-Table -AutoSize
+        shell: pwsh
+
       - name: Remove symbol files
-        run: Get-ChildItem ./publish -Filter *.pdb -Recurse | Remove-Item -Force
+        run: Get-ChildItem ./publish -Filter *.pdb -Recurse | Remove-Item -Force -Verbose
+        shell: pwsh
+
+      - name: List after cleanup
+        run: Get-ChildItem ./publish -Recurse | Select-Object FullName, Length | Format-Table -AutoSize
         shell: pwsh
 
       - name: Upload unsigned artifact

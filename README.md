@@ -1,78 +1,106 @@
 # ASOR Assistant
 
-*A desktop tool for registering external agents against the Workday Agent System of Record (ASOR).*
+A desktop app for authoring, validating, and registering external agents against the Workday Agent System of Record (ASOR).
 
-Built by [Developers and Dragons](https://github.com/Developers-and-Dragons).
-
-![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge) ![Avalonia UI](https://img.shields.io/badge/Avalonia-12-blue?style=for-the-badge) [![Download](https://img.shields.io/badge/Download_Latest-orange?style=for-the-badge)](https://github.com/Developers-and-Dragons/asor-assist/releases)
+[![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge)](https://dotnet.microsoft.com/)
+[![Avalonia UI](https://img.shields.io/badge/Avalonia-12-blue?style=for-the-badge)](https://avaloniaui.net/)
+[![Download Latest](https://img.shields.io/badge/Download-Latest-orange?style=for-the-badge)](https://github.com/Developers-and-Dragons/asor-assist/releases)
 
 ---
 
-## What it does
+## Why this tool exists
 
-- **Visual editor** for authoring ASOR agent definitions with inline validation
-- **JSON mode** for direct editing of the raw payload
-- **Registration** — POST definitions directly to a Workday tenant
-- **Fetch from tenant** — pull existing registered agents and edit them locally
-- **Service operation lookups** — search for SOAP and REST WIDs
-- **Local drafts** — save, load, and manage definitions locally
-- **Contextual help** — right-side guidance panel for each section
+Registering external agents should not feel like deciphering an ancient scroll while manually stitching together JSON, WIDs, and tenant configuration.
+
+ASOR Assistant exists to make that workflow faster, clearer, and less error-prone with a purpose-built desktop editor for the ASOR registration flow.
+
+Use it to:
+
+- build agent definitions visually
+- switch to raw JSON when you want full control
+- validate against the ASOR v1.2 spec
+- fetch existing registered agents from a tenant
+- register directly to Workday
+- look up SOAP and REST service WIDs
+- save local drafts as you work
+
+---
+
+## Features
+
+- **Visual editor** for authoring ASOR agent definitions
+- **JSON editor** for direct payload editing
+- **Spec-aware validation** against ASOR v1.2
+- **Tenant fetch** for pulling existing registered agents
+- **Direct registration** to the Workday ASOR API
+- **Service operation lookups** for SOAP and REST WIDs
+- **Local drafts** for saving work in progress
+- **Contextual guidance** in the built-in help panel
+
+---
+
+## Download
+
+Get the latest build from [GitHub Releases](https://github.com/Developers-and-Dragons/asor-assist/releases).
+
+| Platform | File | Notes |
+|---|---|---|
+| Windows x64 | `AsorAssistant_Windows_x64.zip` | EV code signed |
+| macOS ARM64 | `AsorAssistant_macOS_ARM64.dmg` | Signed and notarized |
 
 ---
 
 ## Quick Start
 
-### 1. Download
-
-Get the latest build from [GitHub Releases](https://github.com/Developers-and-Dragons/asor-assist/releases):
-
-| Platform | File | Notes |
-|----------|------|-------|
-| Windows x64 | `AsorAssistant_Windows_x64.zip` | EV code signed |
-| macOS ARM64 | `AsorAssistant_macOS_ARM64.dmg` | Signed + notarized |
-
-### 2. Install & Run
+### 1. Launch the app
 
 **Windows**
-
-1. Download and extract the zip
+1. Download and extract `AsorAssistant_Windows_x64.zip`
 2. Run `AsorAssistant.App.exe`
 
-> **Windows SmartScreen Notice**
-> Even with code signing, Windows SmartScreen may show "Windows protected your PC" until the app builds download reputation with Microsoft.
-> This is normal for new or updated releases. Click **More info** → **Run anyway** to proceed.
-> The warning will disappear as more users successfully run the signed app.
+> **SmartScreen note**  
+> Windows may show **“Windows protected your PC”** for newer releases until reputation builds.  
+> Choose **More info** → **Run anyway** to continue.
 
 **macOS**
-
 1. Download `AsorAssistant_macOS_ARM64.dmg`
-2. Open the DMG and drag **Asor Assistant** to Applications
-3. Open from Launchpad or Finder
+2. Open the DMG and drag **Asor Assistant** to **Applications**
+3. Launch from Finder or Launchpad
 
-> **macOS Gatekeeper Notice**
-> The first time you open the app, macOS may show "App is from an unidentified developer."
-> Right-click → **Open** once to approve; future launches will be trusted.
+> **Gatekeeper note**  
+> On first launch, macOS may require approval.  
+> If prompted, right-click the app and choose **Open** once.
 
-### 3. Get started
+### 2. Connect to your tenant
 
-1. **Connection** — set your region and paste a bearer token from the Workday Developer Site (upper right corner — login to tenant and copy token)
-2. **Open** — load a saved draft or fetch existing agents from a tenant
-3. **Edit** — fill in required fields (Identity, Provider & Platform, Skills)
-4. **Workday Config** — map skills to Workday resources and execution modes (use Lookups to find WIDs)
-5. **Validate** — check the definition against the ASOR v1.2 spec
-6. **Save** — save as a local draft
-7. **Register** — POST to the Workday ASOR API
+In the app:
+
+1. Select your **region**
+2. Paste a **bearer token** from the Workday Developer Site  
+   *(upper-right menu after logging into the tenant)*
+
+### 3. Build or open an agent definition
+
+From there, you can:
+
+1. **Open** an existing local draft or fetch an existing agent from a tenant
+2. Fill in required sections such as **Identity**, **Provider & Platform**, and **Skills**
+3. Add **Workday configuration** and map required resources
+4. Use **Lookups** to find SOAP and REST WIDs
+5. **Validate** the definition
+6. **Save** a local draft
+7. **Register** the agent to ASOR
 
 ---
 
-## ASOR Spec
+## ASOR v1.2 Support
 
-This tool targets the [ASOR v1.2 specification](https://github.com/Workday/asor/blob/main/versions/v1.2.md).
+ASOR Assistant targets the [ASOR v1.2 specification](https://github.com/Workday/asor/blob/main/versions/v1.2.md).
 
-**Regional endpoints:**
+### Regional endpoints
 
 | Region | Endpoint |
-|--------|----------|
+|---|---|
 | US | `https://us.agent.workday.com` |
 | EU | `https://eu.agent.workday.com` |
 | UK | `https://uk.agent.workday.com` |
@@ -82,9 +110,9 @@ This tool targets the [ASOR v1.2 specification](https://github.com/Workday/asor/
 
 ---
 
-## Building from source
+## Build from source
 
-Requires [.NET 10 SDK](https://dotnet.microsoft.com/download).
+ASOR Assistant requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```bash
 dotnet build AsorAssistant.slnx
