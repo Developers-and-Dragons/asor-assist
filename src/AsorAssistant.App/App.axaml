@@ -82,7 +82,7 @@
         <Style Selector="Window">
           <Setter Property="Background" Value="{DynamicResource AppBaseBrush}" />
           <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
-          <Setter Property="FontFamily" Value="Inter, Segoe UI Emoji, Apple Color Emoji, sans-serif" />
+          <Setter Property="FontFamily" Value="Inter, Segoe UI Emoji, sans-serif" />
         </Style>
 
         <!-- Nav rail -->
