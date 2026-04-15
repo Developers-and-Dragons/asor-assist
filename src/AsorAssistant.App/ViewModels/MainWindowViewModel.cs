@@ -68,6 +68,19 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool _showSaveSuccess;
 
+    private void SetStatus(string message, int dismissMs = 3000)
+    {
+        StatusMessage = message;
+        if (dismissMs > 0)
+            _ = AutoDismissStatus(dismissMs);
+    }
+
+    private async Task AutoDismissStatus(int ms)
+    {
+        await Task.Delay(ms);
+        StatusMessage = null;
+    }
+
     private string? _currentDraftId;
 
     // Draft lists
@@ -119,7 +132,7 @@ public partial class MainWindowViewModel : ObservableObject
             }
             catch
             {
-                StatusMessage = "⚠ Invalid JSON — fix errors before switching to Visual mode.";
+                SetStatus("⚠ Invalid JSON — fix errors before switching to Visual mode.", 5000);
                 return;
             }
         }
@@ -200,7 +213,7 @@ public partial class MainWindowViewModel : ObservableObject
         });
         _currentDraftId = null;
         CurrentDraftName = null;
-        StatusMessage = "New definition";
+        SetStatus("New definition");
         IsFileDrawerOpen = false;
         if (JsonModeActive)
             SwitchToJson(); // refresh JSON view
@@ -211,7 +224,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(CurrentDraftName))
         {
-            StatusMessage = "Enter a name to save.";
+            SetStatus("Enter a name to save.", 5000);
             return;
         }
 
@@ -224,7 +237,7 @@ public partial class MainWindowViewModel : ObservableObject
             }
             catch
             {
-                StatusMessage = "Invalid JSON — cannot save.";
+                SetStatus("Invalid JSON — cannot save.", 5000);
                 return;
             }
         }
@@ -244,7 +257,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         var saved = await _draftStore.SaveAsync(envelope);
         _currentDraftId = saved.Metadata.Id;
-        StatusMessage = $"✓ Saved";
+        SetStatus("✓ Saved");
         await RefreshLocalDrafts();
         await FlashSaveSuccess();
     }
@@ -264,14 +277,14 @@ public partial class MainWindowViewModel : ObservableObject
         var envelope = await _draftStore.LoadAsync(draft.Id);
         if (envelope is null)
         {
-            StatusMessage = "Draft not found.";
+            SetStatus("Draft not found.", 5000);
             return;
         }
 
         Editor.LoadFromModel(envelope.Definition);
         _currentDraftId = envelope.Metadata.Id;
         CurrentDraftName = envelope.Metadata.DisplayName;
-        StatusMessage = $"Loaded: {envelope.Metadata.DisplayName}";
+        SetStatus($"Loaded: {envelope.Metadata.DisplayName}");
         IsFileDrawerOpen = false;
         if (JsonModeActive)
             SwitchToJson();
@@ -287,7 +300,7 @@ public partial class MainWindowViewModel : ObservableObject
             _currentDraftId = null;
             CurrentDraftName = null;
         }
-        StatusMessage = $"Deleted: {draft.DisplayName}";
+        SetStatus($"Deleted: {draft.DisplayName}");
         await RefreshLocalDrafts();
     }
 
@@ -298,7 +311,7 @@ public partial class MainWindowViewModel : ObservableObject
         Editor.LoadFromModel(agent);
         _currentDraftId = null;
         CurrentDraftName = agent.Name;
-        StatusMessage = $"Loaded from tenant: {agent.Name}";
+        SetStatus($"Loaded from tenant: {agent.Name}");
         IsFileDrawerOpen = false;
         if (JsonModeActive)
             SwitchToJson();

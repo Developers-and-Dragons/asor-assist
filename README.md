@@ -26,6 +26,16 @@ Use it to:
 
 ---
 
+## Screenshots
+
+**Dark mode**
+![Dark mode editor](docs/screenshots/dark-mode.png)
+
+**Light mode**
+![Light mode editor](docs/screenshots/light-mode.png)
+
+---
+
 ## Features
 
 - **Visual editor** for authoring ASOR agent definitions
