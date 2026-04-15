@@ -7,7 +7,7 @@
         x:Class="AsorAssistant.App.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         x:Name="MainWin"
-        Title="ASOR Assistant"
+        Title="{Binding CurrentDraftName, StringFormat='ASOR Assistant — {0}', FallbackValue='ASOR Assistant'}"
         Icon="avares://AsorAssistant.App/Assets/app-icon.ico"
         Width="1200" Height="850"
         MinWidth="1050" MinHeight="650">
@@ -280,18 +280,13 @@
                           ToolTip.Tip="POST to Workday ASOR." />
                 </StackPanel>
 
-                <!-- Left: file ops + draft name -->
+                <!-- Left: file ops -->
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
                             Margin="0,0,8,0">
                   <Button Classes="action" Content="Open" Command="{Binding ToggleFileDrawerCommand}"
                           ToolTip.Tip="Open a local draft or fetch from tenant." />
                   <Button Classes="action" Content="New" Command="{Binding NewDefinitionCommand}"
                           ToolTip.Tip="Start a blank definition." />
-                  <Separator Width="1" Height="18" Background="{DynamicResource AppBorderSubtleBrush}" Margin="4,0" />
-                  <TextBlock Text="{Binding CurrentDraftName, FallbackValue='Untitled'}"
-                             Foreground="{DynamicResource AppTextMutedBrush}" FontSize="12"
-                             VerticalAlignment="Center" MaxWidth="180"
-                             TextTrimming="CharacterEllipsis" />
                 </StackPanel>
 
                 <!-- Center: mode toggle (last child, fills and centers) -->
