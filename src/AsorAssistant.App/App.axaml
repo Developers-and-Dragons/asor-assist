@@ -17,7 +17,7 @@
                     <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#c0c0c0" />
                     <SolidColorBrush x:Key="AppTextMutedBrush" Color="#999999" />
                     <SolidColorBrush x:Key="AppTextPlaceholderBrush" Color="#666666" />
-                    <SolidColorBrush x:Key="AppAccentBrush" Color="#6baadc" />
+                    <SolidColorBrush x:Key="AppAccentBrush" Color="#4a90d9" />
                     <SolidColorBrush x:Key="AppAccentSubtleBrush" Color="#1a6baadc" />
                     <SolidColorBrush x:Key="AppSuccessBrush" Color="#5ec26a" />
                     <SolidColorBrush x:Key="AppWarningBrush" Color="#e0a050" />
@@ -78,10 +78,11 @@
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
-        <!-- Window -->
+        <!-- Window: include Segoe UI Emoji in font stack for color emoji on Windows -->
         <Style Selector="Window">
           <Setter Property="Background" Value="{DynamicResource AppBaseBrush}" />
           <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
+          <Setter Property="FontFamily" Value="Inter, Segoe UI Emoji, Apple Color Emoji, sans-serif" />
         </Style>
 
         <!-- Nav rail -->
@@ -248,21 +249,16 @@
           <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
         </Style>
         <Style Selector="Button.help-trigger">
-          <Setter Property="Width" Value="20" />
-          <Setter Property="Height" Value="20" />
           <Setter Property="Padding" Value="0" />
-          <Setter Property="CornerRadius" Value="10" />
-          <Setter Property="FontSize" Value="12" />
-          <Setter Property="FontWeight" Value="Bold" />
-          <Setter Property="Foreground" Value="{DynamicResource AppTextMutedBrush}" />
-          <Setter Property="Background" Value="{DynamicResource AppBorderSubtleBrush}" />
+          <Setter Property="Background" Value="Transparent" />
           <Setter Property="BorderThickness" Value="0" />
-          <Setter Property="HorizontalContentAlignment" Value="Center" />
-          <Setter Property="VerticalContentAlignment" Value="Center" />
+          <Setter Property="FontSize" Value="14" />
+          <Setter Property="Cursor" Value="Hand" />
+          <Setter Property="VerticalAlignment" Value="Center" />
+          <Setter Property="Opacity" Value="0.7" />
         </Style>
         <Style Selector="Button.help-trigger:pointerover">
-          <Setter Property="Foreground" Value="{DynamicResource AppTextPrimaryBrush}" />
-          <Setter Property="Background" Value="{DynamicResource AppBorderBrush}" />
+          <Setter Property="Opacity" Value="1.0" />
         </Style>
 
         <!-- Segmented control -->
