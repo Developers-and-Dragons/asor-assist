@@ -40,6 +40,10 @@ public partial class SkillViewModel : ObservableObject
         DescriptionError = null;
     }
 
+    partial void OnIdChanged(string? value) => IdError = null;
+    partial void OnNameChanged(string? value) => NameError = null;
+    partial void OnDescriptionChanged(string? value) => DescriptionError = null;
+
     public AgentSkill ToModel() => new()
     {
         Id = Id,

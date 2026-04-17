@@ -266,7 +266,8 @@
                             Margin="8,0,0,0">
                   <Button Classes="action" Content="Copy JSON" Command="{Binding CopyJsonCommand}"
                           CommandParameter="{Binding $parent[TopLevel].Clipboard}"
-                          ToolTip.Tip="Copy the current definition as JSON to clipboard." />
+                          ToolTip.Tip="Copy the current definition as JSON to clipboard."
+                          IsVisible="{Binding IsJsonMode}" />
                   <Button Classes="action" Content="Validate" Command="{Binding Editor.ValidateCommand}"
                           ToolTip.Tip="Check definition against ASOR v1.2 spec." />
                   <Button Classes="action" Content="Save" Command="{Binding SaveCommand}"

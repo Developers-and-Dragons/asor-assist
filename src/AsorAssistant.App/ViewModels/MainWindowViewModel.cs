@@ -292,8 +292,14 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(CurrentDraftName))
         {
-            SetStatus("Enter a name to save.", 5000);
-            return;
+            // Fall back to the agent name so Ctrl+S works without opening the flyout
+            if (!string.IsNullOrWhiteSpace(Editor.Name))
+                CurrentDraftName = Editor.Name;
+            else
+            {
+                SetStatus("Enter a name to save.", 5000);
+                return;
+            }
         }
 
         if (JsonModeActive && !string.IsNullOrWhiteSpace(JsonText))

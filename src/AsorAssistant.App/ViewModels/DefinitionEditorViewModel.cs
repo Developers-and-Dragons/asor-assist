@@ -265,8 +265,22 @@ public partial class DefinitionEditorViewModel : ObservableObject
     public bool IsCustomProvider => SelectedProviderId == "__CUSTOM__";
     public bool IsCustomPlatform => SelectedPlatformId == "__CUSTOM__";
 
-    partial void OnSelectedProviderIdChanged(string? value) => OnPropertyChanged(nameof(IsCustomProvider));
-    partial void OnSelectedPlatformIdChanged(string? value) => OnPropertyChanged(nameof(IsCustomPlatform));
+    partial void OnSelectedProviderIdChanged(string? value)
+    {
+        OnPropertyChanged(nameof(IsCustomProvider));
+        ProviderError = null;
+    }
+    partial void OnSelectedPlatformIdChanged(string? value)
+    {
+        OnPropertyChanged(nameof(IsCustomPlatform));
+        PlatformError = null;
+    }
+    partial void OnNameChanged(string? value) => NameError = null;
+    partial void OnDescriptionChanged(string? value) => DescriptionError = null;
+    partial void OnUrlChanged(string? value) => UrlError = null;
+    partial void OnVersionChanged(string? value) => VersionError = null;
+    partial void OnCustomProviderIdChanged(string? value) => ProviderError = null;
+    partial void OnCustomPlatformIdChanged(string? value) => PlatformError = null;
 
     public DefinitionEditorViewModel()
     {
