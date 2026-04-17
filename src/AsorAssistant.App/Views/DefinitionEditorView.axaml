@@ -17,25 +17,25 @@
         </StackPanel>
         <TextBlock Classes="section-desc" Text="Core fields that appear in the Workday agent catalog." />
           <StackPanel Spacing="3">
-            <TextBlock Classes="field-label" Text="NAME" />
+            <TextBlock Classes="field-label"><Run Text="NAME" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
             <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
             <TextBlock Classes="helper" Text="Human-readable name of the agent." />
           </StackPanel>
 
           <StackPanel Spacing="3">
-            <TextBlock Classes="field-label" Text="DESCRIPTION" />
+            <TextBlock Classes="field-label"><Run Text="DESCRIPTION" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
             <TextBox Text="{Binding Description}" PlaceholderText="Used to assist users and other agents in understanding what the agent can do."
                      AcceptsReturn="True" TextWrapping="Wrap" Height="72" />
           </StackPanel>
 
           <Grid ColumnDefinitions="*,16,240">
             <StackPanel Spacing="3">
-              <TextBlock Classes="field-label" Text="URL" />
+              <TextBlock Classes="field-label"><Run Text="URL" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
               <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
               <TextBlock Classes="helper" Text="URL to the address the agent is hosted at." />
             </StackPanel>
             <StackPanel Grid.Column="2" Spacing="3">
-              <TextBlock Classes="field-label" Text="VERSION" />
+              <TextBlock Classes="field-label"><Run Text="VERSION" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
               <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
               <TextBlock Classes="helper" Text="Format is up to the provider." />
             </StackPanel>
@@ -55,7 +55,7 @@
 
         <Grid ColumnDefinitions="*,16,*">
           <StackPanel Spacing="3">
-            <TextBlock Classes="field-label" Text="PROVIDER" />
+            <TextBlock Classes="field-label"><Run Text="PROVIDER" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
             <ComboBox ItemsSource="{Binding ProviderOptions}"
                       SelectedValue="{Binding SelectedProviderId}"
                       SelectedValueBinding="{Binding Id}"
@@ -68,7 +68,7 @@
             <TextBlock Classes="helper" Text="The service provider of the agent." />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="3">
-            <TextBlock Classes="field-label" Text="PLATFORM" />
+            <TextBlock Classes="field-label"><Run Text="PLATFORM" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
             <ComboBox ItemsSource="{Binding PlatformOptions}"
                       SelectedValue="{Binding SelectedPlatformId}"
                       SelectedValueBinding="{Binding Id}"
@@ -140,18 +140,18 @@
                   <StackPanel Spacing="12" Margin="0,10,0,0">
                     <Grid ColumnDefinitions="220,16,*">
                       <StackPanel Spacing="3">
-                        <TextBlock Classes="field-label" Text="ID" />
+                        <TextBlock Classes="field-label"><Run Text="ID" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                         <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
                         <TextBlock Classes="helper" Text="Unique identifier for this skill." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
-                        <TextBlock Classes="field-label" Text="NAME" />
+                        <TextBlock Classes="field-label"><Run Text="NAME" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                         <TextBox Text="{Binding Name}" PlaceholderText="Human-readable skill name" />
                       </StackPanel>
                     </Grid>
 
                     <StackPanel Spacing="3">
-                      <TextBlock Classes="field-label" Text="DESCRIPTION" />
+                      <TextBlock Classes="field-label"><Run Text="DESCRIPTION" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                       <TextBox Text="{Binding Description}" PlaceholderText="Used by the client or a human as a hint to understand what the skill does."
                                AcceptsReturn="True" TextWrapping="Wrap" Height="48" />
                     </StackPanel>
@@ -219,7 +219,7 @@
                   <StackPanel Spacing="12" Margin="0,10,0,0">
                     <Grid ColumnDefinitions="*,16,*">
                       <StackPanel Spacing="3">
-                        <TextBlock Classes="field-label" Text="SKILL" />
+                        <TextBlock Classes="field-label"><Run Text="SKILL" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                         <ComboBox ItemsSource="{Binding AvailableSkills}"
                                   SelectedValue="{Binding SkillId}"
                                   SelectedValueBinding="{Binding Id}"
@@ -228,7 +228,7 @@
                                   HorizontalAlignment="Stretch" />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
-                        <TextBlock Classes="field-label" Text="EXECUTION MODE" />
+                        <TextBlock Classes="field-label"><Run Text="EXECUTION MODE" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                         <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
                                   SelectedItem="{Binding SelectedExecutionModeOption}"
                                   DisplayMemberBinding="{Binding Name}"
