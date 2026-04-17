@@ -19,6 +19,8 @@
           <StackPanel Spacing="3">
             <TextBlock Classes="field-label"><Run Text="NAME" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
             <TextBox Text="{Binding Name}" PlaceholderText="Human-readable agent name" />
+            <TextBlock Classes="field-error" Text="{Binding NameError}"
+                       IsVisible="{Binding NameError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
             <TextBlock Classes="helper" Text="Human-readable name of the agent." />
           </StackPanel>
 
@@ -26,17 +28,23 @@
             <TextBlock Classes="field-label"><Run Text="DESCRIPTION" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
             <TextBox Text="{Binding Description}" PlaceholderText="Used to assist users and other agents in understanding what the agent can do."
                      AcceptsReturn="True" TextWrapping="Wrap" Height="72" />
+            <TextBlock Classes="field-error" Text="{Binding DescriptionError}"
+                       IsVisible="{Binding DescriptionError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
           </StackPanel>
 
           <Grid ColumnDefinitions="*,16,240">
             <StackPanel Spacing="3">
               <TextBlock Classes="field-label"><Run Text="URL" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
               <TextBox Text="{Binding Url}" PlaceholderText="https://agents.example.com/my-agent" />
+              <TextBlock Classes="field-error" Text="{Binding UrlError}"
+                         IsVisible="{Binding UrlError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
               <TextBlock Classes="helper" Text="URL to the address the agent is hosted at." />
             </StackPanel>
             <StackPanel Grid.Column="2" Spacing="3">
               <TextBlock Classes="field-label"><Run Text="VERSION" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
               <TextBox Text="{Binding Version}" PlaceholderText="1.0.0" />
+              <TextBlock Classes="field-error" Text="{Binding VersionError}"
+                         IsVisible="{Binding VersionError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
               <TextBlock Classes="helper" Text="Format is up to the provider." />
             </StackPanel>
           </Grid>
@@ -65,6 +73,8 @@
             <TextBox Text="{Binding CustomProviderId}" PlaceholderText="Enter custom provider ID"
                      IsVisible="{Binding IsCustomProvider}"
                      Margin="0,4,0,0" />
+            <TextBlock Classes="field-error" Text="{Binding ProviderError}"
+                       IsVisible="{Binding ProviderError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
             <TextBlock Classes="helper" Text="The service provider of the agent." />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="3">
@@ -78,6 +88,8 @@
             <TextBox Text="{Binding CustomPlatformId}" PlaceholderText="Enter custom platform ID"
                      IsVisible="{Binding IsCustomPlatform}"
                      Margin="0,4,0,0" />
+            <TextBlock Classes="field-error" Text="{Binding PlatformError}"
+                       IsVisible="{Binding PlatformError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
             <TextBlock Classes="helper" Text="The platform this agent executes on. Use OTHER if none match." />
           </StackPanel>
         </Grid>
@@ -142,11 +154,15 @@
                       <StackPanel Spacing="3">
                         <TextBlock Classes="field-label"><Run Text="ID" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                         <TextBox Text="{Binding Id}" PlaceholderText="unique-skill-id" />
+                        <TextBlock Classes="field-error" Text="{Binding IdError}"
+                                   IsVisible="{Binding IdError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                         <TextBlock Classes="helper" Text="Unique identifier for this skill." />
                       </StackPanel>
                       <StackPanel Grid.Column="2" Spacing="3">
                         <TextBlock Classes="field-label"><Run Text="NAME" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                         <TextBox Text="{Binding Name}" PlaceholderText="Human-readable skill name" />
+                        <TextBlock Classes="field-error" Text="{Binding NameError}"
+                                   IsVisible="{Binding NameError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                       </StackPanel>
                     </Grid>
 
@@ -154,6 +170,8 @@
                       <TextBlock Classes="field-label"><Run Text="DESCRIPTION" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
                       <TextBox Text="{Binding Description}" PlaceholderText="Used by the client or a human as a hint to understand what the skill does."
                                AcceptsReturn="True" TextWrapping="Wrap" Height="48" />
+                      <TextBlock Classes="field-error" Text="{Binding DescriptionError}"
+                                 IsVisible="{Binding DescriptionError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                     </StackPanel>
 
                     <StackPanel Spacing="3">
