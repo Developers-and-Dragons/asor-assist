@@ -83,6 +83,25 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isValid;
 
+    // Inline field validation errors
+    [ObservableProperty]
+    private string? _nameError;
+
+    [ObservableProperty]
+    private string? _descriptionError;
+
+    [ObservableProperty]
+    private string? _urlError;
+
+    [ObservableProperty]
+    private string? _versionError;
+
+    [ObservableProperty]
+    private string? _providerError;
+
+    [ObservableProperty]
+    private string? _platformError;
+
     // Help panel
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HelpTitle))]
@@ -246,8 +265,22 @@ public partial class DefinitionEditorViewModel : ObservableObject
     public bool IsCustomProvider => SelectedProviderId == "__CUSTOM__";
     public bool IsCustomPlatform => SelectedPlatformId == "__CUSTOM__";
 
-    partial void OnSelectedProviderIdChanged(string? value) => OnPropertyChanged(nameof(IsCustomProvider));
-    partial void OnSelectedPlatformIdChanged(string? value) => OnPropertyChanged(nameof(IsCustomPlatform));
+    partial void OnSelectedProviderIdChanged(string? value)
+    {
+        OnPropertyChanged(nameof(IsCustomProvider));
+        ProviderError = null;
+    }
+    partial void OnSelectedPlatformIdChanged(string? value)
+    {
+        OnPropertyChanged(nameof(IsCustomPlatform));
+        PlatformError = null;
+    }
+    partial void OnNameChanged(string? value) => NameError = null;
+    partial void OnDescriptionChanged(string? value) => DescriptionError = null;
+    partial void OnUrlChanged(string? value) => UrlError = null;
+    partial void OnVersionChanged(string? value) => VersionError = null;
+    partial void OnCustomProviderIdChanged(string? value) => ProviderError = null;
+    partial void OnCustomPlatformIdChanged(string? value) => PlatformError = null;
 
     public DefinitionEditorViewModel()
     {
@@ -283,13 +316,51 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [RelayCommand]
     public void Validate()
     {
+        ClearFieldErrors();
+
         var definition = ToModel();
         var result = AgentDefinitionValidator.Validate(definition);
         IsValid = result.IsValid;
         ValidationErrors = result.IsValid ? null : string.Join("\n", result.Errors);
 
+        if (!result.IsValid)
+            ApplyFieldErrors(result.FieldErrors);
+
         if (IsValid)
             _ = AutoDismissValidation();
+    }
+
+    private void ApplyFieldErrors(Dictionary<string, string> fieldErrors)
+    {
+        // Top-level fields
+        fieldErrors.TryGetValue("Name", out var nameErr); NameError = nameErr;
+        fieldErrors.TryGetValue("Description", out var descErr); DescriptionError = descErr;
+        fieldErrors.TryGetValue("Url", out var urlErr); UrlError = urlErr;
+        fieldErrors.TryGetValue("Version", out var verErr); VersionError = verErr;
+        fieldErrors.TryGetValue("Provider", out var provErr); ProviderError = provErr;
+        fieldErrors.TryGetValue("Platform", out var platErr); PlatformError = platErr;
+
+        // Skill-level errors
+        for (var i = 0; i < Skills.Count; i++)
+        {
+            var skill = Skills[i];
+            fieldErrors.TryGetValue($"Skills[{i}].Id", out var idErr); skill.IdError = idErr;
+            fieldErrors.TryGetValue($"Skills[{i}].Name", out var snErr); skill.NameError = snErr;
+            fieldErrors.TryGetValue($"Skills[{i}].Description", out var sdErr); skill.DescriptionError = sdErr;
+        }
+    }
+
+    private void ClearFieldErrors()
+    {
+        NameError = null;
+        DescriptionError = null;
+        UrlError = null;
+        VersionError = null;
+        ProviderError = null;
+        PlatformError = null;
+
+        foreach (var skill in Skills)
+            skill.ClearErrors();
     }
 
     private async Task AutoDismissValidation()
@@ -303,6 +374,7 @@ public partial class DefinitionEditorViewModel : ObservableObject
     {
         ValidationErrors = null;
         IsValid = false;
+        ClearFieldErrors();
     }
 
     [RelayCommand]

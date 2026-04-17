@@ -23,6 +23,27 @@ public partial class SkillViewModel : ObservableObject
     [ObservableProperty]
     private string? _outputModesText;
 
+    // Inline validation errors
+    [ObservableProperty]
+    private string? _idError;
+
+    [ObservableProperty]
+    private string? _nameError;
+
+    [ObservableProperty]
+    private string? _descriptionError;
+
+    public void ClearErrors()
+    {
+        IdError = null;
+        NameError = null;
+        DescriptionError = null;
+    }
+
+    partial void OnIdChanged(string? value) => IdError = null;
+    partial void OnNameChanged(string? value) => NameError = null;
+    partial void OnDescriptionChanged(string? value) => DescriptionError = null;
+
     public AgentSkill ToModel() => new()
     {
         Id = Id,

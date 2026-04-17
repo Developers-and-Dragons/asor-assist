@@ -8,10 +8,10 @@ public static class AgentDefinitionValidator
     {
         var result = new ValidationResult();
 
-        ValidateRequiredString(result, definition.Name, "Name is required.");
-        ValidateRequiredString(result, definition.Description, "Description is required.");
-        ValidateRequiredString(result, definition.Url, "Url is required.");
-        ValidateRequiredString(result, definition.Version, "Version is required.");
+        ValidateRequiredString(result, definition.Name, "Name", "Name is required.");
+        ValidateRequiredString(result, definition.Description, "Description", "Description is required.");
+        ValidateRequiredString(result, definition.Url, "Url", "Url is required.");
+        ValidateRequiredString(result, definition.Version, "Version", "Version is required.");
 
         ValidateProvider(result, definition.Provider);
         ValidatePlatform(result, definition.Platform);
@@ -25,10 +25,13 @@ public static class AgentDefinitionValidator
         return result;
     }
 
-    private static void ValidateRequiredString(ValidationResult result, string? value, string error)
+    private static void ValidateRequiredString(ValidationResult result, string? value, string fieldKey, string error)
     {
         if (string.IsNullOrWhiteSpace(value))
+        {
             result.Errors.Add(error);
+            result.FieldErrors[fieldKey] = error;
+        }
     }
 
     private static void ValidateProvider(ValidationResult result, Provider? provider)
@@ -36,11 +39,15 @@ public static class AgentDefinitionValidator
         if (provider is null)
         {
             result.Errors.Add("Provider is required.");
+            result.FieldErrors["Provider"] = "Provider is required.";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(provider.Id))
+        {
             result.Errors.Add("Provider id is required.");
+            result.FieldErrors["Provider"] = "Provider id is required.";
+        }
     }
 
     private static void ValidatePlatform(ValidationResult result, Platform? platform)
@@ -48,11 +55,15 @@ public static class AgentDefinitionValidator
         if (platform is null)
         {
             result.Errors.Add("Platform is required.");
+            result.FieldErrors["Platform"] = "Platform is required.";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(platform.Id))
+        {
             result.Errors.Add("Platform id is required.");
+            result.FieldErrors["Platform"] = "Platform id is required.";
+        }
     }
 
     private static void ValidateSkills(ValidationResult result, List<AgentSkill>? skills)
@@ -71,15 +82,27 @@ public static class AgentDefinitionValidator
             var prefix = $"Skills[{i}]";
 
             if (string.IsNullOrWhiteSpace(skill.Id))
+            {
                 result.Errors.Add($"{prefix}: id is required.");
+                result.FieldErrors[$"{prefix}.Id"] = "Id is required.";
+            }
             else if (!seenIds.Add(skill.Id))
+            {
                 result.Errors.Add($"{prefix}: duplicate skill id '{skill.Id}'.");
+                result.FieldErrors[$"{prefix}.Id"] = $"Duplicate skill id '{skill.Id}'.";
+            }
 
             if (string.IsNullOrWhiteSpace(skill.Name))
+            {
                 result.Errors.Add($"{prefix}: name is required.");
+                result.FieldErrors[$"{prefix}.Name"] = "Name is required.";
+            }
 
             if (string.IsNullOrWhiteSpace(skill.Description))
+            {
                 result.Errors.Add($"{prefix}: description is required.");
+                result.FieldErrors[$"{prefix}.Description"] = "Description is required.";
+            }
 
             // Tags are listed as required in the spec but are absent from real-world
             // payloads. Treat as optional to avoid false validation failures.
@@ -110,10 +133,16 @@ public static class AgentDefinitionValidator
             var prefix = $"WorkdayConfig[{i}]";
 
             if (!ExecutionMode.IsValidId(resource.ExecutionMode?.Id))
+            {
                 result.Errors.Add($"{prefix}: executionMode must be '{ExecutionMode.Ambient}' or '{ExecutionMode.Delegate}'.");
+                result.FieldErrors[$"{prefix}.ExecutionMode"] = "Must be Ambient or Delegate.";
+            }
 
             if (!string.IsNullOrWhiteSpace(resource.SkillId) && !skillIds.Contains(resource.SkillId))
+            {
                 result.Errors.Add($"{prefix}: skillId '{resource.SkillId}' does not match any defined skill.");
+                result.FieldErrors[$"{prefix}.SkillId"] = $"Skill '{resource.SkillId}' not found.";
+            }
         }
     }
 }

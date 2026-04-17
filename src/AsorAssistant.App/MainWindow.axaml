@@ -7,10 +7,15 @@
         x:Class="AsorAssistant.App.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         x:Name="MainWin"
-        Title="{Binding CurrentDraftName, StringFormat='ASOR Assistant — {0}', FallbackValue='ASOR Assistant'}"
+        Title="{Binding WindowTitle}"
         Icon="avares://AsorAssistant.App/Assets/app-icon.ico"
         Width="1200" Height="850"
         MinWidth="1050" MinHeight="650">
+
+  <Window.KeyBindings>
+    <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}" />
+    <KeyBinding Gesture="Ctrl+N" Command="{Binding NewDefinitionCommand}" />
+  </Window.KeyBindings>
 
   <Grid ColumnDefinitions="72,*">
 
@@ -259,6 +264,10 @@
                 <!-- Right: actions (dock first so they never get clipped) -->
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center"
                             Margin="8,0,0,0">
+                  <Button Classes="action" Content="Copy JSON" Command="{Binding CopyJsonCommand}"
+                          CommandParameter="{Binding $parent[TopLevel].Clipboard}"
+                          ToolTip.Tip="Copy the current definition as JSON to clipboard."
+                          IsVisible="{Binding IsJsonMode}" />
                   <Button Classes="action" Content="Validate" Command="{Binding Editor.ValidateCommand}"
                           ToolTip.Tip="Check definition against ASOR v1.2 spec." />
                   <Button Classes="action" Content="Save" Command="{Binding SaveCommand}"

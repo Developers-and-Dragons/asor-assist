@@ -141,6 +141,12 @@
           <Setter Property="Margin" Value="0,3,0,0" />
           <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
+        <Style Selector="TextBox.field-invalid">
+          <Setter Property="BorderBrush" Value="{DynamicResource AppErrorBrush}" />
+        </Style>
+        <Style Selector="ComboBox.field-invalid">
+          <Setter Property="BorderBrush" Value="{DynamicResource AppErrorBrush}" />
+        </Style>
         <Style Selector="TextBlock.card-title">
           <Setter Property="FontSize" Value="13" />
           <Setter Property="FontWeight" Value="SemiBold" />

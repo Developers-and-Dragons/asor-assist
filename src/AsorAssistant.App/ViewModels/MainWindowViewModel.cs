@@ -4,6 +4,7 @@ using AsorAssistant.Core.Ports;
 using AsorAssistant.Core.Serialization;
 using AsorAssistant.Domain.Models;
 using Avalonia;
+using Avalonia.Input.Platform;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -60,6 +61,11 @@ public partial class MainWindowViewModel : ObservableObject
 
     // Draft state
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WindowTitle))]
+    private bool _isDirty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WindowTitle))]
     private string? _currentDraftName;
 
     [ObservableProperty]
@@ -96,6 +102,26 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private string? _remoteStatusMessage;
 
+    public string WindowTitle
+    {
+        get
+        {
+            var name = CurrentDraftName ?? "Untitled";
+            return IsDirty ? $"● ASOR Assistant — {name}" : $"ASOR Assistant — {name}";
+        }
+    }
+
+    /// <summary>
+    /// Set by the view to show a confirmation dialog. Returns true if user confirms discard.
+    /// </summary>
+    public Func<string, Task<bool>>? ConfirmDiscardAsync { get; set; }
+
+    private async Task<bool> CheckDiscardAsync()
+    {
+        if (!IsDirty || ConfirmDiscardAsync is null) return true;
+        return await ConfirmDiscardAsync("You have unsaved changes. Discard and continue?");
+    }
+
     // Child VMs
     public DefinitionEditorViewModel Editor { get; }
     public RegistrationViewModel Registration { get; }
@@ -115,6 +141,29 @@ public partial class MainWindowViewModel : ObservableObject
         _queryClient = queryClient;
         SelectedRegion = AsorRegion.All[0];
         RemoteRegion = AsorRegion.All[0];
+
+        SubscribeToEditorChanges();
+    }
+
+    private bool _suppressDirtyTracking;
+
+    private void SubscribeToEditorChanges()
+    {
+        // Track property changes on the editor (Name, Description, Url, etc.)
+        Editor.PropertyChanged += (_, e) =>
+        {
+            // Ignore validation/help state changes
+            if (_suppressDirtyTracking) return;
+            if (e.PropertyName is nameof(Editor.ValidationErrors) or nameof(Editor.IsValid)
+                or nameof(Editor.ActiveSection) or nameof(Editor.HelpTitle)
+                or nameof(Editor.HelpContent) or nameof(Editor.IsContextualHelp))
+                return;
+            IsDirty = true;
+        };
+
+        // Track collection changes (skills added/removed, workday config added/removed)
+        Editor.Skills.CollectionChanged += (_, _) => { if (!_suppressDirtyTracking) IsDirty = true; };
+        Editor.WorkdayConfig.CollectionChanged += (_, _) => { if (!_suppressDirtyTracking) IsDirty = true; };
     }
 
     // --- Mode toggle ---
@@ -145,6 +194,20 @@ public partial class MainWindowViewModel : ObservableObject
     {
         JsonText = AgentDefinitionSerializer.Serialize(Editor.ToModel());
         JsonModeActive = true;
+    }
+
+    [RelayCommand]
+    private async Task CopyJson(IClipboard? clipboard)
+    {
+        var json = JsonModeActive && !string.IsNullOrWhiteSpace(JsonText)
+            ? JsonText
+            : AgentDefinitionSerializer.Serialize(Editor.ToModel());
+
+        if (clipboard is not null)
+        {
+            await clipboard.SetTextAsync(json);
+            SetStatus("✓ JSON copied to clipboard");
+        }
     }
 
     // --- Panels ---
@@ -204,8 +267,11 @@ public partial class MainWindowViewModel : ObservableObject
     // --- File operations ---
 
     [RelayCommand]
-    private void NewDefinition()
+    private async Task NewDefinition()
     {
+        if (!await CheckDiscardAsync()) return;
+
+        _suppressDirtyTracking = true;
         Editor.LoadFromModel(new AgentDefinition
         {
             Capabilities = new Capabilities(),
@@ -213,6 +279,8 @@ public partial class MainWindowViewModel : ObservableObject
         });
         _currentDraftId = null;
         CurrentDraftName = null;
+        _suppressDirtyTracking = false;
+        IsDirty = false;
         SetStatus("New definition");
         IsFileDrawerOpen = false;
         if (JsonModeActive)
@@ -224,8 +292,14 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(CurrentDraftName))
         {
-            SetStatus("Enter a name to save.", 5000);
-            return;
+            // Fall back to the agent name so Ctrl+S works without opening the flyout
+            if (!string.IsNullOrWhiteSpace(Editor.Name))
+                CurrentDraftName = Editor.Name;
+            else
+            {
+                SetStatus("Enter a name to save.", 5000);
+                return;
+            }
         }
 
         if (JsonModeActive && !string.IsNullOrWhiteSpace(JsonText))
@@ -257,6 +331,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         var saved = await _draftStore.SaveAsync(envelope);
         _currentDraftId = saved.Metadata.Id;
+        IsDirty = false;
         SetStatus("✓ Saved");
         await RefreshLocalDrafts();
         await FlashSaveSuccess();
@@ -273,6 +348,7 @@ public partial class MainWindowViewModel : ObservableObject
     private async Task LoadDraft(DraftMetadata? draft)
     {
         if (draft is null) return;
+        if (!await CheckDiscardAsync()) return;
 
         var envelope = await _draftStore.LoadAsync(draft.Id);
         if (envelope is null)
@@ -281,9 +357,12 @@ public partial class MainWindowViewModel : ObservableObject
             return;
         }
 
+        _suppressDirtyTracking = true;
         Editor.LoadFromModel(envelope.Definition);
         _currentDraftId = envelope.Metadata.Id;
         CurrentDraftName = envelope.Metadata.DisplayName;
+        _suppressDirtyTracking = false;
+        IsDirty = false;
         SetStatus($"Loaded: {envelope.Metadata.DisplayName}");
         IsFileDrawerOpen = false;
         if (JsonModeActive)
@@ -305,12 +384,16 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void LoadRemoteAgent(AgentDefinition? agent)
+    private async Task LoadRemoteAgent(AgentDefinition? agent)
     {
         if (agent is null) return;
+        if (!await CheckDiscardAsync()) return;
+        _suppressDirtyTracking = true;
         Editor.LoadFromModel(agent);
         _currentDraftId = null;
         CurrentDraftName = agent.Name;
+        _suppressDirtyTracking = false;
+        IsDirty = false;
         SetStatus($"Loaded from tenant: {agent.Name}");
         IsFileDrawerOpen = false;
         if (JsonModeActive)
