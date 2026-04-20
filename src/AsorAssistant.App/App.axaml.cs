@@ -31,6 +31,7 @@ public partial class App : Application
 
             mainVm.Registration.BearerTokenProvider = () => mainVm.BearerToken;
             mainVm.Registration.RegionProvider = () => mainVm.SelectedRegion;
+            mainVm.Registration.ApplyPendingJsonChanges = () => mainVm.ApplyJsonToEditor();
             mainVm.WqlLookup.BearerTokenProvider = () => mainVm.BearerToken;
 
             desktop.MainWindow = new MainWindow { DataContext = mainVm };

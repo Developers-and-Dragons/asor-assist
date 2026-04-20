@@ -1,5 +1,7 @@
+using System.Collections.ObjectModel;
 using AsorAssistant.Domain.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AsorAssistant.App.ViewModels;
 
@@ -23,7 +25,52 @@ public partial class SkillViewModel : ObservableObject
     [ObservableProperty]
     private string? _outputModesText;
 
-    // Inline validation errors
+    // --- Workday Config (opt-in per skill) ---
+
+    [ObservableProperty]
+    private bool _hasWorkdayConfig;
+
+    [ObservableProperty]
+    private LookupOption? _selectedExecutionModeOption;
+
+    public ObservableCollection<WorkdayResourceViewModel> WorkdayResources { get; } = [];
+
+    public static IReadOnlyList<LookupOption> ExecutionModeOptions { get; } =
+    [
+        new LookupOption { Name = "Delegate", Id = ExecutionMode.Delegate },
+        new LookupOption { Name = "Ambient", Id = ExecutionMode.Ambient },
+    ];
+
+    [RelayCommand]
+    private void AddWorkdayResource()
+    {
+        WorkdayResources.Add(new WorkdayResourceViewModel());
+    }
+
+    [RelayCommand]
+    private void RemoveWorkdayResource(WorkdayResourceViewModel resource)
+    {
+        WorkdayResources.Remove(resource);
+    }
+
+    [RelayCommand]
+    private void EnableWorkdayConfig()
+    {
+        HasWorkdayConfig = true;
+        if (WorkdayResources.Count == 0)
+            WorkdayResources.Add(new WorkdayResourceViewModel());
+    }
+
+    [RelayCommand]
+    private void RemoveWorkdayConfig()
+    {
+        HasWorkdayConfig = false;
+        SelectedExecutionModeOption = null;
+        WorkdayResources.Clear();
+    }
+
+    // --- Inline validation errors ---
+
     [ObservableProperty]
     private string? _idError;
 
@@ -54,6 +101,21 @@ public partial class SkillViewModel : ObservableObject
         OutputModes = ParseMimeTypes(OutputModesText)
     };
 
+    /// <summary>
+    /// Builds an AgentSkillResource if this skill has Workday Config enabled, otherwise null.
+    /// </summary>
+    public AgentSkillResource? ToWorkdayConfigModel()
+    {
+        if (!HasWorkdayConfig) return null;
+
+        return new AgentSkillResource
+        {
+            SkillId = Id,
+            ExecutionMode = new ExecutionMode { Id = SelectedExecutionModeOption?.Id },
+            WorkdayResources = WorkdayResources.Select(r => r.ToModel()).ToList()
+        };
+    }
+
     public static SkillViewModel FromModel(AgentSkill skill) => new()
     {
         Id = skill.Id,
@@ -69,6 +131,37 @@ public partial class SkillViewModel : ObservableObject
             ? string.Join(", ", skill.OutputModes.Where(m => m.Type is not null).Select(m => m.Type))
             : null
     };
+
+    /// <summary>
+    /// Apply WorkdayConfig data from a matching AgentSkillResource onto this skill VM.
+    /// </summary>
+    public void ApplyWorkdayConfig(AgentSkillResource resource)
+    {
+        HasWorkdayConfig = true;
+        SelectedExecutionModeOption = MatchExecutionMode(resource.ExecutionMode);
+
+        WorkdayResources.Clear();
+        if (resource.WorkdayResources is not null)
+        {
+            foreach (var wr in resource.WorkdayResources)
+                WorkdayResources.Add(WorkdayResourceViewModel.FromModel(wr));
+        }
+    }
+
+    private static LookupOption? MatchExecutionMode(ExecutionMode? mode)
+    {
+        if (mode is null) return null;
+
+        var byId = ExecutionModeOptions.FirstOrDefault(o => o.Id == mode.Id);
+        if (byId is not null) return byId;
+
+        var byDescriptor = ExecutionModeOptions.FirstOrDefault(o =>
+            string.Equals(o.Name, mode.Descriptor, StringComparison.OrdinalIgnoreCase));
+        if (byDescriptor is not null) return byDescriptor;
+
+        return ExecutionModeOptions.FirstOrDefault(o =>
+            mode.Id is not null && mode.Id.Contains(o.Name, StringComparison.OrdinalIgnoreCase));
+    }
 
     private static List<SkillTag>? ParseTags(string? text)
     {
