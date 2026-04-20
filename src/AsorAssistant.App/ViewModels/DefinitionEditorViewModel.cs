@@ -170,16 +170,13 @@ public partial class DefinitionEditorViewModel : ObservableObject
         Skills define what your agent can do. At least one is required.
 
         ✅ Required per skill
-        • ID — unique, stable identifier
+        • ID — unique identifier
         • Name — human-readable label
         • Description — helps clients understand the skill
 
         📎 Optional
         • Tags — classification keywords
         • Input/Output Modes — MIME types like application/json
-
-        ⚠️ Watch out
-        • Don't change Skill IDs after registration — they're used as references
 
         ──────────────────────
 
@@ -479,13 +476,18 @@ public partial class DefinitionEditorViewModel : ObservableObject
             : null;
         SupportsAuthenticatedExtendedCard = definition.SupportsAuthenticatedExtendedCard == true;
 
-        // Build a lookup of workday config entries by skill ID for merging
+        // Build a lookup of workday config entries by skill ID for merging.
+        // Discard placeholder entries returned by the tenant (empty execution mode + no resources).
         var configBySkillId = new Dictionary<string, AgentSkillResource>(StringComparer.Ordinal);
         if (definition.WorkdayConfig is not null)
         {
             foreach (var entry in definition.WorkdayConfig)
             {
-                if (entry.SkillId is not null)
+                if (entry.SkillId is null) continue;
+
+                var hasExecutionMode = !string.IsNullOrWhiteSpace(entry.ExecutionMode?.Id);
+                var hasResources = entry.WorkdayResources is { Count: > 0 };
+                if (hasExecutionMode || hasResources)
                     configBySkillId[entry.SkillId] = entry;
             }
         }
