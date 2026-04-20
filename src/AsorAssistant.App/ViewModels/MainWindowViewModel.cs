@@ -234,9 +234,10 @@ public partial class MainWindowViewModel : ObservableObject
     // --- Panels ---
 
     [RelayCommand]
-    private void OpenRegistrationPanel()
+    private async Task OpenRegistrationPanel()
     {
         IsRegistrationPanelOpen = true;
+        await Registration.RegisterCommand.ExecuteAsync(null);
     }
 
     [RelayCommand]
