@@ -15,14 +15,10 @@
         <TextBlock Classes="page-title" Text="Register" />
       </DockPanel>
 
-      <TextBlock Classes="section-desc" Text="POST the current definition to Workday ASOR. Region and token are set in the connection bar above." />
-
-      <!-- Token reminder -->
-      <Border Classes="badge-warning" CornerRadius="4" Padding="8,6" Margin="0,0,0,12"
-              IsVisible="{Binding !$parent[Window].((vm:MainWindowViewModel)DataContext).HasToken}">
-        <TextBlock Text="⚠ Set a bearer token and region in the connection bar above."
-                   FontSize="11" Foreground="{DynamicResource AppWarningBrush}" TextWrapping="Wrap" />
-      </Border>
+      <!-- Registering spinner -->
+      <TextBlock Text="Registering..." FontSize="12"
+                 Foreground="{DynamicResource AppTextMutedBrush}"
+                 IsVisible="{Binding IsRegistering}" Margin="0,0,0,8" />
 
       <!-- URL Preview -->
       <Border Classes="surface-inner" Padding="10,8" Margin="0,0,0,12"
@@ -34,19 +30,22 @@
         </StackPanel>
       </Border>
 
-      <Button Classes="action-primary" Content="Register Agent Definition"
-              Command="{Binding RegisterCommand}"
-              IsEnabled="{Binding !IsRegistering}"
-              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-              ToolTip.Tip="POST the current agent definition JSON to the Workday ASOR API." />
-
       <!-- Response -->
-      <StackPanel Spacing="6" Margin="0,16,0,0"
+      <StackPanel Spacing="6"
                   IsVisible="{Binding ResponseText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
         <TextBlock Classes="field-label" Text="RESPONSE" />
         <TextBox Classes="mono" Text="{Binding ResponseText}" IsReadOnly="True"
                  AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="400" />
       </StackPanel>
+
+      <!-- Retry button (shown after a response) -->
+      <Button Classes="action-primary" Content="Register Again"
+              Command="{Binding RegisterCommand}"
+              IsEnabled="{Binding !IsRegistering}"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Margin="0,12,0,0"
+              IsVisible="{Binding ResponseText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+              ToolTip.Tip="POST the current agent definition JSON to the Workday ASOR API." />
 
     </StackPanel>
   </ScrollViewer>

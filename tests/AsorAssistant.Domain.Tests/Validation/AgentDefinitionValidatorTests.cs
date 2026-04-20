@@ -264,6 +264,41 @@ public class AgentDefinitionValidatorTests
     }
 
     [Fact]
+    public void WorkdayConfig_with_execution_mode_and_empty_resources_passes()
+    {
+        var definition = CreateMinimalValid();
+        definition.WorkdayConfig =
+        [
+            new AgentSkillResource
+            {
+                SkillId = "skill-1",
+                ExecutionMode = new ExecutionMode { Id = ExecutionMode.Delegate },
+                WorkdayResources = []
+            }
+        ];
+        var result = AgentDefinitionValidator.Validate(definition);
+        Assert.True(result.IsValid);
+    }
+
+    [Fact]
+    public void WorkdayConfig_without_execution_mode_fails()
+    {
+        var definition = CreateMinimalValid();
+        definition.WorkdayConfig =
+        [
+            new AgentSkillResource
+            {
+                SkillId = "skill-1",
+                ExecutionMode = new ExecutionMode(),
+                WorkdayResources = [new WorkdayResource { ToolName = "Test_Tool" }]
+            }
+        ];
+        var result = AgentDefinitionValidator.Validate(definition);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.Contains("executionMode", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
     public void Multiple_errors_reported_together()
     {
         var definition = new AgentDefinition();

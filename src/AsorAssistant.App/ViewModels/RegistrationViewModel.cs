@@ -14,6 +14,12 @@ public partial class RegistrationViewModel : ObservableObject
     public Func<string?>? BearerTokenProvider { get; set; }
     public Func<AsorRegion?>? RegionProvider { get; set; }
 
+    /// <summary>
+    /// Called before building the model to apply any pending JSON edits.
+    /// Returns false if JSON is invalid and registration should be aborted.
+    /// </summary>
+    public Func<bool>? ApplyPendingJsonChanges { get; set; }
+
     [ObservableProperty]
     private string? _resolvedUrl;
 
@@ -50,6 +56,13 @@ public partial class RegistrationViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(token))
         {
             ResponseText = "Set a bearer token in the connection bar at the top of the app.";
+            IsSuccess = false;
+            return;
+        }
+
+        if (ApplyPendingJsonChanges is not null && !ApplyPendingJsonChanges())
+        {
+            ResponseText = "Invalid JSON — fix errors before registering.";
             IsSuccess = false;
             return;
         }

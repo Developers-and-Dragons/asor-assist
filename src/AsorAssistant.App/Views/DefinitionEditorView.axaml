@@ -181,138 +181,104 @@
                         <TextBox Text="{Binding OutputModesText}" PlaceholderText="application/json" />
                       </StackPanel>
                     </Grid>
-                  </StackPanel>
-                </Expander>
-              </Border>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        </StackPanel>
 
-        <Separator Classes="section-divider" />
+                    <!-- Workday Config (opt-in per skill) -->
+                    <Button Classes="action-add" Content="+ Workday Config"
+                            Command="{Binding EnableWorkdayConfigCommand}"
+                            IsVisible="{Binding !HasWorkdayConfig}"
+                            Margin="0,4,0,0" />
 
-        <!-- WORKDAY CONFIG -->
-        <StackPanel x:Name="SectionWorkdayConfig">
-        <DockPanel Margin="0,0,0,6">
-          <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Add Mapping"
-                  Command="{Binding AddWorkdayConfigEntryCommand}" VerticalAlignment="Top" />
-          <StackPanel>
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <TextBlock Classes="section-header" Text="Workday Config" />
-              <Button Classes="help-trigger" Content="❔" ToolTip.Tip="Show help for this section"
-                      Command="{Binding ShowHelpCommand}" CommandParameter="workdayconfig" VerticalAlignment="Center" />
-            </StackPanel>
-            <TextBlock Classes="section-desc" Text="Map skills to Workday resources, execution modes, and securable items." />
-          </StackPanel>
-        </DockPanel>
+                    <Border Classes="surface-inner" IsVisible="{Binding HasWorkdayConfig}">
+                      <StackPanel Spacing="12">
+                        <DockPanel>
+                          <Button DockPanel.Dock="Right" Classes="action-subtle" Content="Remove Config"
+                                  Command="{Binding RemoveWorkdayConfigCommand}" />
+                          <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Classes="card-title" Text="Workday Config" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding SelectedExecutionModeOption.Name}"
+                                       Foreground="{DynamicResource AppTextMutedBrush}" FontSize="11"
+                                       VerticalAlignment="Center" />
+                          </StackPanel>
+                        </DockPanel>
 
-        <ItemsControl ItemsSource="{Binding WorkdayConfig}">
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="vm:AgentSkillResourceViewModel">
-              <Border Classes="surface">
-                <Expander IsExpanded="True" HorizontalAlignment="Stretch">
-                  <Expander.Header>
-                    <DockPanel HorizontalAlignment="Stretch">
-                      <Button DockPanel.Dock="Right" Classes="action-subtle" Content="Remove"
-                              Command="{Binding #EditorRoot.((vm:DefinitionEditorViewModel)DataContext).RemoveWorkdayConfigEntryCommand}"
-                              CommandParameter="{Binding}" />
-                      <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock Classes="card-title" Text="{Binding SkillId, FallbackValue='Unmapped'}"
-                                   VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding SelectedExecutionModeOption.Name}" Foreground="{DynamicResource AppTextMutedBrush}" FontSize="11"
-                                   VerticalAlignment="Center" />
-                      </StackPanel>
-                    </DockPanel>
-                  </Expander.Header>
+                        <StackPanel Spacing="3">
+                          <TextBlock Classes="field-label"><Run Text="EXECUTION MODE" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
+                          <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
+                                    SelectedItem="{Binding SelectedExecutionModeOption}"
+                                    DisplayMemberBinding="{Binding Name}"
+                                    PlaceholderText="Select mode..."
+                                    HorizontalAlignment="Stretch" />
+                          <TextBlock Classes="helper" TextWrapping="Wrap"
+                                     Text="Delegate = human triggered. Ambient = process/event triggered." />
+                        </StackPanel>
 
-                  <StackPanel Spacing="12" Margin="0,10,0,0">
-                    <Grid ColumnDefinitions="*,16,*">
-                      <StackPanel Spacing="3">
-                        <TextBlock Classes="field-label"><Run Text="SKILL" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
-                        <ComboBox ItemsSource="{Binding AvailableSkills}"
-                                  SelectedValue="{Binding SkillId}"
-                                  SelectedValueBinding="{Binding Id}"
-                                  DisplayMemberBinding="{Binding Id}"
-                                  PlaceholderText="Select skill..."
-                                  HorizontalAlignment="Stretch" />
-                      </StackPanel>
-                      <StackPanel Grid.Column="2" Spacing="3">
-                        <TextBlock Classes="field-label"><Run Text="EXECUTION MODE" /><Run Text=" *" Foreground="{DynamicResource AppErrorBrush}" /></TextBlock>
-                        <ComboBox ItemsSource="{Binding ExecutionModeOptions}"
-                                  SelectedItem="{Binding SelectedExecutionModeOption}"
-                                  DisplayMemberBinding="{Binding Name}"
-                                  PlaceholderText="Select mode..."
-                                  HorizontalAlignment="Stretch" />
-                        <TextBlock Classes="helper" TextWrapping="Wrap"
-                                   Text="Delegate = requires human invocation. Ambient = no human required. Determines the grant type." />
-                      </StackPanel>
-                    </Grid>
+                        <!-- Resources -->
+                        <DockPanel Margin="0,4,0,0">
+                          <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Resource"
+                                  Command="{Binding AddWorkdayResourceCommand}" VerticalAlignment="Top" />
+                          <TextBlock Classes="card-title" Text="Resources" VerticalAlignment="Center" />
+                        </DockPanel>
 
-                    <!-- Resources -->
-                    <DockPanel Margin="0,4,0,0">
-                      <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Resource"
-                              Command="{Binding AddWorkdayResourceCommand}" VerticalAlignment="Top" />
-                      <TextBlock Classes="card-title" Text="Resources" VerticalAlignment="Center" />
-                    </DockPanel>
+                        <ItemsControl ItemsSource="{Binding WorkdayResources}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:WorkdayResourceViewModel">
+                              <Border Classes="surface-inner">
+                                <StackPanel Spacing="10">
+                                  <DockPanel>
+                                    <Button DockPanel.Dock="Right" Classes="action-subtle" Content="Remove"
+                                            Command="{Binding $parent[ItemsControl].((vm:SkillViewModel)DataContext).RemoveWorkdayResourceCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <TextBlock Classes="card-title"
+                                               Text="{Binding ToolName, FallbackValue='New Resource'}"
+                                               VerticalAlignment="Center" />
+                                  </DockPanel>
 
-                    <ItemsControl ItemsSource="{Binding WorkdayResources}">
-                      <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="vm:WorkdayResourceViewModel">
-                          <Border Classes="surface-inner">
-                            <StackPanel Spacing="10">
-                              <DockPanel>
-                                <Button DockPanel.Dock="Right" Classes="action-subtle" Content="Remove"
-                                        Command="{Binding $parent[ItemsControl].((vm:AgentSkillResourceViewModel)DataContext).RemoveWorkdayResourceCommand}"
-                                        CommandParameter="{Binding}" />
-                                <TextBlock Classes="card-title"
-                                           Text="{Binding ToolName, FallbackValue='New Resource'}"
-                                           VerticalAlignment="Center" />
-                              </DockPanel>
-
-                              <Grid ColumnDefinitions="*,16,*">
-                                <StackPanel Spacing="3">
-                                  <TextBlock Classes="field-label" Text="TOOL NAME" />
-                                  <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers" />
-                                  <TextBlock Classes="helper" Text="The operation that defines what this tool can do — e.g. an endpoint or task." />
-                                </StackPanel>
-                                <StackPanel Grid.Column="2" Spacing="3">
-                                  <TextBlock Classes="field-label" Text="AGENT RESOURCE ID" />
-                                  <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday tool WID" />
-                                  <TextBlock Classes="helper" Text="Workday ID of the tool required for this skill. Use Lookups tab to find WIDs." />
-                                </StackPanel>
-                              </Grid>
-
-                              <StackPanel Spacing="3">
-                                <TextBlock Classes="field-label" Text="DESCRIPTION" />
-                                <TextBox Text="{Binding Description}" PlaceholderText="Description of the operation" />
-                              </StackPanel>
-
-                              <!-- Securable Items -->
-                              <DockPanel Margin="0,4,0,0">
-                                <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Item"
-                                        Command="{Binding AddToolCommand}" VerticalAlignment="Top" />
-                                <TextBlock Classes="field-label" Text="SECURABLE ITEMS"
-                                           VerticalAlignment="Center" ToolTip.Tip="Workday Securable Items related to this tool — e.g. CRF Fields, Data Sources." />
-                              </DockPanel>
-
-                              <ItemsControl ItemsSource="{Binding Tools}">
-                                <ItemsControl.ItemTemplate>
-                                  <DataTemplate x:DataType="vm:SecurableItemViewModel">
-                                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,4">
-                                      <TextBox Text="{Binding Id}" PlaceholderText="Workday ID of the securable item (CRF Field, Data Source, etc.)"
-                                               HorizontalAlignment="Stretch" />
-                                      <Button Classes="action-subtle" Content="✕"
-                                              Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
-                                              CommandParameter="{Binding}" />
+                                  <Grid ColumnDefinitions="*,16,*">
+                                    <StackPanel Spacing="3">
+                                      <TextBlock Classes="field-label" Text="TOOL NAME" />
+                                      <TextBox Text="{Binding ToolName}" PlaceholderText="e.g. Get_Workers" />
+                                      <TextBlock Classes="helper" Text="The operation that defines what this tool can do — e.g. an endpoint or task." />
                                     </StackPanel>
-                                  </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                              </ItemsControl>
-                            </StackPanel>
-                          </Border>
-                        </DataTemplate>
-                      </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                    <StackPanel Grid.Column="2" Spacing="3">
+                                      <TextBlock Classes="field-label" Text="AGENT RESOURCE ID" />
+                                      <TextBox Text="{Binding AgentResourceId}" PlaceholderText="Workday tool WID" />
+                                      <TextBlock Classes="helper" Text="Workday ID of the tool required for this skill. Use Lookups tab to find WIDs." />
+                                    </StackPanel>
+                                  </Grid>
+
+                                  <StackPanel Spacing="3">
+                                    <TextBlock Classes="field-label" Text="DESCRIPTION" />
+                                    <TextBox Text="{Binding Description}" PlaceholderText="Description of the operation" />
+                                  </StackPanel>
+
+                                  <!-- Securable Items -->
+                                  <DockPanel Margin="0,4,0,0">
+                                    <Button DockPanel.Dock="Right" Classes="action-add" Content="+ Item"
+                                            Command="{Binding AddToolCommand}" VerticalAlignment="Top" />
+                                    <TextBlock Classes="field-label" Text="SECURABLE ITEMS"
+                                               VerticalAlignment="Center" ToolTip.Tip="Workday Securable Items related to this tool — e.g. CRF Fields, Data Sources." />
+                                  </DockPanel>
+
+                                  <ItemsControl ItemsSource="{Binding Tools}">
+                                    <ItemsControl.ItemTemplate>
+                                      <DataTemplate x:DataType="vm:SecurableItemViewModel">
+                                        <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,0,4">
+                                          <TextBox Text="{Binding Id}" PlaceholderText="Workday ID of the securable item (CRF Field, Data Source, etc.)"
+                                                   HorizontalAlignment="Stretch" />
+                                          <Button Classes="action-subtle" Content="✕"
+                                                  Command="{Binding $parent[ItemsControl].((vm:WorkdayResourceViewModel)DataContext).RemoveToolCommand}"
+                                                  CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                      </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                  </ItemsControl>
+                                </StackPanel>
+                              </Border>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </StackPanel>
+                    </Border>
                   </StackPanel>
                 </Expander>
               </Border>

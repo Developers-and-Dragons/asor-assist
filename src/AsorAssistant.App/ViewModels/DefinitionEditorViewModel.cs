@@ -70,11 +70,8 @@ public partial class DefinitionEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _supportsAuthenticatedExtendedCard;
 
-    // Skills
+    // Skills (Workday Config is now nested inside each skill)
     public ObservableCollection<SkillViewModel> Skills { get; } = [];
-
-    // Workday Config
-    public ObservableCollection<AgentSkillResourceViewModel> WorkdayConfig { get; } = [];
 
     // Validation
     [ObservableProperty]
@@ -116,8 +113,7 @@ public partial class DefinitionEditorViewModel : ObservableObject
         "identity" => "Identity",
         "provider" => "Provider & Platform",
         "capabilities" => "Capabilities",
-        "skills" => "Skills",
-        "workdayconfig" => "Workday Config",
+        "skills" => "Skills & Workday Config",
         "optional" => "Optional Fields",
         _ => "Getting Started"
     };
@@ -174,7 +170,7 @@ public partial class DefinitionEditorViewModel : ObservableObject
         Skills define what your agent can do. At least one is required.
 
         ✅ Required per skill
-        • ID — unique, stable (referenced by Workday Config)
+        • ID — unique identifier
         • Name — human-readable label
         • Description — helps clients understand the skill
 
@@ -182,26 +178,20 @@ public partial class DefinitionEditorViewModel : ObservableObject
         • Tags — classification keywords
         • Input/Output Modes — MIME types like application/json
 
-        ⚠️ Watch out
-        • Don't change Skill IDs after registration — they're used as references
-        • Workday Config entries link to skills by ID
-        """,
+        ──────────────────────
 
-        "workdayconfig" => """
-        📌 What this is
-        Maps your skills to Workday resources and access modes.
+        🔧 Workday Config (per skill)
+        Click "+ Workday Config" inside a skill card to map it to Workday resources.
 
-        ✅ Per mapping
-        • Skill — select from skills you've defined above
         • Execution Mode:
           · Delegate = human-triggered (interactive)
           · Ambient = background (no human needed)
           · This determines the OAuth grant type
 
-        ✅ Per resource
-        • Tool Name — the operation name (endpoint or task)
-        • Agent Resource ID — Workday tool WID
-        • Securable Items — related data sources, CRF fields
+        • Per resource:
+          · Tool Name — the operation name (endpoint or task)
+          · Agent Resource ID — Workday tool WID
+          · Securable Items — related data sources, CRF fields
 
         💡 Tip
         Use the Lookups tab to search for WIDs by operation name, then paste them here.
@@ -297,20 +287,6 @@ public partial class DefinitionEditorViewModel : ObservableObject
     private void RemoveSkill(SkillViewModel skill)
     {
         Skills.Remove(skill);
-    }
-
-    [RelayCommand]
-    private void AddWorkdayConfigEntry()
-    {
-        var entry = new AgentSkillResourceViewModel { AvailableSkills = Skills };
-        entry.WorkdayResources.Add(new WorkdayResourceViewModel());
-        WorkdayConfig.Add(entry);
-    }
-
-    [RelayCommand]
-    private void RemoveWorkdayConfigEntry(AgentSkillResourceViewModel entry)
-    {
-        WorkdayConfig.Remove(entry);
     }
 
     [RelayCommand]
@@ -417,10 +393,19 @@ public partial class DefinitionEditorViewModel : ObservableObject
             DefaultInputModes = SkillViewModel.ParseMimeTypes(DefaultInputModesText),
             DefaultOutputModes = SkillViewModel.ParseMimeTypes(DefaultOutputModesText),
             SupportsAuthenticatedExtendedCard = SupportsAuthenticatedExtendedCard ? true : null,
-            WorkdayConfig = WorkdayConfig.Count > 0
-                ? WorkdayConfig.Select(c => c.ToModel()).ToList()
-                : null
+            WorkdayConfig = BuildWorkdayConfig()
         };
+    }
+
+    private List<AgentSkillResource>? BuildWorkdayConfig()
+    {
+        var configs = Skills
+            .Select(s => s.ToWorkdayConfigModel())
+            .Where(c => c is not null)
+            .Cast<AgentSkillResource>()
+            .ToList();
+
+        return configs.Count > 0 ? configs : null;
     }
 
     public void LoadFromModel(AgentDefinition definition)
@@ -491,20 +476,36 @@ public partial class DefinitionEditorViewModel : ObservableObject
             : null;
         SupportsAuthenticatedExtendedCard = definition.SupportsAuthenticatedExtendedCard == true;
 
+        // Build a lookup of workday config entries by skill ID for merging.
+        // Discard placeholder entries returned by the tenant (empty execution mode + no resources).
+        var configBySkillId = new Dictionary<string, AgentSkillResource>(StringComparer.Ordinal);
+        if (definition.WorkdayConfig is not null)
+        {
+            foreach (var entry in definition.WorkdayConfig)
+            {
+                if (entry.SkillId is null) continue;
+
+                var hasExecutionMode = !string.IsNullOrWhiteSpace(entry.ExecutionMode?.Id);
+                var hasResources = entry.WorkdayResources is { Count: > 0 };
+                if (hasExecutionMode || hasResources)
+                    configBySkillId[entry.SkillId] = entry;
+            }
+        }
+
         Skills.Clear();
         if (definition.Skills is not null)
         {
             foreach (var skill in definition.Skills)
-                Skills.Add(SkillViewModel.FromModel(skill));
-        }
+            {
+                var vm = SkillViewModel.FromModel(skill);
 
-        WorkdayConfig.Clear();
-        if (definition.WorkdayConfig is not null)
-        {
-            foreach (var entry in definition.WorkdayConfig)
-                WorkdayConfig.Add(AgentSkillResourceViewModel.FromModel(entry, Skills));
-        }
+                // Attach matching workday config if present
+                if (skill.Id is not null && configBySkillId.TryGetValue(skill.Id, out var config))
+                    vm.ApplyWorkdayConfig(config);
 
+                Skills.Add(vm);
+            }
+        }
     }
 
     private void AddDefaultSkill()

@@ -161,9 +161,30 @@ public partial class MainWindowViewModel : ObservableObject
             IsDirty = true;
         };
 
-        // Track collection changes (skills added/removed, workday config added/removed)
+        // Track collection changes (skills added/removed)
         Editor.Skills.CollectionChanged += (_, _) => { if (!_suppressDirtyTracking) IsDirty = true; };
-        Editor.WorkdayConfig.CollectionChanged += (_, _) => { if (!_suppressDirtyTracking) IsDirty = true; };
+    }
+
+    /// <summary>
+    /// If JSON mode is active, parse the JSON text and load it into the editor.
+    /// Returns false if the JSON is invalid.
+    /// </summary>
+    public bool ApplyJsonToEditor()
+    {
+        if (!JsonModeActive || string.IsNullOrWhiteSpace(JsonText))
+            return true;
+
+        try
+        {
+            var parsed = AgentDefinitionSerializer.Deserialize(JsonText);
+            if (parsed is not null) Editor.LoadFromModel(parsed);
+            return true;
+        }
+        catch
+        {
+            SetStatus("Invalid JSON — fix errors first.", 5000);
+            return false;
+        }
     }
 
     // --- Mode toggle ---
@@ -213,9 +234,10 @@ public partial class MainWindowViewModel : ObservableObject
     // --- Panels ---
 
     [RelayCommand]
-    private void OpenRegistrationPanel()
+    private async Task OpenRegistrationPanel()
     {
         IsRegistrationPanelOpen = true;
+        await Registration.RegisterCommand.ExecuteAsync(null);
     }
 
     [RelayCommand]
@@ -302,18 +324,10 @@ public partial class MainWindowViewModel : ObservableObject
             }
         }
 
-        if (JsonModeActive && !string.IsNullOrWhiteSpace(JsonText))
+        if (!ApplyJsonToEditor())
         {
-            try
-            {
-                var parsed = AgentDefinitionSerializer.Deserialize(JsonText);
-                if (parsed is not null) Editor.LoadFromModel(parsed);
-            }
-            catch
-            {
-                SetStatus("Invalid JSON — cannot save.", 5000);
-                return;
-            }
+            SetStatus("Invalid JSON — cannot save.", 5000);
+            return;
         }
 
         var definition = Editor.ToModel();
